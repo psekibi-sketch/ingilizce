@@ -8,13 +8,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
       background: #111b21;
-      color: #fff;
+      color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 16px;
-      user-select: none;
     }
     .panel {
       background: #1e2c34;
@@ -101,17 +100,15 @@
       border: 2px solid #3b4e5a;
       border-radius: 12px;
       padding: 15px;
-      color: #fff;
+      color: #ffffff;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
       text-align: left;
+      outline: none;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .secenek-butonu.secili {
-      border-color: #38bdf8 !important;
-      background: #16384a !important;
-      color: #38bdf8 !important;
-    }
+    .secenek-butonu:active { transform: translateY(1px); }
     .secenek-butonu.dogru-renk {
       border-color: #22c55e !important;
       background: #143521 !important;
@@ -141,6 +138,7 @@
       color: #ef4444;
     }
     .onay-butonu {
+      display: none;
       width: 100%;
       background: #22c55e;
       border: none;
@@ -152,12 +150,7 @@
       cursor: pointer;
       text-transform: uppercase;
     }
-    .onay-butonu.kapali {
-      background: #33444f;
-      color: #64748b;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+    .onay-butonu:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
@@ -174,143 +167,12 @@
   <div id="ana-bolum">
     <div class="soru-alani">
       <div class="soru-yazisi" id="soru-basligi">"Pazartesi" hangisidir?</div>
-      <button class="ses-tusu" id="ses-butonu" type="button" onclick="sesCal()" title="Telaffuzu Dinle">🔊</button>
+      <button class="ses-tusu" id="ses-tusu" type="button">🔊</button>
     </div>
     
-    <span class="ipucu-tusu" onclick="ipucuAc()">💡 İpucu ister misin?</span>
+    <span class="ipucu-tusu" id="ipucu-btn">💡 İpucu ister misin?</span>
     <div class="ipucu-kutusu" id="ipucu-yazisi"></div>
 
     <div class="liste" id="buton-kutusu">
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(0)">Monday</button>
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(1)">Tuesday</button>
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(2)">Friday</button>
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(3)">Sunday</button>
-    </div>
-  </div>
-
-  <div class="bildirim-kutusu" id="mesaj"></div>
-  <button class="onay-butonu kapali" id="islem-tusu" type="button" onclick="ilerle()">KONTROL ET</button>
-</div>
-
-<script>
-  var gunler = [
-    { en: 'Monday', tr: 'Pazartesi', hint: 'Moon-day (Ay günü) - Haftanın 1. günü' },
-    { en: 'Tuesday', tr: 'Salı', hint: 'Two-sday (2. gün) - İkinci gün' },
-    { en: 'Wednesday', tr: 'Çarşamba', hint: 'Wed-nes-day - Ortadaki en uzun gün' },
-    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
-    { en: 'Friday', tr: 'Cuma', hint: 'Fri-day (Fries) - Hafta sonu kapısı' },
-    { en: 'Saturday', tr: 'Cumartesi', hint: 'Saturn-day - Cumartesi' },
-    { en: 'Sunday', tr: 'Pazar', hint: 'Sun-day (Güneş günü) - Dinlenme günü' }
-  ];
-
-  function karistir(arr) {
-    return arr.slice().sort(function() { return 0.5 - Math.random(); });
-  }
-
-  function soruUret(hedef, tip) {
-    var yanlislar = karistir(gunler.filter(function(g) { return g.en !== hedef.en; })).slice(0, 3);
-    var siklar = karistir([hedef].concat(yanlislar));
-    return { h: hedef, t: tip, s: siklar };
-  }
-
-  // 20 Soru: Yarı yarıya Türkçe->İngilizce ve İngilizce->Türkçe
-  var kuyruk = [];
-  for (var i = 0; i < 20; i++) {
-    var g = gunler[i % gunler.length];
-    var tip = (i % 2 === 0) ? 'tr_en' : 'en_tr';
-    kuyruk.push(soruUret(g, tip));
-  }
-  kuyruk = karistir(kuyruk);
-
-  var can = 5;
-  var secim = -1;
-  var bittiMi = false;
-
-  function sesCal() {
-    try {
-      if ('speechSynthesis' in window && kuyruk.length > 0) {
-        window.speechSynthesis.cancel();
-        var u = new SpeechSynthesisUtterance(kuyruk[0].h.en);
-        u.lang = 'en-US';
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
-      }
-    } catch(e) {}
-  }
-
-  function ipucuAc() {
-    var e = document.getElementById('ipucu-yazisi');
-    e.style.display = (e.style.display === 'block') ? 'none' : 'block';
-  }
-
-  function tiklaSec(idx) {
-    if (bittiMi) return;
-    secim = idx;
-    var butonlar = document.getElementById('buton-kutusu').getElementsByTagName('button');
-    for (var i = 0; i < butonlar.length; i++) {
-      butonlar[i].className = 'secenek-butonu';
-    }
-    butonlar[idx].className = 'secenek-butonu secili';
-    document.getElementById('islem-tusu').className = 'onay-butonu';
-  }
-
-  function ekranaYaz() {
-    bittiMi = false;
-    secim = -1;
-
-    document.getElementById('mesaj').style.display = 'none';
-    var anaTus = document.getElementById('islem-tusu');
-    anaTus.textContent = 'KONTROL ET';
-    anaTus.className = 'onay-butonu kapali';
-
-    var aktif = kuyruk[0];
-    document.getElementById('sayac').textContent = 'Kalan Soru: ' + kuyruk.length;
-    document.getElementById('canlar').textContent = '❤️ ' + can;
-
-    var ipucu = document.getElementById('ipucu-yazisi');
-    ipucu.style.display = 'none';
-    ipucu.textContent = '💡 İpucu: ' + aktif.h.hint;
-
-    var turYazisi = document.getElementById('tur-yazisi');
-    var soruBasligi = document.getElementById('soru-basligi');
-    var butonlar = document.getElementById('buton-kutusu').getElementsByTagName('button');
-
-    if (aktif.t === 'tr_en') {
-      turYazisi.textContent = 'TÜRKÇE ➔ İNGİLİZCE';
-      soruBasligi.textContent = '"' + aktif.h.tr + '" hangisidir?';
-      for (var i = 0; i < 4; i++) {
-        butonlar[i].className = 'secenek-butonu';
-        butonlar[i].textContent = aktif.s[i].en;
-      }
-    } else {
-      turYazisi.textContent = 'İNGİLİZCE ➔ TÜRKÇE';
-      soruBasligi.textContent = '"' + aktif.h.en + '" ne demektir?';
-      for (var i = 0; i < 4; i++) {
-        butonlar[i].className = 'secenek-butonu';
-        butonlar[i].textContent = aktif.s[i].tr;
-      }
-    }
-  }
-
-  function ilerle() {
-    var aktif = kuyruk[0];
-    var anaTus = document.getElementById('islem-tusu');
-    var msj = document.getElementById('mesaj');
-    var butonlar = document.getElementById('buton-kutusu').getElementsByTagName('button');
-
-    if (!bittiMi) {
-      bittiMi = true;
-      var dogruMu = (aktif.s[secim].en === aktif.h.en);
-
-      msj.style.display = 'block';
-      sesCal(); // Doğru cevabın sesini onay anında dinlet
-
-      for (var i = 0; i < 4; i++) {
-        if (aktif.s[i].en === aktif.h.en) {
-          butonlar[i].className = 'secenek-butonu dogru-renk';
-        } else if (i === secim) {
-          butonlar[i].className = 'secenek-butonu yanlis-renk';
-        }
-      }
-
-      if (dogruMu)
+      <button class="secenek-butonu" type="button" data-idx="0">Monday</button>
+      <button class="secenek-butonu" type="

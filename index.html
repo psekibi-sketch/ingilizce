@@ -15,22 +15,22 @@
       min-height: 100vh;
       padding: 16px;
     }
-    .panel {
+    .kart {
       background: #1e2c34;
       border: 2px solid #33444f;
       border-radius: 20px;
       width: 100%;
       max-width: 440px;
-      padding: 22px;
+      padding: 24px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
-    .ust-serit {
+    .ust-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
     }
-    .tur-etiketi {
+    .etiket {
       background: rgba(56, 189, 248, 0.15);
       color: #38bdf8;
       font-size: 12px;
@@ -38,26 +38,25 @@
       padding: 4px 10px;
       border-radius: 8px;
     }
-    .sayac-can {
+    .sayac {
       display: flex;
       gap: 12px;
       font-weight: bold;
       font-size: 14px;
     }
-    .soru-alani {
+    .soru-satiri {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
       gap: 10px;
+      margin-bottom: 12px;
     }
-    .soru-yazisi {
+    .soru-baslik {
       font-size: 20px;
       font-weight: bold;
       line-height: 1.3;
-      flex: 1;
     }
-    .ses-tusu {
+    .ses-btn {
       background: #38bdf8;
       border: none;
       width: 44px;
@@ -65,21 +64,21 @@
       border-radius: 50%;
       font-size: 20px;
       cursor: pointer;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
-    .ses-tusu:active { transform: scale(0.92); }
-    .ipucu-tusu {
+    .ses-btn:active { transform: scale(0.92); }
+    .ipucu-link {
       color: #94a3b8;
       font-size: 13px;
       text-decoration: underline;
       cursor: pointer;
       display: inline-block;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
-    .ipucu-kutusu {
+    .ipucu-kutu {
       display: none;
       background: #152229;
       border: 1px dashed #475569;
@@ -89,13 +88,13 @@
       font-size: 13px;
       margin-bottom: 14px;
     }
-    .liste {
+    .secenekler-kutusu {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
-    .secenek-butonu {
+    .secenek-btn {
       background: #273740;
       border: 2px solid #3b4e5a;
       border-radius: 12px;
@@ -105,21 +104,20 @@
       font-weight: bold;
       cursor: pointer;
       text-align: left;
-      outline: none;
       transition: background 0.15s, border-color 0.15s;
     }
-    .secenek-butonu:active { transform: translateY(1px); }
-    .secenek-butonu.dogru-renk {
+    .secenek-btn:active { transform: translateY(1px); }
+    .secenek-btn.dogru {
       border-color: #22c55e !important;
       background: #143521 !important;
       color: #22c55e !important;
     }
-    .secenek-butonu.yanlis-renk {
+    .secenek-btn.yanlis {
       border-color: #ef4444 !important;
       background: #3b1818 !important;
       color: #ef4444 !important;
     }
-    .bildirim-kutusu {
+    .mesaj-kutusu {
       display: none;
       padding: 12px;
       border-radius: 10px;
@@ -127,17 +125,17 @@
       margin-bottom: 14px;
       line-height: 1.4;
     }
-    .bildirim-kutusu.d-ok {
+    .mesaj-kutusu.d-ok {
       background: rgba(34, 197, 94, 0.2);
       border: 1px solid #22c55e;
       color: #22c55e;
     }
-    .bildirim-kutusu.d-err {
+    .mesaj-kutusu.d-err {
       background: rgba(239, 68, 68, 0.2);
       border: 1px solid #ef4444;
       color: #ef4444;
     }
-    .onay-butonu {
+    .ana-btn {
       display: none;
       width: 100%;
       background: #22c55e;
@@ -150,29 +148,43 @@
       cursor: pointer;
       text-transform: uppercase;
     }
-    .onay-butonu:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
 
-<div class="panel">
-  <div class="ust-serit">
-    <span class="tur-etiketi" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
-    <div class="sayac-can">
+<div class="kart" id="ana-kart">
+  <div class="ust-bar">
+    <span class="etiket" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
+    <div class="sayac">
       <span id="sayac" style="color: #4ade80;">Kalan: 20</span>
       <span id="canlar" style="color: #ef4444;">❤️ 5</span>
     </div>
   </div>
 
-  <div id="ana-bolum">
-    <div class="soru-alani">
-      <div class="soru-yazisi" id="soru-basligi">"Pazartesi" hangisidir?</div>
-      <button class="ses-tusu" id="ses-tusu" type="button">🔊</button>
-    </div>
-    
-    <span class="ipucu-tusu" id="ipucu-btn">💡 İpucu ister misin?</span>
-    <div class="ipucu-kutusu" id="ipucu-yazisi"></div>
+  <div class="soru-satiri">
+    <div class="soru-baslik" id="soru-basligi">...</div>
+    <button class="ses-btn" id="ses-btn" type="button">🔊</button>
+  </div>
+  
+  <span class="ipucu-link" id="ipucu-btn">💡 İpucu ister misin?</span>
+  <div class="ipucu-kutu" id="ipucu-kutu"></div>
 
-    <div class="liste" id="buton-kutusu">
-      <button class="secenek-butonu" type="button" data-idx="0">Monday</button>
-      <button class="secenek-butonu" type="
+  <!-- 4 şık doğrudan JavaScript ile buraya üretilir -->
+  <div class="secenekler-kutusu" id="secenekler-alani"></div>
+
+  <div class="mesaj-kutusu" id="mesaj-alani"></div>
+  <button class="ana-btn" id="devam-btn" type="button">DEVAM ET</button>
+</div>
+
+<script>
+  const gunler = [
+    { en: 'Monday', tr: 'Pazartesi', ipucu: 'Moon-day (Ay günü) - 1. gün' },
+    { en: 'Tuesday', tr: 'Salı', ipucu: 'Two-sday (2. gün) - Salı' },
+    { en: 'Wednesday', tr: 'Çarşamba', ipucu: 'Wed-nes-day - Ortadaki en uzun gün' },
+    { en: 'Thursday', tr: 'Perşembe', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
+    { en: 'Friday', tr: 'Cuma', ipucu: 'Fri-day (Fries) - Hafta sonu kapısı' },
+    { en: 'Saturday', tr: 'Cumartesi', ipucu: 'Saturn-day - Hafta sonu' },
+    { en: 'Sunday', tr: 'Pazar', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü' }
+  ];
+
+  function karistir(arr) {

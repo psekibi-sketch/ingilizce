@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>LingoDays - İngilizce Günler</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
       background: #111b21;
       color: #ffffff;
@@ -38,7 +38,7 @@
       padding: 5px 10px;
       border-radius: 8px;
     }
-    .sayac {
+    .sayac-alani {
       display: flex;
       gap: 12px;
       font-weight: bold;
@@ -51,13 +51,13 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .soru-baslik {
+    .soru-metni {
       font-size: 20px;
       font-weight: bold;
       line-height: 1.3;
       flex: 1;
     }
-    .ses-btn {
+    .ses-tusu {
       background: #38bdf8;
       border: none;
       width: 44px;
@@ -70,8 +70,8 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .ses-btn:active { transform: scale(0.92); }
-    .ipucu-link {
+    .ses-tusu:active { transform: scale(0.92); }
+    .ipucu-tusu {
       color: #94a3b8;
       font-size: 13px;
       text-decoration: underline;
@@ -137,7 +137,7 @@
       border: 1px solid #ef4444;
       color: #ef4444;
     }
-    .ana-btn {
+    .devam-btn {
       display: none;
       width: 100%;
       background: #22c55e;
@@ -154,66 +154,22 @@
 </head>
 <body>
 
-<div class="kart" id="oyun-alani">
+<div class="kart" id="ana-kart">
   <div class="ust-bar">
-    <span class="etiket" id="tur-etiketi">TÜRKÇE ➔ İNGİLİZCE</span>
-    <div class="sayac">
-      <span id="kalan-sayisi" style="color: #4ade80;">Kalan: 20</span>
-      <span id="can-sayisi" style="color: #ef4444;">❤️ 5</span>
+    <span class="etiket" id="tur-etiket">TÜRKÇE ➔ İNGİLİZCE</span>
+    <div class="sayac-alani">
+      <span id="kalan-sayi" style="color: #4ade80;">Kalan: 20</span>
+      <span id="can-sayi" style="color: #ef4444;">❤️ 5</span>
     </div>
   </div>
 
   <div class="soru-satiri">
-    <div class="soru-baslik" id="soru-basligi">"Pazartesi" hangisidir?</div>
-    <button class="ses-btn" type="button" onclick="sesCal()">🔊</button>
+    <div class="soru-metni" id="soru-metni">...</div>
+    <button class="ses-tusu" id="ses-tusu" type="button">🔊</button>
   </div>
   
-  <span class="ipucu-link" onclick="ipucuToggle()">💡 İpucu ister misin?</span>
-  <div class="ipucu-kutu" id="ipucu-metni">Moon-day (Ay günü) - 1. gün</div>
+  <span class="ipucu-tusu" id="ipucu-tetik">💡 İpucu ister misin?</span>
+  <div class="ipucu-kutu" id="ipucu-kutu"></div>
 
-  <!-- 4 Şık doğrudan HTML içine sabitlenmiştir -->
-  <div class="secenekler-kutusu">
-    <button class="secenek-btn" id="btn-0" type="button" onclick="cevapVer(0)">Monday</button>
-    <button class="secenek-btn" id="btn-1" type="button" onclick="cevapVer(1)">Tuesday</button>
-    <button class="secenek-btn" id="btn-2" type="button" onclick="cevapVer(2)">Friday</button>
-    <button class="secenek-btn" id="btn-3" type="button" onclick="cevapVer(3)">Sunday</button>
-  </div>
-
-  <div class="mesaj-kutusu" id="sonuc-kutusu"></div>
-  <button class="ana-btn" id="devam-butonu" type="button" onclick="siradakiSoru()">DEVAM ET</button>
-</div>
-
-<script>
-  var gunler = [
-    { en: 'Monday', tr: 'Pazartesi', ipucu: 'Moon-day (Ay günü) - 1. gün' },
-    { en: 'Tuesday', tr: 'Salı', ipucu: 'Two-sday (2. gün) - Salı' },
-    { en: 'Wednesday', tr: 'Çarşamba', ipucu: 'Wed-nes-day - Ortadaki en uzun gün' },
-    { en: 'Thursday', tr: 'Perşembe', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
-    { en: 'Friday', tr: 'Cuma', ipucu: 'Fri-day (Fries) - Hafta sonu kapısı' },
-    { en: 'Saturday', tr: 'Cumartesi', ipucu: 'Saturn-day - Hafta sonu' },
-    { en: 'Sunday', tr: 'Pazar', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü' }
-  ];
-
-  function karistir(arr) {
-    var kopya = arr.slice();
-    for (var i = kopya.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var gecici = kopya[i];
-      kopya[i] = kopya[j];
-      kopya[j] = gecici;
-    }
-    return kopya;
-  }
-
-  function soruUret(hedef, tip) {
-    var digerleri = gunler.filter(function(g) { return g.en !== hedef.en; });
-    digerleri = karistir(digerleri).slice(0, 3);
-    var secenekler = karistir([hedef].concat(digerleri));
-    return { hedef: hedef, tip: tip, secenekler: secenekler };
-  }
-
-  var kuyruk = [];
-  for (var i = 0; i < 20; i++) {
-    var hedefGun = gunler[i % gunler.length];
-    var tip = (i % 2 === 0) ? 'tr_en' : 'en_tr';
-    kuyruk.push(
+  <div class="secenekler-kutusu" id="secenekler-alani">
+    <button class="

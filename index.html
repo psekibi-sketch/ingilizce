@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays - İngilizce Günler</title>
+  <title>LingoDays</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
@@ -16,59 +16,56 @@
       padding: 16px;
       -webkit-tap-highlight-color: transparent;
     }
-    .app-card {
+    .card {
       width: 100%;
       max-width: 480px;
       background: #202f36;
       border: 2px solid #37464f;
       border-radius: 24px;
-      padding: 22px;
+      padding: 24px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.5);
     }
-    .top-bar {
+    .top {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
       margin-bottom: 20px;
     }
-    .progress-track {
+    .track {
       flex: 1;
       height: 12px;
       background: #37464f;
       border-radius: 10px;
       overflow: hidden;
+      margin-right: 14px;
     }
-    .progress-fill {
+    .fill {
       width: 5%;
       height: 100%;
       background: #58cc02;
-      transition: width 0.3s ease;
+      transition: width 0.3s;
     }
     .hearts {
       font-size: 18px;
       font-weight: 800;
       color: #ff4b4b;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-    .badge {
+    .tag {
       display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 4px 10px;
+      border-radius: 12px;
       background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       margin-bottom: 12px;
     }
-    .prompt-title {
-      font-size: 21px;
+    .title {
+      font-size: 20px;
       font-weight: 800;
       margin-bottom: 16px;
-      line-height: 1.3;
     }
-    .mnemonic-box {
+    .mnemonic {
       background: #18282f;
       border: 2px dashed #4b626e;
       border-radius: 16px;
@@ -76,110 +73,89 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       cursor: pointer;
     }
-    .mnemonic-icon { font-size: 42px; }
-    .mnemonic-word { font-size: 20px; font-weight: 800; color: #1cb0f6; }
-    .mnemonic-sub { font-size: 13px; color: #afc5ce; margin-top: 2px; }
-
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr;
+    .m-icon { font-size: 38px; }
+    .m-word { font-size: 20px; font-weight: 800; color: #1cb0f6; }
+    .m-sub { font-size: 13px; color: #afc5ce; margin-top: 2px; }
+    .btn-col {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
-    .opt-btn {
+    .opt {
       background: #27373f;
       border: 2px solid #37464f;
       border-bottom: 4px solid #37464f;
       border-radius: 14px;
       padding: 14px;
       color: #fff;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
-      text-align: left;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      text-align: left;
     }
-    .opt-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
-    .opt-btn.selected {
+    .opt:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .opt.sel {
       border-color: #1cb0f6;
       border-bottom-color: #1899d6;
-      background: rgba(28, 176, 246, 0.15);
+      background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
     }
-
-    .mic-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin: 16px 0;
-    }
-    .circle-btn {
-      width: 74px;
-      height: 74px;
+    .sound-btn {
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       background: #1cb0f6;
       border: none;
       border-bottom: 4px solid #1899d6;
-      font-size: 32px;
+      font-size: 30px;
       color: white;
       cursor: pointer;
+      margin: 12px auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .circle-btn:active { transform: translateY(2px); }
-    .circle-btn.listening {
-      background: #ff4b4b;
-      border-bottom-color: #ea2b2b;
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-
-    .bottom-feedback {
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 14px;
+    .sound-btn:active { transform: translateY(2px); }
+    .feedback {
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
       display: none;
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.4;
     }
-    .bottom-feedback.correct {
-      background: rgba(88, 204, 2, 0.15);
+    .feedback.ok {
+      background: rgba(88, 204, 2, 0.2);
       border: 1px solid #58cc02;
       color: #58cc02;
     }
-    .bottom-feedback.wrong {
-      background: rgba(255, 75, 75, 0.15);
+    .feedback.err {
+      background: rgba(255, 75, 75, 0.2);
       border: 1px solid #ff4b4b;
       color: #ff4b4b;
     }
-
-    .action-btn {
+    .main-btn {
       width: 100%;
       background: #58cc02;
       border: none;
       border-bottom: 4px solid #58a700;
       color: white;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
-      padding: 16px;
+      padding: 15px;
       border-radius: 14px;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
-    .action-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
-    .action-btn.disabled {
+    .main-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .main-btn.disabled {
       background: #37464f;
       border-bottom-color: #27333a;
       color: #6a828e;
@@ -189,26 +165,186 @@
 </head>
 <body>
 
-<div class="app-card">
-  <div class="top-bar">
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
-    <div class="hearts">❤️ <span id="hearts-count">5</span></div>
+<div class="card">
+  <div class="top">
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="hearts">❤️ <span id="hearts">5</span></div>
   </div>
 
-  <div id="exercise-box"></div>
-  <div class="bottom-feedback" id="feedback-box"></div>
-  <button class="action-btn disabled" id="action-btn" onclick="onActionClick()">KONTROL ET</button>
+  <div id="content">
+    <span class="tag" id="tag">Hafıza Kartı</span>
+    <div class="title" id="title">Görsel Hafızana Kazı!</div>
+    <div id="body-area"></div>
+  </div>
+
+  <div class="feedback" id="fb"></div>
+  <button class="main-btn disabled" id="action-btn" onclick="handleClick()">KONTROL ET</button>
 </div>
 
 <script>
-  var days = [
-    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay Günü) ➔ Haftanın 1. günü' },
-    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday ➔ Haftanın 2. günü' },
-    { en: 'Wednesday', tr: 'Çarşamba', icon: '🧙‍♂️', hint: 'Wed-nes-day ➔ Ortadaki en uzun gün' },
-    { en: 'Thursday', tr: 'Perşembe', icon: '⚡', hint: 'Thor-sday ➔ Şimşek Tanrısı Thor günü' },
-    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries) ➔ Hafta sonu neşesi' },
-    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day ➔ Satürn gezegeni günü' },
-    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş Günü) ➔ Dinlenme günü' }
+  var data = [
+    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay Günü) ➔ 1. Gün' },
+    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday ➔ 2. Gün' },
+    { en: 'Wednesday', tr: 'Çarşamba', icon: '🧙‍♂️', hint: 'Wed-nes-day ➔ En uzun gün' },
+    { en: 'Thursday', tr: 'Perşembe', icon: '⚡', hint: 'Thor-sday ➔ Şimşek Günü' },
+    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries) ➔ Tatil habercisi' },
+    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day ➔ Satürn günü' },
+    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş Günü) ➔ Dinlenme' }
   ];
+
+  var questions = [];
+  var step = 0;
+  var hearts = 5;
+  var selected = null;
+  var checked = false;
+
+  function speak(txt) {
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(txt);
+      u.lang = 'en-US';
+      window.speechSynthesis.speak(u);
+    } catch(e) {}
+  }
+
+  function makeQuestions() {
+    var q = [];
+    for (var i = 0; i < 20; i++) {
+      var item = data[i % data.length];
+      var wrongs = data.filter(function(x){ return x.en !== item.en; }).sort(function(){ return 0.5 - Math.random(); }).slice(0, 3);
+      var opts = [item].concat(wrongs).sort(function(){ return 0.5 - Math.random(); });
+      var mode = (i % 3 === 0) ? 'card' : (i % 3 === 1 ? 'sound' : 'quiz');
+      q.push({ item: item, mode: mode, opts: opts });
+    }
+    return q.sort(function(){ return 0.5 - Math.random(); });
+  }
+
+  function loadStep() {
+    checked = false;
+    selected = null;
+    document.getElementById('fb').style.display = 'none';
+    document.getElementById('fb').className = 'feedback';
+    
+    var btn = document.getElementById('action-btn');
+    btn.textContent = 'KONTROL ET';
+    btn.className = 'main-btn disabled';
+
+    var pct = Math.max(5, ((step + 1) / questions.length) * 100);
+    document.getElementById('fill').style.width = pct + '%';
+    document.getElementById('hearts').textContent = hearts;
+
+    var cur = questions[step];
+    var tag = document.getElementById('tag');
+    var title = document.getElementById('title');
+    var area = document.getElementById('body-area');
+
+    if (cur.mode === 'card') {
+      tag.textContent = 'Görsel Hafıza';
+      title.textContent = '"' + cur.item.tr + '" hangisidir?';
+      area.innerHTML = 
+        '<div class="mnemonic" onclick="speak(\'' + cur.item.en + '\')">' +
+          '<div class="m-icon">' + cur.item.icon + '</div>' +
+          '<div>' +
+            '<div class="m-word">' + cur.item.en + ' 🔊</div>' +
+            '<div style="font-weight:700;">' + cur.item.tr + '</div>' +
+            '<div class="m-sub">' + cur.item.hint + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="btn-col" id="opt-box"></div>';
+      speak(cur.item.en);
+      drawOpts(cur.opts, 'en');
+    } else if (cur.mode === 'sound') {
+      tag.textContent = 'Dinleme';
+      title.textContent = 'Sesi dinleyin ve doğru günü seçin:';
+      area.innerHTML = 
+        '<button class="sound-btn" onclick="speak(\'' + cur.item.en + '\')">🔊</button>' +
+        '<div class="btn-col" id="opt-box"></div>';
+      speak(cur.item.en);
+      drawOpts(cur.opts, 'tr');
+    } else {
+      tag.textContent = 'Kelime Testi';
+      title.textContent = '"' + cur.item.tr + '" İngilizce nedir?';
+      area.innerHTML = 
+        '<div style="text-align:center; font-size:42px; margin-bottom:12px;">' + cur.item.icon + '</div>' +
+        '<div class="btn-col" id="opt-box"></div>';
+      drawOpts(cur.opts, 'en');
+    }
+  }
+
+  function drawOpts(arr, key) {
+    var box = document.getElementById('opt-box');
+    box.innerHTML = '';
+    arr.forEach(function(o) {
+      var b = document.createElement('button');
+      b.className = 'opt';
+      b.innerHTML = '<span>' + o.icon + '</span> <span>' + o[key] + '</span>';
+      b.onclick = function() {
+        if (checked) return;
+        var all = document.querySelectorAll('.opt');
+        all.forEach(function(x){ x.classList.remove('sel'); });
+        b.classList.add('sel');
+        selected = o;
+        document.getElementById('action-btn').classList.remove('disabled');
+      };
+      box.appendChild(b);
+    });
+  }
+
+  function handleClick() {
+    if (!checked) {
+      checked = true;
+      var cur = questions[step];
+      var isOk = (selected && selected.en === cur.item.en);
+      var fb = document.getElementById('fb');
+      var btn = document.getElementById('action-btn');
+
+      fb.style.display = 'block';
+      speak(cur.item.en);
+
+      if (isOk) {
+        fb.className = 'feedback ok';
+        fb.innerHTML = '<strong>🎉 Harika! Doğru.</strong><br>' + cur.item.icon + ' ' + cur.item.en + ' = ' + cur.item.tr;
+        btn.textContent = 'DEVAM ET';
+      } else {
+        hearts--;
+        document.getElementById('hearts').textContent = Math.max(0, hearts);
+        fb.className = 'feedback err';
+        fb.innerHTML = '<strong>❌ Doğrusu: ' + cur.item.en + ' (' + cur.item.tr + ')</strong><br>' + cur.item.hint;
+        btn.textContent = 'ANLADIM';
+      }
+    } else {
+      if (hearts <= 0) {
+        alert("Canlarınız bitti! Baştan başlıyoruz.");
+        startApp();
+        return;
+      }
+      step++;
+      if (step < questions.length) {
+        loadStep();
+      } else {
+        document.getElementById('content').innerHTML = 
+          '<div style="text-align:center; padding: 20px 0;">' +
+            '<div style="font-size:60px;">🏆</div>' +
+            '<div class="title" style="color:#ffc800; margin-top:10px;">Tebrikler!</div>' +
+            '<p style="color:#afc5ce;">Haftanın günlerini tamamladınız.</p>' +
+          '</div>';
+        document.getElementById('fb').style.display = 'none';
+        var b = document.getElementById('action-btn');
+        b.textContent = 'YENİDEN BAŞLA 🔄';
+        b.onclick = startApp;
+      }
+    }
+  }
+
+  function startApp() {
+    questions = makeQuestions();
+    step = 0;
+    hearts = 5;
+    loadStep();
+  }
+
+  // Sayfa açıldığında doğrudan çalıştır
+  startApp();
+</script>
+</body>
+</html>

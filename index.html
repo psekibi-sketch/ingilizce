@@ -13,18 +13,17 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 12px;
+      padding: 16px;
       -webkit-tap-highlight-color: transparent;
     }
     .app-card {
       width: 100%;
-      max-width: 520px;
+      max-width: 480px;
       background: #202f36;
       border: 2px solid #37464f;
       border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      position: relative;
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
     }
     .top-bar {
       display: flex;
@@ -43,7 +42,7 @@
       width: 5%;
       height: 100%;
       background: #58cc02;
-      transition: width 0.3s;
+      transition: width 0.3s ease;
     }
     .hearts {
       font-size: 18px;
@@ -51,21 +50,20 @@
       color: #ff4b4b;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
     .badge {
       display: inline-block;
       padding: 4px 12px;
-      border-radius: 999px;
+      border-radius: 20px;
       background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
       font-size: 13px;
       font-weight: 700;
       margin-bottom: 12px;
-      text-transform: uppercase;
     }
     .prompt-title {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       margin-bottom: 16px;
       line-height: 1.3;
@@ -83,7 +81,7 @@
     }
     .mnemonic-icon { font-size: 42px; }
     .mnemonic-word { font-size: 20px; font-weight: 800; color: #1cb0f6; }
-    .mnemonic-sub { font-size: 14px; color: #afc5ce; margin-top: 2px; }
+    .mnemonic-sub { font-size: 13px; color: #afc5ce; margin-top: 2px; }
 
     .btn-grid {
       display: grid;
@@ -105,7 +103,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      touch-action: manipulation;
     }
     .opt-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
     .opt-btn.selected {
@@ -115,17 +112,16 @@
       color: #1cb0f6;
     }
 
-    /* Ses & Konuşma Butonu */
     .mic-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin: 20px 0;
+      gap: 10px;
+      margin: 16px 0;
     }
     .circle-btn {
-      width: 76px;
-      height: 76px;
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
       background: #1cb0f6;
       border: none;
@@ -149,12 +145,13 @@
       100% { transform: scale(1); }
     }
 
-    /* Alt Geri Bildirim ve İlerleme */
     .bottom-feedback {
-      border-radius: 16px;
+      border-radius: 14px;
       padding: 14px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       display: none;
+      font-size: 15px;
+      line-height: 1.4;
     }
     .bottom-feedback.correct {
       background: rgba(88, 204, 2, 0.15);
@@ -193,7 +190,6 @@
 <body>
 
 <div class="app-card">
-  <!-- Üst Bar -->
   <div class="top-bar">
     <div class="progress-track">
       <div class="progress-fill" id="progress-fill"></div>
@@ -201,37 +197,18 @@
     <div class="hearts">❤️ <span id="hearts-count">5</span></div>
   </div>
 
-  <!-- Soru Alanı -->
   <div id="exercise-box"></div>
-
-  <!-- Sonuç / Geri Bildirim -->
   <div class="bottom-feedback" id="feedback-box"></div>
-
-  <!-- Alt Buton -->
   <button class="action-btn disabled" id="action-btn" onclick="onActionClick()">KONTROL ET</button>
 </div>
 
 <script>
-  const days = [
+  var days = [
     { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay Günü) ➔ Haftanın 1. günü' },
     { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday ➔ Haftanın 2. günü' },
-    { en: 'Wednesday', tr: 'Çarşamba', icon: '🧙‍♂️', hint: 'Wed-nes-day ➔ En uzun yazılan gün' },
-    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday ➔ Şimşek Tanrısı Thor günü' },
-    { en: 'Friday', tr: 'Cuma', hint: 'Fri-day (Fries) ➔ Hafta sonu neşesi' },
+    { en: 'Wednesday', tr: 'Çarşamba', icon: '🧙‍♂️', hint: 'Wed-nes-day ➔ Ortadaki en uzun gün' },
+    { en: 'Thursday', tr: 'Perşembe', icon: '⚡', hint: 'Thor-sday ➔ Şimşek Tanrısı Thor günü' },
+    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries) ➔ Hafta sonu neşesi' },
     { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day ➔ Satürn gezegeni günü' },
-    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş Günü) ➔ Güneş ve dinlenme günü' }
+    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş Günü) ➔ Dinlenme günü' }
   ];
-
-  let questions = [];
-  let currentIndex = 0;
-  let hearts = 5;
-  let selected = null;
-  let isChecked = false;
-
-  function speak(text) {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);

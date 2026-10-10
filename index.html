@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays - İngilizce Günler</title>
+  <title>LingoDays</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
@@ -14,19 +14,18 @@
       justify-content: center;
       align-items: center;
       padding: 16px;
-      -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
     .card {
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       background: #202f36;
       border: 2px solid #37464f;
       border-radius: 24px;
       padding: 24px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.5);
     }
-    .top-bar {
+    .top {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -44,29 +43,28 @@
       width: 5%;
       height: 100%;
       background: #58cc02;
-      transition: width 0.3s ease;
+      transition: width 0.3s;
     }
     .hearts {
       font-size: 18px;
       font-weight: 800;
       color: #ff4b4b;
     }
-    .info-row {
+    .meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .tag {
-      padding: 4px 12px;
-      border-radius: 12px;
       background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
+      padding: 4px 10px;
+      border-radius: 10px;
       font-size: 12px;
       font-weight: 700;
-      text-transform: uppercase;
     }
-    .queue-info {
+    .remain {
       font-size: 13px;
       color: #afc5ce;
       font-weight: 700;
@@ -75,60 +73,54 @@
       font-size: 21px;
       font-weight: 800;
       margin-bottom: 12px;
-      line-height: 1.3;
     }
-    .hint-trigger {
-      display: inline-block;
+    .hint-link {
       font-size: 13px;
       color: #afc5ce;
       cursor: pointer;
-      margin-bottom: 12px;
       text-decoration: underline;
+      margin-bottom: 12px;
+      display: inline-block;
     }
     .hint-box {
+      display: none;
       background: #18282f;
       border: 1px dashed #4b626e;
       border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 14px;
-      font-size: 14px;
+      padding: 10px;
+      font-size: 13px;
       color: #ffc800;
-      display: none;
+      margin-bottom: 14px;
     }
-    .sound-panel {
+    .sound-row {
       display: none;
-      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 16px;
+      justify-content: center;
+      margin-bottom: 14px;
     }
-    .sound-btn {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
+    .btn-sound {
       background: #1cb0f6;
       border: none;
       border-bottom: 4px solid #1899d6;
-      font-size: 28px;
-      color: #fff;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      font-size: 26px;
+      color: white;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-    .sound-btn:active { transform: translateY(2px); }
-    .btn-col {
+    .opt-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-bottom: 16px;
     }
-    .opt {
+    .btn-opt {
       background: #27373f;
       border: 2px solid #37464f;
       border-bottom: 4px solid #37464f;
       border-radius: 14px;
-      padding: 15px 16px;
+      padding: 14px 16px;
       color: #fff;
       font-size: 17px;
       font-weight: 700;
@@ -138,44 +130,44 @@
       gap: 12px;
       text-align: left;
     }
-    .opt:active { transform: translateY(2px); border-bottom-width: 2px; }
-    .opt.sel {
+    .btn-opt:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .btn-opt.sel {
       border-color: #1cb0f6;
       border-bottom-color: #1899d6;
       background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
     }
-    .opt.correct-mark {
+    .btn-opt.ok {
       border-color: #58cc02 !important;
       border-bottom-color: #58a700 !important;
       background: rgba(88, 204, 2, 0.2) !important;
       color: #58cc02 !important;
     }
-    .opt.wrong-mark {
+    .btn-opt.err {
       border-color: #ff4b4b !important;
       border-bottom-color: #ea2b2b !important;
       background: rgba(255, 75, 75, 0.2) !important;
       color: #ff4b4b !important;
     }
-    .feedback {
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 14px;
+    .alert {
       display: none;
-      font-size: 15px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 14px;
       line-height: 1.4;
     }
-    .feedback.ok {
+    .alert.ok {
       background: rgba(88, 204, 2, 0.15);
       border: 1px solid #58cc02;
       color: #58cc02;
     }
-    .feedback.err {
+    .alert.err {
       background: rgba(255, 75, 75, 0.15);
       border: 1px solid #ff4b4b;
       color: #ff4b4b;
     }
-    .main-btn {
+    .btn-main {
       width: 100%;
       background: #58cc02;
       border: none;
@@ -187,193 +179,28 @@
       border-radius: 14px;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
-    .main-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
-    .main-btn.disabled {
+    .btn-main:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .btn-main.disabled {
       background: #37464f;
       border-bottom-color: #27333a;
       color: #6a828e;
       pointer-events: none;
-    }
-    .stat-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: 16px 0;
-      text-align: left;
-    }
-    .stat-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .stat-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .stat-bar-bg {
-      height: 8px;
-      background: #18282f;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .stat-bar-fill {
-      height: 100%;
-      border-radius: 6px;
     }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="top-bar">
-    <div class="track"><div class="fill" id="fill-bar"></div></div>
-    <div class="hearts">❤️ <span id="hearts-val">5</span></div>
+  <div class="top">
+    <div class="track"><div class="fill" id="p-bar"></div></div>
+    <div class="hearts">❤️ <span id="h-val">5</span></div>
   </div>
 
-  <div id="quiz-panel">
-    <div class="info-row">
-      <span class="tag" id="tag-badge">SORU</span>
-      <span class="queue-info" id="queue-indicator">Kalan: 20</span>
+  <div id="quiz-ui">
+    <div class="meta">
+      <span class="tag" id="q-tag">TÜRKÇE ➔ İNGİLİZCE</span>
+      <span class="remain" id="q-remain">Kalan: 20</span>
     </div>
 
-    <div class="title" id="question-text">Yükleniyor...</div>
-    
-    <div class="hint-trigger" id="hint-btn" onclick="toggleHint()">💡 İpucu ister misin?</div>
-    <div class="hint-box" id="hint-display"></div>
-
-    <div class="sound-panel" id="sound-box">
-      <button class="sound-btn" type="button" onclick="playAudioCurrent()">🔊</button>
-      <span style="font-size:12px; color:#afc5ce;">Dinlemek için dokunun</span>
-    </div>
-
-    <div class="btn-col">
-      <button class="opt" type="button" onclick="handleSelect(0)" id="opt-0"><span>-</span></button>
-      <button class="opt" type="button" onclick="handleSelect(1)" id="opt-1"><span>-</span></button>
-      <button class="opt" type="button" onclick="handleSelect(2)" id="opt-2"><span>-</span></button>
-      <button class="opt" type="button" onclick="handleSelect(3)" id="opt-3"><span>-</span></button>
-    </div>
-  </div>
-
-  <div id="report-panel" style="display: none; text-align: center;">
-    <div style="font-size:52px; margin-bottom:8px;">📊</div>
-    <div class="title" style="color:#ffc800;">Performans Özeti</div>
-    <div class="stat-list" id="stat-container"></div>
-  </div>
-
-  <div class="feedback" id="feedback-alert"></div>
-  <button class="main-btn disabled" id="submit-btn" onclick="processStep()">KONTROL ET</button>
-</div>
-
-<script>
-  var daysData = [
-    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay günü) - Haftanın 1. günü' },
-    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday (2. gün) - İkinci iş günü' },
-    { en: 'Wednesday', tr: 'Çarşamba', icon: '🐪', hint: 'Hump Day (Hafta ortası) - En uzun yazılan gün' },
-    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
-    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries/Patates) - Hafta sonu kapısı' },
-    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day - Hafta sonu başlangıcı' },
-    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş günü) - Dinlenme günü' }
-  ];
-
-  var queue = [];
-  var targetGoal = 20;
-  var completedCount = 0;
-  var hearts = 5;
-  var selectedIndex = -1;
-  var isEvaluated = false;
-  var performanceLog = {};
-
-  for (var i = 0; i < daysData.length; i++) {
-    performanceLog[daysData[i].en] = { attempts: 0, wrongs: 0, tr: daysData[i].tr, icon: daysData[i].icon };
-  }
-
-  function playAudio(word) {
-    try {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        var u = new SpeechSynthesisUtterance(word);
-        u.lang = 'en-US';
-        window.speechSynthesis.speak(u);
-      }
-    } catch(e) {}
-  }
-
-  function playAudioCurrent() {
-    if (queue.length > 0) {
-      playAudio(queue[0].target.en);
-    }
-  }
-
-  function shuffle(arr) {
-    var c = arr.slice();
-    for (var i = c.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = c[i]; c[i] = c[j]; c[j] = t;
-    }
-    return c;
-  }
-
-  function buildQuestion(targetItem, mode) {
-    var wrongPool = daysData.filter(function(x) { return x.en !== targetItem.en; });
-    var wrongs = shuffle(wrongPool).slice(0, 3);
-    var choices = shuffle([targetItem].concat(wrongs));
-    return { target: targetItem, mode: mode, choices: choices };
-  }
-
-  function setupQuiz() {
-    queue = [];
-    completedCount = 0;
-    hearts = 5;
-    var modes = ['tr_to_en', 'en_to_tr', 'sound'];
-    for (var i = 0; i < targetGoal; i++) {
-      var item = daysData[i % daysData.length];
-      var m = modes[i % modes.length];
-      queue.push(buildQuestion(item, m));
-    }
-    queue = shuffle(queue);
-    renderQuestion();
-  }
-
-  function toggleHint() {
-    var h = document.getElementById('hint-display');
-    h.style.display = (h.style.display === 'block') ? 'none' : 'block';
-  }
-
-  function handleSelect(idx) {
-    if (isEvaluated) return;
-    selectedIndex = idx;
-    for (var i = 0; i < 4; i++) {
-      var b = document.getElementById('opt-' + i);
-      if (b) b.classList.remove('sel');
-    }
-    var selectedBtn = document.getElementById('opt-' + idx);
-    if (selectedBtn) selectedBtn.classList.add('sel');
-
-    document.getElementById('submit-btn').classList.remove('disabled');
-  }
-
-  function renderQuestion() {
-    isEvaluated = false;
-    selectedIndex = -1;
-
-    document.getElementById('feedback-alert').style.display = 'none';
-    var submitBtn = document.getElementById('submit-btn');
-    submitBtn.textContent = 'KONTROL ET';
-    submitBtn.className = 'main-btn disabled';
-
-    var currentQ = queue[0];
-    var progressPct = Math.min(100, Math.max(5, (completedCount / targetGoal) * 100));
-    document.getElementById('fill-bar').style.width = progressPct + '%';
-    document.getElementById('hearts-val').textContent = hearts;
-    document.getElementById('queue-indicator').textContent = 'Kalan: ' + queue.length;
-
-    var tag = document.getElementById('tag-badge');
-    var qTitle = document.getElementById('question-text');
-    var hintDisp = document.getElementById('hint-display');
-    var soundBox = document.getElementById('sound-box');
-
-    hintDisp.style
+    <!-- Başlang

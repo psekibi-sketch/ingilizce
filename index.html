@@ -2,9 +2,10 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>İngilizce Günler</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LingoDays - İngilizce Günler</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
       background: #111b21;
       color: #fff;
@@ -15,29 +16,41 @@
       min-height: 100vh;
       margin: 0;
       padding: 16px;
-      box-sizing: border-box;
+      user-select: none;
     }
     .panel {
       background: #1e2c34;
       border: 2px solid #33444f;
       border-radius: 20px;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       padding: 22px;
-      box-sizing: border-box;
     }
     .ust-serit {
       display: flex;
       justify-content: space-between;
-      font-weight: bold;
-      color: #4ade80;
+      align-items: center;
       margin-bottom: 14px;
-      font-size: 15px;
+    }
+    .tur-etiketi {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+    .sayac-can {
+      display: flex;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 14px;
     }
     .soru-yazisi {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: bold;
       margin-bottom: 12px;
+      line-height: 1.3;
     }
     .ipucu-tusu {
       color: #94a3b8;
@@ -45,7 +58,7 @@
       text-decoration: underline;
       cursor: pointer;
       display: inline-block;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .ipucu-kutusu {
       display: none;
@@ -56,6 +69,37 @@
       border-radius: 8px;
       font-size: 13px;
       margin-bottom: 14px;
+    }
+    .ses-kutusu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .buyuk-yuvarlak-btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #38bdf8;
+      border: none;
+      color: #0b1e11;
+      font-size: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .buyuk-yuvarlak-btn:active { transform: scale(0.95); }
+    .buyuk-yuvarlak-btn.dinliyor {
+      background: #ef4444;
+      animation: pulse 1s infinite;
+      color: white;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
     }
     .liste {
       display: flex;
@@ -75,224 +119,4 @@
       text-align: left;
     }
     .secenek-butonu.secili {
-      border-color: #38bdf8 !important;
-      background: #16384a !important;
-      color: #38bdf8 !important;
-    }
-    .secenek-butonu.dogru-renk {
-      border-color: #22c55e !important;
-      background: #143521 !important;
-      color: #22c55e !important;
-    }
-    .secenek-butonu.yanlis-renk {
-      border-color: #ef4444 !important;
-      background: #3b1818 !important;
-      color: #ef4444 !important;
-    }
-    .bildirim-kutusu {
-      display: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      margin-bottom: 14px;
-      line-height: 1.4;
-    }
-    .bildirim-kutusu.d-ok {
-      background: rgba(34, 197, 94, 0.2);
-      border: 1px solid #22c55e;
-      color: #22c55e;
-    }
-    .bildirim-kutusu.d-err {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid #ef4444;
-      color: #ef4444;
-    }
-    .onay-butonu {
-      width: 100%;
-      background: #22c55e;
-      border: none;
-      color: #0b1e11;
-      font-size: 16px;
-      font-weight: bold;
-      padding: 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-    .onay-butonu.kapali {
-      background: #33444f;
-      color: #64748b;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-
-<div class="panel">
-  <div class="ust-serit">
-    <span id="sayac">Kalan Soru: 20</span>
-    <span id="canlar" style="color:#ef4444;">❤️ 5</span>
-  </div>
-
-  <div id="ana-bolum">
-    <div class="soru-yazisi" id="soru-basligi">"Pazartesi" hangisidir?</div>
-    
-    <span class="ipucu-tusu" onclick="ipucuAc()">💡 İpucu ister misin?</span>
-    <div class="ipucu-kutusu" id="ipucu-yazisi">Moon-day (Ay günü) - Haftanın 1. günü</div>
-
-    <div class="liste" id="buton-kutusu">
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(0)">Monday</button>
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(1)">Tuesday</button>
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(2)">Friday</button>
-      <button class="secenek-butonu" type="button" onclick="tiklaSec(3)">Sunday</button>
-    </div>
-  </div>
-
-  <div class="bildirim-kutusu" id="mesaj"></div>
-  <button class="onay-butonu kapali" id="islem-tusu" type="button" onclick="ilerle()">KONTROL ET</button>
-</div>
-
-<script>
-  var gunler = [
-    { en: 'Monday', tr: 'Pazartesi', hint: 'Moon-day (Ay günü) - 1. gün' },
-    { en: 'Tuesday', tr: 'Salı', hint: 'Two-sday (2. gün) - Salı' },
-    { en: 'Wednesday', tr: 'Çarşamba', hint: 'Ortadaki en uzun yazılan gün' },
-    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
-    { en: 'Friday', tr: 'Cuma', hint: 'Fri-day (Fries) - Hafta sonu kapısı' },
-    { en: 'Saturday', tr: 'Cumartesi', hint: 'Saturn-day - Cumartesi' },
-    { en: 'Sunday', tr: 'Pazar', hint: 'Sun-day (Güneş günü) - Pazar' }
-  ];
-
-  var kuyruk = [
-    { h: gunler[0], s: [gunler[0], gunler[1], gunler[4], gunler[6]] },
-    { h: gunler[1], s: [gunler[0], gunler[1], gunler[2], gunler[3]] },
-    { h: gunler[4], s: [gunler[3], gunler[4], gunler[5], gunler[6]] },
-    { h: gunler[2], s: [gunler[1], gunler[2], gunler[3], gunler[4]] },
-    { h: gunler[6], s: [gunler[0], gunler[4], gunler[5], gunler[6]] },
-    { h: gunler[3], s: [gunler[1], gunler[2], gunler[3], gunler[5]] },
-    { h: gunler[5], s: [gunler[2], gunler[3], gunler[4], gunler[5]] },
-    { h: gunler[0], s: [gunler[0], gunler[1], gunler[5], gunler[6]] },
-    { h: gunler[1], s: [gunler[0], gunler[1], gunler[3], gunler[4]] },
-    { h: gunler[4], s: [gunler[1], gunler[2], gunler[4], gunler[6]] },
-    { h: gunler[2], s: [gunler[2], gunler[3], gunler[4], gunler[5]] },
-    { h: gunler[3], s: [gunler[0], gunler[1], gunler[2], gunler[3]] },
-    { h: gunler[6], s: [gunler[0], gunler[4], gunler[5], gunler[6]] },
-    { h: gunler[5], s: [gunler[2], gunler[4], gunler[5], gunler[6]] },
-    { h: gunler[0], s: [gunler[0], gunler[1], gunler[3], gunler[4]] },
-    { h: gunler[1], s: [gunler[0], gunler[1], gunler[2], gunler[5]] },
-    { h: gunler[4], s: [gunler[2], gunler[3], gunler[4], gunler[6]] },
-    { h: gunler[2], s: [gunler[1], gunler[2], gunler[3], gunler[4]] },
-    { h: gunler[3], s: [gunler[0], gunler[1], gunler[3], gunler[5]] },
-    { h: gunler[6], s: [gunler[1], gunler[4], gunler[5], gunler[6]] }
-  ];
-
-  var can = 5;
-  var secim = -1;
-  var bittiMi = false;
-
-  function ipucuAc() {
-    var e = document.getElementById('ipucu-yazisi');
-    e.style.display = (e.style.display === 'block') ? 'none' : 'block';
-  }
-
-  function tiklaSec(idx) {
-    if (bittiMi) return;
-    secim = idx;
-    var butonlar = document.getElementById('buton-kutusu').getElementsByTagName('button');
-    for (var i = 0; i < butonlar.length; i++) {
-      butonlar[i].className = 'secenek-butonu';
-    }
-    butonlar[idx].className = 'secenek-butonu secili';
-    document.getElementById('islem-tusu').className = 'onay-butonu';
-  }
-
-  function ekranaYaz() {
-    bittiMi = false;
-    secim = -1;
-
-    document.getElementById('mesaj').style.display = 'none';
-    var anaTus = document.getElementById('islem-tusu');
-    anaTus.textContent = 'KONTROL ET';
-    anaTus.className = 'onay-butonu kapali';
-
-    var aktif = kuyruk[0];
-    document.getElementById('sayac').textContent = 'Kalan Soru: ' + kuyruk.length;
-    document.getElementById('canlar').textContent = '❤️ ' + can;
-    document.getElementById('soru-basligi').textContent = '"' + aktif.h.tr + '" hangisidir?';
-
-    var ipucu = document.getElementById('ipucu-yazisi');
-    ipucu.style.display = 'none';
-    ipucu.textContent = '💡 İpucu: ' + aktif.h.hint;
-
-    var butonlar = document.getElementById('buton-kutusu').getElementsByTagName('button');
-    for (var i = 0; i < 4; i++) {
-      butonlar[i].className = 'secenek-butonu';
-      butonlar[i].textContent = aktif.s[i].en;
-    }
-  }
-
-  function ilerle() {
-    var aktif = kuyruk[0];
-    var anaTus = document.getElementById('islem-tusu');
-    var msj = document.getElementById('mesaj');
-    var butonlar = document.getElementById('buton-kutusu').getElementsByTagName('button');
-
-    if (!bittiMi) {
-      bittiMi = true;
-      var dogruMu = (aktif.s[secim].en === aktif.h.en);
-
-      msj.style.display = 'block';
-
-      for (var i = 0; i < 4; i++) {
-        if (aktif.s[i].en === aktif.h.en) {
-          butonlar[i].className = 'secenek-butonu dogru-renk';
-        } else if (i === secim) {
-          butonlar[i].className = 'secenek-butonu yanlis-renk';
-        }
-      }
-
-      if (dogruMu) {
-        msj.className = 'bildirim-kutusu d-ok';
-        msj.innerHTML = '<strong>Tebrikler! Doğru.</strong><br>' + aktif.h.en + ' = ' + aktif.h.tr;
-        anaTus.textContent = 'DEVAM ET';
-        kuyruk.shift();
-      } else {
-        can--;
-        document.getElementById('canlar').textContent = '❤️ ' + Math.max(0, can);
-        msj.className = 'bildirim-kutusu d-err';
-        msj.innerHTML = '<strong>Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>' + aktif.h.en + '</strong> (' + aktif.h.tr + ')';
-        anaTus.textContent = 'SONA EKLE & DEVAM ET';
-
-        var yanlisOlan = kuyruk.shift();
-        yanlisOlan.s.sort(function() { return 0.5 - Math.random(); });
-        kuyruk.push(yanlisOlan);
-      }
-    } else {
-      if (can <= 0) {
-        alert("Canlarınız bitti! Yeniden başlıyor.");
-        location.reload();
-        return;
-      }
-
-      if (kuyruk.length > 0) {
-        ekranaYaz();
-      } else {
-        document.getElementById('ana-bolum').innerHTML = 
-          '<div style="text-align:center; padding:20px 0;">' +
-            '<div style="font-size:48px; margin-bottom:10px;">🏆</div>' +
-            '<div style="font-size:22px; font-weight:bold; color:#4ade80;">Harika! Tamamlandı.</div>' +
-            '<p style="color:#94a3b8; margin-top:8px;">20 soruluk pratiği başarıyla bitirdiniz.</p>' +
-          '</div>';
-        msj.style.display = 'none';
-        anaTus.textContent = 'YENİDEN BAŞLA 🔄';
-        anaTus.onclick = function() { location.reload(); };
-      }
-    }
-  }
-
-  // İlk soruyu göster
-  ekranaYaz();
-</script>
-</body>
-</html>
+      border-color:

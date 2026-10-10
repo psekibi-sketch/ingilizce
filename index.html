@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>İngilizce Günler Pratiği</title>
+  <title>İngilizce Günler - Öğren ve Pekiştir</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -29,19 +29,19 @@
     }
     .container {
       width: 100%;
-      max-width: 580px;
+      max-width: 600px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.4);
     }
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      font-size: 15px;
+      margin-bottom: 14px;
+      font-size: 14px;
       color: var(--text-muted);
     }
     .progress-bar-bg {
@@ -49,7 +49,7 @@
       height: 8px;
       border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .progress-fill {
       background: var(--accent);
@@ -69,11 +69,54 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+    
+    /* Ezber / Öğrenme Kartları */
+    .learn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0 24px;
+      max-height: 58vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .day-card {
+      background: #273549;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .day-card:active { transform: scale(0.98); }
+    .day-card:hover { border-color: var(--accent); }
+    .day-left { display: flex; flex-direction: column; gap: 3px; }
+    .day-en { font-size: 18px; font-weight: 700; color: #fff; }
+    .day-tr { font-size: 14px; color: var(--accent); font-weight: 600; }
+    .day-hint { font-size: 12px; color: var(--text-muted); font-style: italic; }
+    .btn-speaker {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Test Alanı */
     .question-prompt {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
-      margin-bottom: 24px;
-      min-height: 40px;
+      margin-bottom: 20px;
+      min-height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -83,15 +126,15 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .btn-opt {
       background: #273549;
       color: var(--text);
       border: 2px solid transparent;
       border-radius: 14px;
-      padding: 18px 12px;
-      font-size: 17px;
+      padding: 16px 10px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -105,12 +148,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin: 16px 0;
     }
     .btn-circle {
-      width: 80px;
-      height: 80px;
+      width: 76px;
+      height: 76px;
       border-radius: 50%;
       border: none;
       background: var(--accent);
@@ -119,7 +162,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 30px;
+      font-size: 28px;
       box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
       transition: all 0.2s;
     }
@@ -135,15 +178,24 @@
       70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
       100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
-    .hint-text { font-size: 14px; color: var(--text-muted); text-align: center; }
     .feedback-box {
-      min-height: 28px;
+      min-height: 48px;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 15px;
       text-align: center;
-      margin-top: 10px;
+      margin: 8px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
-    .btn-next, .btn-restart {
+    .feedback-tip {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+    .btn-main {
       width: 100%;
       background: var(--accent);
       color: #0f172a;
@@ -153,64 +205,96 @@
       font-size: 17px;
       font-weight: 700;
       cursor: pointer;
-      display: none;
-      margin-top: 16px;
+      margin-top: 10px;
+      transition: opacity 0.2s;
     }
-    .result-score { font-size: 54px; font-weight: 800; color: var(--accent); text-align: center; margin: 16px 0 8px; }
+    .btn-main:active { opacity: 0.9; }
+    .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .result-score { font-size: 52px; font-weight: 800; color: var(--accent); margin: 12px 0 6px; }
   </style>
 </head>
 <body>
 
-<div class="container" id="app">
-  <div class="header">
-    <span id="question-index">Soru 1 / 20</span>
-    <span id="score-counter">Doğru: 0</span>
-  </div>
-  <div class="progress-bar-bg">
-    <div class="progress-fill" id="progress-bar"></div>
+<div class="container">
+  
+  <!-- 1. BÖLÜM: EZBERLE VE ÖĞREN EKRANI -->
+  <div id="learn-area">
+    <div style="text-align: center;">
+      <span class="badge">Adım 1: Keşfet & Dinle</span>
+      <h2 style="font-size: 22px; margin-bottom: 6px;">Haftanın Günlerini Ezberle</h2>
+      <p style="color: var(--text-muted); font-size: 14px;">Her güne tıklayarak sesli dinleyin ve ipucunu okuyun.</p>
+    </div>
+
+    <div class="learn-grid" id="learn-cards"></div>
+
+    <button class="btn-main" onclick="startPractice()">🚀 Hazırım, Pratik Yapalım (20 Soru)</button>
   </div>
 
-  <div id="quiz-area">
+  <!-- 2. BÖLÜM: PRATİK & SORU EKRANI -->
+  <div id="quiz-area" style="display: none;">
+    <div class="header">
+      <span id="question-index">Soru 1 / 20</span>
+      <span id="score-counter">Doğru: 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-fill" id="progress-bar"></div>
+    </div>
+
     <div style="text-align: center;"><span class="badge" id="type-badge">Çeviri</span></div>
     <div class="question-prompt" id="prompt-text">Loading...</div>
 
     <div class="action-panel" id="action-panel" style="display: none;">
       <button class="btn-circle" id="action-btn" aria-label="Eylem">🔊</button>
-      <div class="hint-text" id="action-hint">Dinlemek için dokunun</div>
+      <div style="font-size: 13px; color: var(--text-muted);" id="action-hint">Dinlemek için dokunun</div>
     </div>
 
     <div class="options-grid" id="options-container"></div>
+    
     <div class="feedback-box" id="feedback-text"></div>
-    <button class="btn-next" id="next-btn" onclick="nextQuestion()">Sonraki Soru ➔</button>
+    <button class="btn-main" id="next-btn" style="display: none;" onclick="nextQuestion()">Sonraki ➔</button>
   </div>
 
+  <!-- 3. BÖLÜM: SONUÇ VE PEKİŞTİRME EKRANI -->
   <div id="result-area" style="display: none; text-align: center;">
-    <h2 style="font-size: 26px;">Tebrikler! Test Tamamlandı</h2>
+    <span class="badge">Sonuç</span>
+    <h2 style="font-size: 24px;">Tebrikler, Tamamladın!</h2>
     <div class="result-score" id="percent-text">%0</div>
-    <p id="result-summary" style="color: var(--text-muted); font-size: 16px; margin-bottom: 24px;">20 sorudan 0 tanesini doğru yanıtladınız.</p>
-    <button class="btn-restart" style="display: block;" onclick="initQuiz()">🔄 Testi Yeniden Başlat</button>
+    <p id="result-summary" style="color: var(--text-muted); font-size: 15px; margin-bottom: 20px;"></p>
+    
+    <button class="btn-main" id="retry-wrongs-btn" style="display: none;" onclick="practiceWrongs()">⚠️ Yanlış Yapılanları Tekrarla</button>
+    <button class="btn-main" onclick="startPractice()">🔄 20 Soruluk Yeni Pratik</button>
+    <button class="btn-secondary" onclick="showLearnArea()">📖 Günleri Tekrar İncele</button>
   </div>
+
 </div>
 
 <script>
   const days = [
-    { en: 'Monday', tr: 'Pazartesi' },
-    { en: 'Tuesday', tr: 'Salı' },
-    { en: 'Wednesday', tr: 'Çarşamba' },
-    { en: 'Thursday', tr: 'Perşembe' },
-    { en: 'Friday', tr: 'Cuma' },
-    { en: 'Saturday', tr: 'Cumartesi' },
-    { en: 'Sunday', tr: 'Pazar' }
+    { en: 'Monday', tr: 'Pazartesi', hint: 'Moon Day (Ay günü) - Haftanın ilk günü' },
+    { en: 'Tuesday', tr: 'Salı', hint: '"Tues" sesiyle başlar, haftanın 2. günü' },
+    { en: 'Wednesday', tr: 'Çarşamba', hint: 'Yazılışı "Wed-nes-day" olsa da "Wenzdey" okunur' },
+    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor (Şimşek tanrısı) günü, dili dişlerin arasına alarak "Törzdey"' },
+    { en: 'Friday', tr: 'Cuma', hint: 'Hafta sonunun müjdecisi, cuma neşesi' },
+    { en: 'Saturday', tr: 'Cumartesi', hint: 'Saturn (Satürn) günü, hafta sonu başlangıcı' },
+    { en: 'Sunday', tr: 'Pazar', hint: 'Sun Day (Güneş günü) - Dinlenme günü' }
   ];
 
   let questions = [];
   let currentIndex = 0;
   let correctCount = 0;
   let answered = false;
-
-  function shuffle(array) {
-    return array.slice().sort(() => Math.random() - 0.5);
-  }
+  let wrongQuestions = [];
 
   function speakText(text) {
     if ('speechSynthesis' in window) {
@@ -222,31 +306,65 @@
     }
   }
 
-  function generate20Questions() {
+  function renderLearnCards() {
+    const container = document.getElementById('learn-cards');
+    container.innerHTML = '';
+    days.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'day-card';
+      card.onclick = () => speakText(d.en);
+      card.innerHTML = `
+        <div class="day-left">
+          <span class="day-en">${d.en}</span>
+          <span class="day-tr">${d.tr}</span>
+          <span class="day-hint">${d.hint}</span>
+        </div>
+        <button class="btn-speaker" aria-label="Dinle">🔊</button>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function showLearnArea() {
+    document.getElementById('learn-area').style.display = 'block';
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('result-area').style.display = 'none';
+  }
+
+  function generateQuestions(pool, count = 20) {
     const list = [];
     const types = ['en-to-tr', 'tr-to-en', 'listening', 'speaking'];
 
-    for (let i = 0; i < 20; i++) {
-      const target = days[Math.floor(Math.random() * days.length)];
-      const qType = types[i % types.length]; // 4 tip dengeli dağıtılır
+    for (let i = 0; i < count; i++) {
+      const target = pool[Math.floor(Math.random() * pool.length)];
+      const qType = types[i % types.length];
       
-      const wrongDays = days.filter(d => d.en !== target.en);
-      const chosenWrongs = shuffle(wrongDays).slice(0, 3);
-      const allChoices = shuffle([target, ...chosenWrongs]);
+      const wrongPool = days.filter(d => d.en !== target.en);
+      const chosenWrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
+      const allChoices = [target, ...chosenWrongs].sort(() => Math.random() - 0.5);
 
-      list.push({
-        type: qType,
-        target: target,
-        choices: allChoices
-      });
+      list.push({ type: qType, target, choices: allChoices });
     }
-    return shuffle(list);
+    return list.sort(() => Math.random() - 0.5);
   }
 
-  function initQuiz() {
-    questions = generate20Questions();
+  function startPractice() {
+    questions = generateQuestions(days, 20);
     currentIndex = 0;
     correctCount = 0;
+    wrongQuestions = [];
+    document.getElementById('learn-area').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('result-area').style.display = 'none';
+    renderQuestion();
+  }
+
+  function practiceWrongs() {
+    questions = generateQuestions(wrongQuestions.map(w => w.target), Math.max(5, wrongQuestions.length));
+    currentIndex = 0;
+    correctCount = 0;
+    wrongQuestions = [];
+    document.getElementById('learn-area').style.display = 'none';
     document.getElementById('quiz-area').style.display = 'block';
     document.getElementById('result-area').style.display = 'none';
     renderQuestion();
@@ -260,7 +378,7 @@
     document.getElementById('question-index').textContent = `Soru ${currentIndex + 1} / ${total}`;
     document.getElementById('score-counter').textContent = `Doğru: ${correctCount}`;
     document.getElementById('progress-bar').style.width = `${((currentIndex) / total) * 100}%`;
-    document.getElementById('feedback-text').textContent = '';
+    document.getElementById('feedback-text').innerHTML = '';
     document.getElementById('next-btn').style.display = 'none';
 
     const prompt = document.getElementById('prompt-text');
@@ -276,17 +394,17 @@
 
     if (q.type === 'en-to-tr') {
       badge.textContent = 'İngilizce ➔ Türkçe';
-      prompt.textContent = `"${q.target.en}" Türkçe ne demek?`;
+      prompt.textContent = `"${q.target.en}" nedir?`;
       renderOptionButtons(q.choices.map(c => ({ label: c.tr, isCorrect: c.en === q.target.en })));
     } 
     else if (q.type === 'tr-to-en') {
       badge.textContent = 'Türkçe ➔ İngilizce';
-      prompt.textContent = `"${q.target.tr}" İngilizce nasıl denir?`;
+      prompt.textContent = `"${q.target.tr}" İngilizce nasıl yazılır?`;
       renderOptionButtons(q.choices.map(c => ({ label: c.en, isCorrect: c.en === q.target.en })));
     } 
     else if (q.type === 'listening') {
       badge.textContent = 'Dinle & Seç';
-      prompt.textContent = 'Sesi dinleyin ve doğru günü seçin';
+      prompt.textContent = 'Telaffuz edilen günü seçin';
       actionPanel.style.display = 'flex';
       actionBtn.textContent = '🔊';
       actionBtn.className = 'btn-circle';
@@ -296,8 +414,8 @@
       renderOptionButtons(q.choices.map(c => ({ label: c.en, isCorrect: c.en === q.target.en })));
     } 
     else if (q.type === 'speaking') {
-      badge.textContent = 'Telaffuz / Konuşma';
-      prompt.textContent = `Bu günü İngilizce söyleyin: "${q.target.tr}"`;
+      badge.textContent = 'Telaffuz Pratiği';
+      prompt.textContent = `Mikrofona söyleyin: "${q.target.tr}"`;
       actionPanel.style.display = 'flex';
       optsContainer.style.display = 'none';
       actionBtn.textContent = '🎙️';
@@ -324,21 +442,26 @@
 
     const feedback = document.getElementById('feedback-text');
     const buttons = document.querySelectorAll('.btn-opt');
+    const q = questions[currentIndex];
+
+    // Her cevapta doğru telaffuzu dinlet
+    speakText(q.target.en);
 
     if (isCorrect) {
       correctCount++;
       if (selectedBtn) selectedBtn.classList.add('correct');
-      feedback.textContent = '✓ Harika! Doğru cevap.';
-      feedback.style.color = 'var(--success)';
+      feedback.innerHTML = `<span style="color: var(--success);">✓ Harika! ${q.target.en} = ${q.target.tr}</span>`;
     } else {
+      wrongQuestions.push(q);
       if (selectedBtn) selectedBtn.classList.add('wrong');
-      const q = questions[currentIndex];
       const correctVal = (q.type === 'en-to-tr') ? q.target.tr : q.target.en;
       buttons.forEach(b => {
         if (b.textContent === correctVal) b.classList.add('correct');
       });
-      feedback.textContent = `✗ Yanlış. Doğru cevap: ${correctVal}`;
-      feedback.style.color = 'var(--error)';
+      feedback.innerHTML = `
+        <span style="color: var(--error);">✗ Doğrusu: <strong>${q.target.en}</strong> (${q.target.tr})</span>
+        <span class="feedback-tip">💡 İpucu: ${q.target.hint}</span>
+      `;
     }
 
     document.getElementById('score-counter').textContent = `Doğru: ${correctCount}`;
@@ -350,7 +473,7 @@
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      document.getElementById('feedback-text').textContent = 'Tarayıcınız ses tanımayı desteklemiyor. Geçildi sayıldı.';
+      document.getElementById('feedback-text').innerHTML = '<span>Mikrofon bu tarayıcıda desteklenmiyor.</span>';
       checkAnswer(true, null);
       return;
     }
@@ -363,7 +486,7 @@
     const actionBtn = document.getElementById('action-btn');
     const actionHint = document.getElementById('action-hint');
     actionBtn.classList.add('listening');
-    actionHint.textContent = 'Sizi dinliyor... Şimdi konuşun';
+    actionHint.textContent = 'Dinleniyor... Şimdi konuşun';
 
     recognition.onresult = (event) => {
       actionBtn.classList.remove('listening');
@@ -374,14 +497,14 @@
         checkAnswer(true, null);
       } else {
         const feedback = document.getElementById('feedback-text');
-        feedback.textContent = `Duyulan: "${spoken}". Beklenen: "${expectedWord}"`;
+        feedback.innerHTML = `<span>Duyulan: "${spoken}"</span>`;
         checkAnswer(false, null);
       }
     };
 
     recognition.onerror = () => {
       actionBtn.classList.remove('listening');
-      actionHint.textContent = 'Ses alınamadı. Mikrofon izinlerini kontrol edin veya tekrar deneyin.';
+      actionHint.textContent = 'Ses alınamadı. Lütfen tekrar deneyin.';
     };
 
     recognition.onend = () => {
@@ -408,11 +531,19 @@
     const percent = Math.round((correctCount / questions.length) * 100);
     document.getElementById('percent-text').textContent = `%${percent}`;
     document.getElementById('result-summary').textContent = 
-      `${questions.length} sorudan ${correctCount} tanesini doğru tamamladınız.`;
+      `${questions.length} sorudan ${correctCount} tanesini doğru bildiniz.`;
+
+    const retryBtn = document.getElementById('retry-wrongs-btn');
+    if (wrongQuestions.length > 0) {
+      retryBtn.style.display = 'block';
+      retryBtn.textContent = `⚠️ Yanlış Yapılan ${wrongQuestions.length} Kelimeyi Tekrarla`;
+    } else {
+      retryBtn.style.display = 'none';
+    }
   }
 
-  // İlk başlatma
-  initQuiz();
+  // İlk açılışta ezber kartlarını hazırla
+  renderLearnCards();
 </script>
 
 </body>

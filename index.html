@@ -119,6 +119,56 @@
       background: #3b1818 !important;
       color: #ef4444 !important;
     }
+    
+    /* Mikrofon Alanı */
+    .mikrofon-alani {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .mic-btn {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: #38bdf8;
+      border: none;
+      font-size: 32px;
+      color: #0b1e11;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+    }
+    .mic-btn:active { transform: scale(0.95); }
+    .mic-btn.dinliyor {
+      background: #ef4444;
+      color: white;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .mic-durum {
+      font-size: 14px;
+      color: #94a3b8;
+      font-weight: bold;
+      min-height: 20px;
+    }
+    .mic-atla-btn {
+      background: transparent;
+      border: 1px solid #3b4e5a;
+      color: #94a3b8;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
     .mesaj-kutusu {
       display: none;
       padding: 12px;
@@ -150,6 +200,37 @@
       cursor: pointer;
       text-transform: uppercase;
     }
+
+    /* Özet / Karne Stilleri */
+    .ozet-kutu {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .skor-daire {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid #22c55e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 16px auto;
+      font-size: 28px;
+      font-weight: bold;
+      color: #22c55e;
+    }
+    .skor-etiket { font-size: 11px; color: #94a3b8; }
+    .ozet-satir {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #152229;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -171,12 +252,19 @@
   <span class="ipucu-link" onclick="ipucuToggle()">💡 İpucu ister misin?</span>
   <div class="ipucu-kutu" id="ipucu-kutu">Moon-day (Ay günü) - 1. gün</div>
 
-  <!-- 4 buton doğrudan HTML içine yazılmıştır -->
-  <div class="secenekler-kutusu">
+  <!-- Normal 4 Seçenek -->
+  <div class="secenekler-kutusu" id="secenekler-kutusu">
     <button class="secenek-btn" id="btn-0" type="button" onclick="cevap(0)">Monday</button>
     <button class="secenek-btn" id="btn-1" type="button" onclick="cevap(1)">Tuesday</button>
     <button class="secenek-btn" id="btn-2" type="button" onclick="cevap(2)">Friday</button>
     <button class="secenek-btn" id="btn-3" type="button" onclick="cevap(3)">Sunday</button>
+  </div>
+
+  <!-- Konuşma / Mikrofon Alanı -->
+  <div class="mikrofon-alani" id="mikrofon-kutusu">
+    <button class="mic-btn" id="mic-btn" type="button" onclick="mikrofonDinle()">🎙️</button>
+    <div class="mic-durum" id="mic-durum">Mikrofona dokunun ve söyleyin</div>
+    <button class="mic-atla-btn" type="button" onclick="siklaraDon()">Şıklarla Yanıtla ➔</button>
   </div>
 
   <div class="mesaj-kutusu" id="mesaj-kutu"></div>
@@ -207,30 +295,57 @@
     var yanlislar = gunler.filter(function(g) { return g.en !== hedef.en; });
     yanlislar = karistir(yanlislar).slice(0, 3);
     var secenekler = karistir([hedef].concat(yanlislar));
-    return { hedef: hedef, tip: tip, secenekler: secenekler };
+    return { 
+      hedef: hedef, 
+      tip: tip, 
+      secenekler: secenekler,
+      hataYapti: false // İstatistik takibi için
+    };
   }
 
+  // 20 Soru: TR->EN, EN->TR ve Konuşma modları dengeli dağıtıldı
   var kuyruk = [];
+  var modlar = ['tr_en', 'en_tr', 'konus', 'tr_en', 'en_tr'];
   for (var i = 0; i < 20; i++) {
     var g = gunler[i % gunler.length];
-    var tip = (i % 2 === 0) ? 'tr_en' : 'en_tr';
-    kuyruk.push(soruOlustur(g, tip));
+    var t = modlar[i % modlar.length];
+    kuyruk.push(soruOlustur(g, t));
   }
   kuyruk = karistir(kuyruk);
 
   var can = 5;
   var kilitli = false;
 
-  window.sesCal = function() {
+  // İstatistik Sayaçları
+  var toplamBaslangicSorusu = 20;
+  var ilkDenemedeDogru = 0;
+  var sonradanOgrenilen = 0;
+  var toplamHata = 0;
+
+  function seslendir(metin, dil) {
     try {
-      if (window.speechSynthesis && kuyruk.length > 0) {
+      if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
-        var u = new SpeechSynthesisUtterance(kuyruk[0].hedef.en);
-        u.lang = 'en-US';
+        var u = new SpeechSynthesisUtterance(metin);
+        u.lang = dil || 'en-US';
         u.rate = 0.85;
         window.speechSynthesis.speak(u);
       }
     } catch(e) {}
+  }
+
+  // HOPARLÖR TUŞU (Kopya vermez!)
+  window.sesCal = function() {
+    if (kuyruk.length === 0) return;
+    var aktif = kuyruk[0];
+    
+    // Türkçe sorularda veya telaffuz sorusunda soru Türkçe seslendirilir (kopya engellendi)
+    if (aktif.tip === 'tr_en' || aktif.tip === 'konus') {
+      seslendir(aktif.hedef.tr, 'tr-TR');
+    } else {
+      // İngilizce soruda zaten ekranda "Monday" yazdığı için İngilizce seslendirir
+      seslendir(aktif.hedef.en, 'en-US');
+    }
   };
 
   window.ipucuToggle = function() {
@@ -249,90 +364,50 @@
     document.getElementById('can-sayi').textContent = '❤️ ' + can;
     document.getElementById('ipucu-kutu').textContent = '💡 İpucu: ' + aktif.hedef.hint;
 
-    if (aktif.tip === 'tr_en') {
-      document.getElementById('tur-etiket').textContent = 'TÜRKÇE ➔ İNGİLİZCE';
-      document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.tr + '" hangisidir?';
+    var seceneklerKutusu = document.getElementById('secenekler-kutusu');
+    var mikrofonKutusu = document.getElementById('mikrofon-kutusu');
+
+    if (aktif.tip === 'konus') {
+      // KONUŞMA MODU
+      document.getElementById('tur-etiket').textContent = 'TELAFFUZ / KONUŞMA 🎙️';
+      document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.tr + '" gününü İngilizce söyle:';
+      
+      seceneklerKutusu.style.display = 'none';
+      mikrofonKutusu.style.display = 'flex';
+      document.getElementById('mic-durum').textContent = 'Mikrofona dokunun ve söyleyin';
+      document.getElementById('mic-btn').className = 'mic-btn';
     } else {
-      document.getElementById('tur-etiket').textContent = 'İNGİLİZCE ➔ TÜRKÇE';
-      document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.en + '" ne demektir?';
-    }
+      // TEST MODU
+      mikrofonKutusu.style.display = 'none';
+      seceneklerKutusu.style.display = 'flex';
 
-    for (var i = 0; i < 4; i++) {
-      var btn = document.getElementById('btn-' + i);
-      btn.className = 'secenek-btn';
-      btn.textContent = (aktif.tip === 'tr_en') ? aktif.secenekler[i].en : aktif.secenekler[i].tr;
-    }
-  };
+      if (aktif.tip === 'tr_en') {
+        document.getElementById('tur-etiket').textContent = 'TÜRKÇE ➔ İNGİLİZCE';
+        document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.tr + '" hangisidir?';
+      } else {
+        document.getElementById('tur-etiket').textContent = 'İNGİLİZCE ➔ TÜRKÇE';
+        document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.en + '" ne demektir?';
+      }
 
-  window.cevap = function(idx) {
-    if (kilitli) return;
-    kilitli = true;
-
-    var aktif = kuyruk[0];
-    var secilen = aktif.secenekler[idx];
-    var dogruMu = (secilen.en === aktif.hedef.en);
-
-    window.sesCal();
-
-    for (var i = 0; i < 4; i++) {
-      var btn = document.getElementById('btn-' + i);
-      if (aktif.secenekler[i].en === aktif.hedef.en) {
-        btn.className = 'secenek-btn dogru';
-      } else if (i === idx) {
-        btn.className = 'secenek-btn yanlis';
+      for (var i = 0; i < 4; i++) {
+        var btn = document.getElementById('btn-' + i);
+        btn.className = 'secenek-btn';
+        btn.textContent = (aktif.tip === 'tr_en') ? aktif.secenekler[i].en : aktif.secenekler[i].tr;
       }
     }
-
-    var msj = document.getElementById('mesaj-kutu');
-    var devamBtn = document.getElementById('devam-btn');
-
-    if (dogruMu) {
-      msj.className = 'mesaj-kutusu d-ok';
-      msj.innerHTML = '<strong>🎉 Harika! Doğru.</strong><br>' + aktif.hedef.en + ' = ' + aktif.hedef.tr;
-      msj.style.display = 'block';
-
-      kuyruk.shift();
-
-      setTimeout(function() {
-        window.sonrakiSoru();
-      }, 800);
-    } else {
-      can--;
-      document.getElementById('can-sayi').textContent = '❤️ ' + Math.max(0, can);
-
-      msj.className = 'mesaj-kutusu d-err';
-      msj.innerHTML = '<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>' + aktif.hedef.en + '</strong> (' + aktif.hedef.tr + ')';
-      msj.style.display = 'block';
-
-      var yanlisSoru = kuyruk.shift();
-      yanlisSoru.secenekler = karistir(yanlisSoru.secenekler);
-      kuyruk.push(yanlisSoru);
-
-      devamBtn.style.display = 'block';
-    }
   };
 
-  window.sonrakiSoru = function() {
-    if (can <= 0) {
-      alert("Canlarınız tükendi! Test yeniden başlıyor.");
-      location.reload();
-      return;
-    }
-
+  // Mikrofon Desteklemezse veya İzin Verilmezse Şıklara Dönme Butonu
+  window.siklaraDon = function() {
     if (kuyruk.length > 0) {
+      kuyruk[0].tip = 'tr_en';
       window.soruGoster();
-    } else {
-      document.getElementById('ana-kart').innerHTML =
-        '<div style="text-align:center; padding:20px 0;">' +
-          '<div style="font-size:52px; margin-bottom:12px;">🏆</div>' +
-          '<h2 style="color:#22c55e; margin-bottom:8px;">Tebrikler!</h2>' +
-          '<p style="color:#94a3b8; margin-bottom:20px;">Tüm günleri eksiksiz öğrendiniz.</p>' +
-          '<button class="secenek-btn dogru" style="text-align:center; width:100%; cursor:pointer;" onclick="location.reload()">YENİDEN BAŞLAT 🔄</button>' +
-        '</div>';
     }
   };
 
-  window.soruGoster();
-</script>
-</body>
-</html>
+  // MİKROFON DİNLEME
+  window.mikrofonDinle = function() {
+    if (kilitli) return;
+    var Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var micBtn = document.getElementById('mic-btn');
+    var durum = document.getElementById

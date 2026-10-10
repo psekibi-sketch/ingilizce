@@ -34,9 +34,7 @@
       margin-bottom: 15px;
       font-size: 14px;
     }
-    .can {
-      color: #ff4b4b;
-    }
+    .can { color: #ff4b4b; }
     .soru-baslik {
       font-size: 20px;
       font-weight: bold;
@@ -93,8 +91,8 @@
       text-align: left;
     }
     .secenek.secildi {
-      border-color: #1cb0f6;
-      background-color: #1a3847;
+      border-color: #1cb0f6 !important;
+      background-color: #1a3847 !important;
     }
     .secenek.dogru {
       border-color: #58cc02 !important;
@@ -136,10 +134,11 @@
       cursor: pointer;
       text-transform: uppercase;
     }
-    .ana-buton:disabled {
+    .ana-buton.pasif {
       background-color: #37464f;
       color: #6a828e;
       cursor: not-allowed;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -152,180 +151,4 @@
   </div>
 
   <div id="oyun-alani">
-    <div class="soru-baslik" id="soru-metni">"Pazartesi" hangisidir?</div>
-    
-    <span class="ipucu-btn" onclick="ipucuGoster()">💡 İpucu ister misin?</span>
-    <div class="ipucu-alani" id="ipucu-metni">Moon-day (Ay günü) - 1. gün</div>
-
-    <div class="ses-kutusu" id="ses-alani">
-      <button class="ses-butonu" type="button" onclick="sesCal()">🔊</button>
-      <div style="font-size:12px; color:#afc5ce; margin-top:5px;">Dinlemek için dokunun</div>
-    </div>
-
-    <div class="secenekler">
-      <button class="secenek" type="button" onclick="secimYap(0)" id="btn-0">Monday</button>
-      <button class="secenek" type="button" onclick="secimYap(1)" id="btn-1">Tuesday</button>
-      <button class="secenek" type="button" onclick="secimYap(2)" id="btn-2">Friday</button>
-      <button class="secenek" type="button" onclick="secimYap(3)" id="btn-3">Sunday</button>
-    </div>
-  </div>
-
-  <div id="sonuc-alani" style="display:none; text-align:center;">
-    <div style="font-size:40px; margin-bottom:10px;">🏆</div>
-    <div style="font-size:20px; font-weight:bold; margin-bottom:10px;">Tebrikler!</div>
-    <div style="color:#afc5ce; margin-bottom:20px;">Tüm günleri başarıyla tamamladınız.</div>
-  </div>
-
-  <div class="mesaj-alani" id="bildirim"></div>
-  <button class="ana-buton" id="kontrol-butonu" disabled onclick="butonaBasildi()">KONTROL ET</button>
-</div>
-
-<script>
-  var gunler = [
-    { en: 'Monday', tr: 'Pazartesi', hint: 'Moon-day (Ay günü) - Haftanın 1. günü' },
-    { en: 'Tuesday', tr: 'Salı', hint: 'Two-sday (2. gün) - İkinci gün' },
-    { en: 'Wednesday', tr: 'Çarşamba', hint: 'Wed-nes-day - Ortadaki en uzun gün' },
-    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
-    { en: 'Friday', tr: 'Cuma', hint: 'Fri-day (Fries) - Hafta sonu kapısı' },
-    { en: 'Saturday', tr: 'Cumartesi', hint: 'Saturn-day - Hafta sonu başlangıcı' },
-    { en: 'Sunday', tr: 'Pazar', hint: 'Sun-day (Güneş günü) - Dinlenme günü' }
-  ];
-
-  var kuyruk = [
-    { hedef: gunler[0], tip: 'tr_en', siklar: [gunler[0], gunler[1], gunler[4], gunler[6]] },
-    { hedef: gunler[1], tip: 'en_tr', siklar: [gunler[0], gunler[1], gunler[2], gunler[3]] },
-    { hedef: gunler[4], tip: 'ses', siklar: [gunler[3], gunler[4], gunler[5], gunler[6]] },
-    { hedef: gunler[2], tip: 'tr_en', siklar: [gunler[1], gunler[2], gunler[3], gunler[4]] },
-    { hedef: gunler[6], tip: 'en_tr', siklar: [gunler[0], gunler[4], gunler[5], gunler[6]] },
-    { hedef: gunler[3], tip: 'ses', siklar: [gunler[1], gunler[2], gunler[3], gunler[5]] },
-    { hedef: gunler[5], tip: 'tr_en', siklar: [gunler[2], gunler[3], gunler[4], gunler[5]] },
-    { hedef: gunler[0], tip: 'en_tr', siklar: [gunler[0], gunler[1], gunler[5], gunler[6]] },
-    { hedef: gunler[1], tip: 'ses', siklar: [gunler[0], gunler[1], gunler[3], gunler[4]] },
-    { hedef: gunler[4], tip: 'tr_en', siklar: [gunler[1], gunler[2], gunler[4], gunler[6]] },
-    { hedef: gunler[2], tip: 'en_tr', siklar: [gunler[2], gunler[3], gunler[4], gunler[5]] },
-    { hedef: gunler[3], tip: 'tr_en', siklar: [gunler[0], gunler[1], gunler[2], gunler[3]] },
-    { hedef: gunler[6], tip: 'ses', siklar: [gunler[0], gunler[4], gunler[5], gunler[6]] },
-    { hedef: gunler[5], tip: 'en_tr', siklar: [gunler[2], gunler[4], gunler[5], gunler[6]] },
-    { hedef: gunler[0], tip: 'ses', siklar: [gunler[0], gunler[1], gunler[3], gunler[4]] },
-    { hedef: gunler[1], tip: 'tr_en', siklar: [gunler[0], gunler[1], gunler[2], gunler[5]] },
-    { hedef: gunler[4], tip: 'en_tr', siklar: [gunler[2], gunler[3], gunler[4], gunler[6]] },
-    { hedef: gunler[2], tip: 'ses', siklar: [gunler[1], gunler[2], gunler[3], gunler[4]] },
-    { hedef: gunler[3], tip: 'en_tr', siklar: [gunler[0], gunler[1], gunler[3], gunler[5]] },
-    { hedef: gunler[6], tip: 'tr_en', siklar: [gunler[1], gunler[4], gunler[5], gunler[6]] }
-  ];
-
-  var can = 5;
-  var secilenIndex = -1;
-  var kontrolEdildi = false;
-
-  function ipucuGoster() {
-    var alan = document.getElementById('ipucu-metni');
-    alan.style.display = (alan.style.display === 'block') ? 'none' : 'block';
-  }
-
-  function sesCal() {
-    if ('speechSynthesis' in window && kuyruk.length > 0) {
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(kuyruk[0].hedef.en);
-      u.lang = 'en-US';
-      window.speechSynthesis.speak(u);
-    }
-  }
-
-  function secimYap(index) {
-    if (kontrolEdildi) return;
-    secilenIndex = index;
-    for (var i = 0; i < 4; i++) {
-      document.getElementById('btn-' + i).classList.remove('secildi');
-    }
-    document.getElementById('btn-' + index).classList.add('secildi');
-    document.getElementById('kontrol-butonu').disabled = false;
-  }
-
-  function soruyuCiz() {
-    kontrolEdildi = false;
-    secilenIndex = -1;
-
-    document.getElementById('bildirim').style.display = 'none';
-    var anaBtn = document.getElementById('kontrol-butonu');
-    anaBtn.textContent = 'KONTROL ET';
-    anaBtn.disabled = true;
-
-    var cur = kuyruk[0];
-    document.getElementById('kalan-sayisi').textContent = 'Kalan Soru: ' + kuyruk.length;
-    document.getElementById('can-sayisi').textContent = '❤️ ' + can;
-
-    var ipucu = document.getElementById('ipucu-metni');
-    ipucu.style.display = 'none';
-    ipucu.textContent = '💡 İpucu: ' + cur.hedef.hint;
-
-    var sesAlani = document.getElementById('ses-alani');
-    var isTr = (cur.tip === 'en_tr' || cur.tip === 'ses');
-
-    if (cur.tip === 'tr_en') {
-      document.getElementById('soru-metni').textContent = '"' + cur.hedef.tr + '" hangisidir?';
-      sesAlani.style.display = 'none';
-    } else if (cur.tip === 'en_tr') {
-      document.getElementById('soru-metni').textContent = '"' + cur.hedef.en + '" ne demek?';
-      sesAlani.style.display = 'none';
-    } else {
-      document.getElementById('soru-metni').textContent = 'Sesi dinleyin ve doğru günü seçin:';
-      sesAlani.style.display = 'block';
-    }
-
-    for (var i = 0; i < 4; i++) {
-      var btn = document.getElementById('btn-' + i);
-      btn.className = 'secenek';
-      btn.textContent = isTr ? cur.siklar[i].tr : cur.siklar[i].en;
-    }
-  }
-
-  function butonaBasildi() {
-    var cur = kuyruk[0];
-    var anaBtn = document.getElementById('kontrol-butonu');
-    var bildirim = document.getElementById('bildirim');
-
-    if (!kontrolEdildi) {
-      kontrolEdildi = true;
-      var secilenSik = cur.siklar[secilenIndex];
-      var dogruMu = (secilenSik.en === cur.hedef.en);
-
-      bildirim.style.display = 'block';
-
-      for (var i = 0; i < 4; i++) {
-        var btn = document.getElementById('btn-' + i);
-        if (cur.siklar[i].en === cur.hedef.en) {
-          btn.classList.add('dogru');
-        } else if (i === secilenIndex) {
-          btn.classList.add('yanlis');
-        }
-      }
-
-      if (dogruMu) {
-        bildirim.className = 'mesaj-alani dogru';
-        bildirim.innerHTML = '<strong>Tebrikler! Doğru.</strong><br>' + cur.hedef.en + ' = ' + cur.hedef.tr;
-        anaBtn.textContent = 'DEVAM ET';
-        kuyruk.shift();
-      } else {
-        can--;
-        document.getElementById('can-sayisi').textContent = '❤️ ' + Math.max(0, can);
-        bildirim.className = 'mesaj-alani yanlis';
-        bildirim.innerHTML = '<strong>Yanlış! Bu soru en sona eklendi.</strong><br>Doğrusu: <strong>' + cur.hedef.en + '</strong> (' + cur.hedef.tr + ')';
-        anaBtn.textContent = 'SONA EKLE & DEVAM ET';
-
-        var yanlisSoru = kuyruk.shift();
-        yanlisSoru.siklar.sort(function() { return 0.5 - Math.random(); });
-        kuyruk.push(yanlisSoru);
-      }
-    } else {
-      if (can <= 0) {
-        alert("Canlarınız tükendi! Test yeniden başlıyor.");
-        location.reload();
-        return;
-      }
-
-      if (kuyruk.length > 0) {
-        soruyuCiz();
-      } else {
-        document.getElementById('oyun-alani').style.display = 'none';
-        document.getElementById('bildirim').style.display = 'none';
+    <div class="soru-baslik" id="

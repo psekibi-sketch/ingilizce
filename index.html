@@ -26,11 +26,11 @@
       padding: 24px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.5);
     }
-    .top {
+    .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .track {
       flex: 1;
@@ -44,7 +44,7 @@
       width: 5%;
       height: 100%;
       background: #58cc02;
-      transition: width 0.3s;
+      transition: width 0.3s ease;
     }
     .hearts {
       font-size: 18px;
@@ -74,8 +74,9 @@
     .title {
       font-size: 21px;
       font-weight: 800;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       line-height: 1.3;
+      min-height: 30px;
     }
     .hint-trigger {
       display: inline-block;
@@ -95,6 +96,28 @@
       color: #ffc800;
       display: none;
     }
+    .sound-panel {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .sound-btn {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #1cb0f6;
+      border: none;
+      border-bottom: 4px solid #1899d6;
+      font-size: 28px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sound-btn:active { transform: translateY(2px); }
     .btn-col {
       display: flex;
       flex-direction: column;
@@ -106,7 +129,7 @@
       border: 2px solid #37464f;
       border-bottom: 4px solid #37464f;
       border-radius: 14px;
-      padding: 15px;
+      padding: 14px 16px;
       color: #fff;
       font-size: 17px;
       font-weight: 700;
@@ -135,28 +158,6 @@
       background: rgba(255, 75, 75, 0.2) !important;
       color: #ff4b4b !important;
     }
-    .sound-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin: 14px 0 18px;
-    }
-    .sound-btn {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: #1cb0f6;
-      border: none;
-      border-bottom: 4px solid #1899d6;
-      font-size: 30px;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .sound-btn:active { transform: translateY(2px); }
     .feedback {
       border-radius: 14px;
       padding: 14px;
@@ -196,6 +197,8 @@
       color: #6a828e;
       pointer-events: none;
     }
+    
+    /* İstatistik Tablosu */
     .stat-list {
       display: flex;
       flex-direction: column;
@@ -224,20 +227,155 @@
       height: 100%;
       border-radius: 6px;
     }
-    .weakness-alert {
-      background: rgba(255, 200, 0, 0.15);
-      border: 1px solid #ffc800;
-      color: #ffc800;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 13px;
-      margin-bottom: 16px;
-      line-height: 1.4;
-    }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="top">
-    <div
+  <!-- Üst Göstergeler -->
+  <div class="top-bar">
+    <div class="track"><div class="fill" id="fill-bar"></div></div>
+    <div class="hearts">❤️ <span id="hearts-val">5</span></div>
+  </div>
+
+  <!-- Soru İçeriği -->
+  <div id="quiz-panel">
+    <div class="info-row">
+      <span class="tag" id="tag-badge">SORU</span>
+      <span class="queue-info" id="queue-indicator">Kalan: 20</span>
+    </div>
+
+    <div class="title" id="question-text">Soru hazırlanıyor...</div>
+    
+    <div class="hint-trigger" id="hint-btn" onclick="toggleHint()">💡 İpucu ister misin?</div>
+    <div class="hint-box" id="hint-display"></div>
+
+    <div class="sound-panel" id="sound-box">
+      <button class="sound-btn" type="button" onclick="playCurrentAudio()">🔊</button>
+      <span style="font-size:12px; color:#afc5ce;">Tekrar dinlemek için dokunun</span>
+    </div>
+
+    <!-- 4 Sabit Şık Butonu (Dinamik çökme riskini önler) -->
+    <div class="btn-col" id="options-group">
+      <button class="opt" type="button" onclick="handleSelect(0)" id="opt-0"><span>-</span></button>
+      <button class="opt" type="button" onclick="handleSelect(1)" id="opt-1"><span>-</span></button>
+      <button class="opt" type="button" onclick="handleSelect(2)" id="opt-2"><span>-</span></button>
+      <button class="opt" type="button" onclick="handleSelect(3)" id="opt-3"><span>-</span></button>
+    </div>
+  </div>
+
+  <!-- Sonuç Rapor Alanı (Test Bitince Gösterilir) -->
+  <div id="report-panel" style="display: none; text-align: center;">
+    <div style="font-size:52px; margin-bottom:8px;">📊</div>
+    <div class="title" style="color:#ffc800;">Performans Özeti</div>
+    <div class="stat-list" id="stat-container"></div>
+  </div>
+
+  <!-- Geri Bildirim ve İlerleme Butonu -->
+  <div class="feedback" id="feedback-alert"></div>
+  <button class="main-btn disabled" id="submit-btn" onclick="processStep()">KONTROL ET</button>
+</div>
+
+<script>
+  var daysData = [
+    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay günü) - Haftanın 1. günü' },
+    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday (2. gün) - İkinci iş günü' },
+    { en: 'Wednesday', tr: 'Çarşamba', icon: '🐪', hint: 'Hump Day (Hafta ortası) - En uzun yazılan gün' },
+    { en: 'Thursday', tr: 'Perşembe', icon: '⚡', hint: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
+    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries/Patates) - Hafta sonu kapısı' },
+    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day - Hafta sonu başlangıcı' },
+    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş günü) - Dinlenme günü' }
+  ];
+
+  var queue = [];
+  var targetGoal = 20;
+  var completedCount = 0;
+  var hearts = 5;
+  var selectedIndex = -1;
+  var isEvaluated = false;
+  var performanceLog = {};
+
+  // İstatistik havuzunu hazırla
+  for (var i = 0; i < daysData.length; i++) {
+    performanceLog[daysData[i].en] = { attempts: 0, wrongs: 0, tr: daysData[i].tr, icon: daysData[i].icon };
+  }
+
+  function playAudio(word) {
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(word);
+        u.lang = 'en-US';
+        u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      }
+    } catch(e) {}
+  }
+
+  function playCurrentAudio() {
+    if (queue.length > 0) {
+      playAudio(queue[0].target.en);
+    }
+  }
+
+  function shuffle(arr) {
+    var c = arr.slice();
+    for (var i = c.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = c[i]; c[i] = c[j]; c[j] = t;
+    }
+    return c;
+  }
+
+  function buildQuestion(targetItem, mode) {
+    var wrongPool = daysData.filter(function(x) { return x.en !== targetItem.en; });
+    var wrongs = shuffle(wrongPool).slice(0, 3);
+    var choices = shuffle([targetItem].concat(wrongs));
+    return { target: targetItem, mode: mode, choices: choices };
+  }
+
+  function setupQuiz() {
+    queue = [];
+    completedCount = 0;
+    hearts = 5;
+    var modes = ['tr_to_en', 'en_to_tr', 'sound'];
+    for (var i = 0; i < targetGoal; i++) {
+      var item = daysData[i % daysData.length];
+      var m = modes[i % modes.length];
+      queue.push(buildQuestion(item, m));
+    }
+    queue = shuffle(queue);
+    renderQuestion();
+  }
+
+  function toggleHint() {
+    var h = document.getElementById('hint-display');
+    h.style.display = (h.style.display === 'block') ? 'none' : 'block';
+  }
+
+  function handleSelect(idx) {
+    if (isEvaluated) return;
+    selectedIndex = idx;
+    for (var i = 0; i < 4; i++) {
+      var b = document.getElementById('opt-' + i);
+      if (b) b.classList.remove('sel');
+    }
+    var selectedBtn = document.getElementById('opt-' + idx);
+    if (selectedBtn) selectedBtn.classList.add('sel');
+
+    var submitBtn = document.getElementById('submit-btn');
+    submitBtn.classList.remove('disabled');
+  }
+
+  function renderQuestion() {
+    isEvaluated = false;
+    selectedIndex = -1;
+
+    var fb = document.getElementById('feedback-alert');
+    fb.style.display = 'none';
+
+    var submitBtn = document.getElementById('submit-btn');
+    submitBtn.textContent = 'KONTROL ET';
+    submitBtn.className = 'main-btn disabled';
+
+    var currentQ

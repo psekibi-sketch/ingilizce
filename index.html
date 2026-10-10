@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>LingoDays - İngilizce Günler</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
     body {
       background: #111b21;
       color: #ffffff;
@@ -38,7 +38,7 @@
       padding: 5px 10px;
       border-radius: 8px;
     }
-    .sayac-alani {
+    .sayac {
       display: flex;
       gap: 12px;
       font-weight: bold;
@@ -51,13 +51,13 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .soru-metni {
+    .soru-baslik {
       font-size: 20px;
       font-weight: bold;
       line-height: 1.3;
       flex: 1;
     }
-    .ses-tusu {
+    .ses-btn {
       background: #38bdf8;
       border: none;
       width: 44px;
@@ -70,8 +70,8 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .ses-tusu:active { transform: scale(0.92); }
-    .ipucu-tusu {
+    .ses-btn:active { transform: scale(0.92); }
+    .ipucu-link {
       color: #94a3b8;
       font-size: 13px;
       text-decoration: underline;
@@ -137,7 +137,7 @@
       border: 1px solid #ef4444;
       color: #ef4444;
     }
-    .devam-btn {
+    .ana-btn {
       display: none;
       width: 100%;
       background: #22c55e;
@@ -157,19 +157,182 @@
 <div class="kart" id="ana-kart">
   <div class="ust-bar">
     <span class="etiket" id="tur-etiket">TÜRKÇE ➔ İNGİLİZCE</span>
-    <div class="sayac-alani">
+    <div class="sayac">
       <span id="kalan-sayi" style="color: #4ade80;">Kalan: 20</span>
       <span id="can-sayi" style="color: #ef4444;">❤️ 5</span>
     </div>
   </div>
 
   <div class="soru-satiri">
-    <div class="soru-metni" id="soru-metni">...</div>
-    <button class="ses-tusu" id="ses-tusu" type="button">🔊</button>
+    <div class="soru-baslik" id="soru-basligi">"Pazartesi" hangisidir?</div>
+    <button class="ses-btn" type="button" onclick="sesCal()">🔊</button>
   </div>
   
-  <span class="ipucu-tusu" id="ipucu-tetik">💡 İpucu ister misin?</span>
-  <div class="ipucu-kutu" id="ipucu-kutu"></div>
+  <span class="ipucu-link" onclick="ipucuToggle()">💡 İpucu ister misin?</span>
+  <div class="ipucu-kutu" id="ipucu-kutu">Moon-day (Ay günü) - 1. gün</div>
 
-  <div class="secenekler-kutusu" id="secenekler-alani">
-    <button class="
+  <!-- 4 buton doğrudan HTML içine yazılmıştır -->
+  <div class="secenekler-kutusu">
+    <button class="secenek-btn" id="btn-0" type="button" onclick="cevap(0)">Monday</button>
+    <button class="secenek-btn" id="btn-1" type="button" onclick="cevap(1)">Tuesday</button>
+    <button class="secenek-btn" id="btn-2" type="button" onclick="cevap(2)">Friday</button>
+    <button class="secenek-btn" id="btn-3" type="button" onclick="cevap(3)">Sunday</button>
+  </div>
+
+  <div class="mesaj-kutusu" id="mesaj-kutu"></div>
+  <button class="ana-btn" id="devam-btn" type="button" onclick="sonrakiSoru()">SONRAKİ SORU ➔</button>
+</div>
+
+<script>
+  var gunler = [
+    { en: 'Monday', tr: 'Pazartesi', hint: 'Moon-day (Ay günü) - 1. gün' },
+    { en: 'Tuesday', tr: 'Salı', hint: 'Two-sday (2. gün) - Salı' },
+    { en: 'Wednesday', tr: 'Çarşamba', hint: 'Wed-nes-day - Ortadaki en uzun gün' },
+    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
+    { en: 'Friday', tr: 'Cuma', hint: 'Fri-day (Fries) - Hafta sonu kapısı' },
+    { en: 'Saturday', tr: 'Cumartesi', hint: 'Saturn-day - Hafta sonu' },
+    { en: 'Sunday', tr: 'Pazar', hint: 'Sun-day (Güneş günü) - Dinlenme günü' }
+  ];
+
+  function karistir(arr) {
+    var copy = arr.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = copy[i]; copy[i] = copy[j]; copy[j] = t;
+    }
+    return copy;
+  }
+
+  function soruOlustur(hedef, tip) {
+    var yanlislar = gunler.filter(function(g) { return g.en !== hedef.en; });
+    yanlislar = karistir(yanlislar).slice(0, 3);
+    var secenekler = karistir([hedef].concat(yanlislar));
+    return { hedef: hedef, tip: tip, secenekler: secenekler };
+  }
+
+  var kuyruk = [];
+  for (var i = 0; i < 20; i++) {
+    var g = gunler[i % gunler.length];
+    var tip = (i % 2 === 0) ? 'tr_en' : 'en_tr';
+    kuyruk.push(soruOlustur(g, tip));
+  }
+  kuyruk = karistir(kuyruk);
+
+  var can = 5;
+  var kilitli = false;
+
+  window.sesCal = function() {
+    try {
+      if (window.speechSynthesis && kuyruk.length > 0) {
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(kuyruk[0].hedef.en);
+        u.lang = 'en-US';
+        u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      }
+    } catch(e) {}
+  };
+
+  window.ipucuToggle = function() {
+    var el = document.getElementById('ipucu-kutu');
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+  };
+
+  window.soruGoster = function() {
+    kilitli = false;
+    document.getElementById('mesaj-kutu').style.display = 'none';
+    document.getElementById('devam-btn').style.display = 'none';
+    document.getElementById('ipucu-kutu').style.display = 'none';
+
+    var aktif = kuyruk[0];
+    document.getElementById('kalan-sayi').textContent = 'Kalan: ' + kuyruk.length;
+    document.getElementById('can-sayi').textContent = '❤️ ' + can;
+    document.getElementById('ipucu-kutu').textContent = '💡 İpucu: ' + aktif.hedef.hint;
+
+    if (aktif.tip === 'tr_en') {
+      document.getElementById('tur-etiket').textContent = 'TÜRKÇE ➔ İNGİLİZCE';
+      document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.tr + '" hangisidir?';
+    } else {
+      document.getElementById('tur-etiket').textContent = 'İNGİLİZCE ➔ TÜRKÇE';
+      document.getElementById('soru-basligi').textContent = '"' + aktif.hedef.en + '" ne demektir?';
+    }
+
+    for (var i = 0; i < 4; i++) {
+      var btn = document.getElementById('btn-' + i);
+      btn.className = 'secenek-btn';
+      btn.textContent = (aktif.tip === 'tr_en') ? aktif.secenekler[i].en : aktif.secenekler[i].tr;
+    }
+  };
+
+  window.cevap = function(idx) {
+    if (kilitli) return;
+    kilitli = true;
+
+    var aktif = kuyruk[0];
+    var secilen = aktif.secenekler[idx];
+    var dogruMu = (secilen.en === aktif.hedef.en);
+
+    window.sesCal();
+
+    for (var i = 0; i < 4; i++) {
+      var btn = document.getElementById('btn-' + i);
+      if (aktif.secenekler[i].en === aktif.hedef.en) {
+        btn.className = 'secenek-btn dogru';
+      } else if (i === idx) {
+        btn.className = 'secenek-btn yanlis';
+      }
+    }
+
+    var msj = document.getElementById('mesaj-kutu');
+    var devamBtn = document.getElementById('devam-btn');
+
+    if (dogruMu) {
+      msj.className = 'mesaj-kutusu d-ok';
+      msj.innerHTML = '<strong>🎉 Harika! Doğru.</strong><br>' + aktif.hedef.en + ' = ' + aktif.hedef.tr;
+      msj.style.display = 'block';
+
+      kuyruk.shift();
+
+      setTimeout(function() {
+        window.sonrakiSoru();
+      }, 800);
+    } else {
+      can--;
+      document.getElementById('can-sayi').textContent = '❤️ ' + Math.max(0, can);
+
+      msj.className = 'mesaj-kutusu d-err';
+      msj.innerHTML = '<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>' + aktif.hedef.en + '</strong> (' + aktif.hedef.tr + ')';
+      msj.style.display = 'block';
+
+      var yanlisSoru = kuyruk.shift();
+      yanlisSoru.secenekler = karistir(yanlisSoru.secenekler);
+      kuyruk.push(yanlisSoru);
+
+      devamBtn.style.display = 'block';
+    }
+  };
+
+  window.sonrakiSoru = function() {
+    if (can <= 0) {
+      alert("Canlarınız tükendi! Test yeniden başlıyor.");
+      location.reload();
+      return;
+    }
+
+    if (kuyruk.length > 0) {
+      window.soruGoster();
+    } else {
+      document.getElementById('ana-kart').innerHTML =
+        '<div style="text-align:center; padding:20px 0;">' +
+          '<div style="font-size:52px; margin-bottom:12px;">🏆</div>' +
+          '<h2 style="color:#22c55e; margin-bottom:8px;">Tebrikler!</h2>' +
+          '<p style="color:#94a3b8; margin-bottom:20px;">Tüm günleri eksiksiz öğrendiniz.</p>' +
+          '<button class="secenek-btn dogru" style="text-align:center; width:100%; cursor:pointer;" onclick="location.reload()">YENİDEN BAŞLAT 🔄</button>' +
+        '</div>';
+    }
+  };
+
+  window.soruGoster();
+</script>
+</body>
+</html>

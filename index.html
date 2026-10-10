@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays</title>
+  <title>LingoDays - Günler Pratiği</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
@@ -49,36 +49,32 @@
       font-size: 18px;
       font-weight: 800;
       color: #ff4b4b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .queue-info {
+      font-size: 12px;
+      color: #afc5ce;
+      font-weight: 700;
     }
     .tag {
       display: inline-block;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 12px;
       background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
       font-size: 12px;
       font-weight: 700;
       margin-bottom: 12px;
+      text-transform: uppercase;
     }
     .title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
-      margin-bottom: 16px;
-    }
-    .mnemonic {
-      background: #18282f;
-      border: 2px dashed #4b626e;
-      border-radius: 16px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
       margin-bottom: 18px;
-      cursor: pointer;
+      line-height: 1.3;
     }
-    .m-icon { font-size: 38px; }
-    .m-word { font-size: 20px; font-weight: 800; color: #1cb0f6; }
-    .m-sub { font-size: 13px; color: #afc5ce; margin-top: 2px; }
     .btn-col {
       display: flex;
       flex-direction: column;
@@ -90,14 +86,14 @@
       border: 2px solid #37464f;
       border-bottom: 4px solid #37464f;
       border-radius: 14px;
-      padding: 14px;
+      padding: 16px;
       color: #fff;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-align: left;
     }
     .opt:active { transform: translateY(2px); border-bottom-width: 2px; }
@@ -107,37 +103,83 @@
       background: rgba(28, 176, 246, 0.2);
       color: #1cb0f6;
     }
+    .opt.correct-mark {
+      border-color: #58cc02 !important;
+      border-bottom-color: #58a700 !important;
+      background: rgba(88, 204, 2, 0.2) !important;
+      color: #58cc02 !important;
+    }
+    .opt.wrong-mark {
+      border-color: #ff4b4b !important;
+      border-bottom-color: #ea2b2b !important;
+      background: rgba(255, 75, 75, 0.2) !important;
+      color: #ff4b4b !important;
+    }
+    .sound-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0 20px;
+    }
     .sound-btn {
-      width: 70px;
-      height: 70px;
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
       background: #1cb0f6;
       border: none;
       border-bottom: 4px solid #1899d6;
-      font-size: 30px;
+      font-size: 32px;
       color: white;
       cursor: pointer;
-      margin: 12px auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .sound-btn:active { transform: translateY(2px); }
-    .feedback {
+    .sound-btn.listening {
+      background: #ff4b4b;
+      border-bottom-color: #ea2b2b;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .hint-trigger {
+      display: inline-block;
+      font-size: 13px;
+      color: #afc5ce;
+      cursor: pointer;
+      margin-bottom: 14px;
+      text-decoration: underline;
+    }
+    .hint-box {
+      background: #18282f;
+      border: 1px dashed #4b626e;
       border-radius: 12px;
       padding: 12px;
-      margin-bottom: 12px;
-      display: none;
+      margin-bottom: 16px;
       font-size: 14px;
+      color: #ffc800;
+      display: none;
+    }
+    .feedback {
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+      display: none;
+      font-size: 15px;
       line-height: 1.4;
     }
     .feedback.ok {
-      background: rgba(88, 204, 2, 0.2);
+      background: rgba(88, 204, 2, 0.15);
       border: 1px solid #58cc02;
       color: #58cc02;
     }
     .feedback.err {
-      background: rgba(255, 75, 75, 0.2);
+      background: rgba(255, 75, 75, 0.15);
       border: 1px solid #ff4b4b;
       color: #ff4b4b;
     }
@@ -147,12 +189,13 @@
       border: none;
       border-bottom: 4px solid #58a700;
       color: white;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 800;
-      padding: 15px;
+      padding: 16px;
       border-radius: 14px;
       cursor: pointer;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .main-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
     .main-btn.disabled {
@@ -172,8 +215,13 @@
   </div>
 
   <div id="content">
-    <span class="tag" id="tag">Hafıza Kartı</span>
-    <div class="title" id="title">Görsel Hafızana Kazı!</div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="tag" id="tag">Soru</span>
+      <span class="queue-info" id="queue-count">Kalan: 20</span>
+    </div>
+    <div class="title" id="title">...</div>
+    <div class="hint-trigger" id="hint-toggle" onclick="toggleHint()">💡 İpucu ister misin?</div>
+    <div class="hint-box" id="hint-box"></div>
     <div id="body-area"></div>
   </div>
 
@@ -182,18 +230,20 @@
 </div>
 
 <script>
+  // Günler ve sadece zihinsel anımsatıcı semboller (doğrudan cevap vermez)
   var data = [
-    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay Günü) ➔ 1. Gün' },
-    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday ➔ 2. Gün' },
-    { en: 'Wednesday', tr: 'Çarşamba', icon: '🧙‍♂️', hint: 'Wed-nes-day ➔ En uzun gün' },
-    { en: 'Thursday', tr: 'Perşembe', icon: '⚡', hint: 'Thor-sday ➔ Şimşek Günü' },
-    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries) ➔ Tatil habercisi' },
-    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day ➔ Satürn günü' },
-    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş Günü) ➔ Dinlenme' }
+    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay günü) ➔ Haftanın 1. günü' },
+    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday (2. gün) ➔ İkinci iş günü' },
+    { en: 'Wednesday', tr: 'Çarşamba', icon: '🐪', hint: 'Hump Day (Hafta ortası hörgücü) ➔ En uzun yazılan gün' },
+    { en: 'Thursday', tr: 'Perşembe', icon: '⚡', hint: 'Thor-sday (Şimşek günü) ➔ Cuma öncesi' },
+    { en: 'Friday', tr: 'Cuma', icon: '🍟', hint: 'Fri-day (Fries/Patates) ➔ Hafta sonu kapısı' },
+    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day ➔ Hafta sonu başlangıcı' },
+    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş günü) ➔ Dinlenme günü' }
   ];
 
-  var questions = [];
-  var step = 0;
+  var questionQueue = [];
+  var totalCompleted = 0;
+  var targetGoal = 20;
   var hearts = 5;
   var selected = null;
   var checked = false;
@@ -207,67 +257,99 @@
     } catch(e) {}
   }
 
-  function makeQuestions() {
-    var q = [];
-    for (var i = 0; i < 20; i++) {
-      var item = data[i % data.length];
-      var wrongs = data.filter(function(x){ return x.en !== item.en; }).sort(function(){ return 0.5 - Math.random(); }).slice(0, 3);
-      var opts = [item].concat(wrongs).sort(function(){ return 0.5 - Math.random(); });
-      var mode = (i % 3 === 0) ? 'card' : (i % 3 === 1 ? 'sound' : 'quiz');
-      q.push({ item: item, mode: mode, opts: opts });
-    }
-    return q.sort(function(){ return 0.5 - Math.random(); });
+  function shuffle(arr) {
+    return arr.slice().sort(function() { return 0.5 - Math.random(); });
   }
 
-  function loadStep() {
+  function createQuestion(item, mode) {
+    var wrongs = data.filter(function(x){ return x.en !== item.en; });
+    var pickedWrongs = shuffle(wrongs).slice(0, 3);
+    var opts = shuffle([item].concat(pickedWrongs)); // Tam 4 şık
+    return { item: item, mode: mode, opts: opts };
+  }
+
+  function initQuiz() {
+    questionQueue = [];
+    totalCompleted = 0;
+    hearts = 5;
+    var modes = ['tr_to_en', 'en_to_tr', 'sound', 'speaking'];
+
+    for (var i = 0; i < targetGoal; i++) {
+      var item = data[i % data.length];
+      var mode = modes[i % modes.length];
+      questionQueue.push(createQuestion(item, mode));
+    }
+    questionQueue = shuffle(questionQueue);
+    loadNext();
+  }
+
+  function toggleHint() {
+    var hb = document.getElementById('hint-box');
+    hb.style.display = (hb.style.display === 'block') ? 'none' : 'block';
+  }
+
+  function loadNext() {
     checked = false;
     selected = null;
-    document.getElementById('fb').style.display = 'none';
-    document.getElementById('fb').className = 'feedback';
-    
+
+    var fb = document.getElementById('fb');
+    fb.style.display = 'none';
+    fb.className = 'feedback';
+
     var btn = document.getElementById('action-btn');
     btn.textContent = 'KONTROL ET';
     btn.className = 'main-btn disabled';
 
-    var pct = Math.max(5, ((step + 1) / questions.length) * 100);
-    document.getElementById('fill').style.width = pct + '%';
+    // İlerleme ve Kalan hesabı
+    var progress = Math.min(100, Math.max(5, (totalCompleted / targetGoal) * 100));
+    document.getElementById('fill').style.width = progress + '%';
     document.getElementById('hearts').textContent = hearts;
+    document.getElementById('queue-count').textContent = 'Kalan: ' + questionQueue.length;
 
-    var cur = questions[step];
+    var cur = questionQueue[0];
     var tag = document.getElementById('tag');
     var title = document.getElementById('title');
     var area = document.getElementById('body-area');
+    var hintBox = document.getElementById('hint-box');
+    var hintToggle = document.getElementById('hint-toggle');
 
-    if (cur.mode === 'card') {
-      tag.textContent = 'Görsel Hafıza';
-      title.textContent = '"' + cur.item.tr + '" hangisidir?';
-      area.innerHTML = 
-        '<div class="mnemonic" onclick="speak(\'' + cur.item.en + '\')">' +
-          '<div class="m-icon">' + cur.item.icon + '</div>' +
-          '<div>' +
-            '<div class="m-word">' + cur.item.en + ' 🔊</div>' +
-            '<div style="font-weight:700;">' + cur.item.tr + '</div>' +
-            '<div class="m-sub">' + cur.item.hint + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="btn-col" id="opt-box"></div>';
-      speak(cur.item.en);
+    hintBox.style.display = 'none';
+    hintBox.textContent = '💡 İpucu: ' + cur.item.hint;
+    hintToggle.style.display = (cur.mode === 'speaking') ? 'none' : 'inline-block';
+
+    if (cur.mode === 'tr_to_en') {
+      tag.textContent = 'Türkçe ➔ İngilizce';
+      title.innerHTML = '"<strong>' + cur.item.tr + '</strong>" hangisidir?';
+      area.innerHTML = '<div class="btn-col" id="opt-box"></div>';
       drawOpts(cur.opts, 'en');
-    } else if (cur.mode === 'sound') {
+    } 
+    else if (cur.mode === 'en_to_tr') {
+      tag.textContent = 'İngilizce ➔ Türkçe';
+      title.innerHTML = '"<strong>' + cur.item.en + '</strong>" ne demek?';
+      area.innerHTML = '<div class="btn-col" id="opt-box"></div>';
+      drawOpts(cur.opts, 'tr');
+    }
+    else if (cur.mode === 'sound') {
       tag.textContent = 'Dinleme';
       title.textContent = 'Sesi dinleyin ve doğru günü seçin:';
       area.innerHTML = 
-        '<button class="sound-btn" onclick="speak(\'' + cur.item.en + '\')">🔊</button>' +
+        '<div class="sound-wrap">' +
+          '<button class="sound-btn" onclick="speak(\'' + cur.item.en + '\')">🔊</button>' +
+          '<span style="font-size:13px; color:#afc5ce;">Tekrar dinlemek için dokunun</span>' +
+        '</div>' +
         '<div class="btn-col" id="opt-box"></div>';
       speak(cur.item.en);
       drawOpts(cur.opts, 'tr');
-    } else {
-      tag.textContent = 'Kelime Testi';
-      title.textContent = '"' + cur.item.tr + '" İngilizce nedir?';
+    }
+    else if (cur.mode === 'speaking') {
+      tag.textContent = 'Telaffuz / Konuşma';
+      title.innerHTML = 'Mikrofona İngilizce söyleyin: <br><span style="color:#1cb0f6;">' + cur.item.tr + '</span>';
+      hintToggle.style.display = 'none';
       area.innerHTML = 
-        '<div style="text-align:center; font-size:42px; margin-bottom:12px;">' + cur.item.icon + '</div>' +
-        '<div class="btn-col" id="opt-box"></div>';
-      drawOpts(cur.opts, 'en');
+        '<div class="sound-wrap">' +
+          '<button class="sound-btn" id="mic-btn" onclick="runMic(\'' + cur.item.en + '\')">🎙️</button>' +
+          '<span id="mic-status" style="font-size:14px; font-weight:700; color:#afc5ce;">Mikrofona dokunup söyleyin</span>' +
+        '</div>';
     }
   }
 
@@ -277,74 +359,12 @@
     arr.forEach(function(o) {
       var b = document.createElement('button');
       b.className = 'opt';
-      b.innerHTML = '<span>' + o.icon + '</span> <span>' + o[key] + '</span>';
+      // Anımsatıcı emoji şıkta yer alır ama cevabı açık etmez
+      b.innerHTML = '<span style="font-size:20px;">' + o.icon + '</span> <span>' + o[key] + '</span>';
       b.onclick = function() {
         if (checked) return;
         var all = document.querySelectorAll('.opt');
-        all.forEach(function(x){ x.classList.remove('sel'); });
+        for (var i = 0; i < all.length; i++) all[i].classList.remove('sel');
         b.classList.add('sel');
         selected = o;
-        document.getElementById('action-btn').classList.remove('disabled');
-      };
-      box.appendChild(b);
-    });
-  }
-
-  function handleClick() {
-    if (!checked) {
-      checked = true;
-      var cur = questions[step];
-      var isOk = (selected && selected.en === cur.item.en);
-      var fb = document.getElementById('fb');
-      var btn = document.getElementById('action-btn');
-
-      fb.style.display = 'block';
-      speak(cur.item.en);
-
-      if (isOk) {
-        fb.className = 'feedback ok';
-        fb.innerHTML = '<strong>🎉 Harika! Doğru.</strong><br>' + cur.item.icon + ' ' + cur.item.en + ' = ' + cur.item.tr;
-        btn.textContent = 'DEVAM ET';
-      } else {
-        hearts--;
-        document.getElementById('hearts').textContent = Math.max(0, hearts);
-        fb.className = 'feedback err';
-        fb.innerHTML = '<strong>❌ Doğrusu: ' + cur.item.en + ' (' + cur.item.tr + ')</strong><br>' + cur.item.hint;
-        btn.textContent = 'ANLADIM';
-      }
-    } else {
-      if (hearts <= 0) {
-        alert("Canlarınız bitti! Baştan başlıyoruz.");
-        startApp();
-        return;
-      }
-      step++;
-      if (step < questions.length) {
-        loadStep();
-      } else {
-        document.getElementById('content').innerHTML = 
-          '<div style="text-align:center; padding: 20px 0;">' +
-            '<div style="font-size:60px;">🏆</div>' +
-            '<div class="title" style="color:#ffc800; margin-top:10px;">Tebrikler!</div>' +
-            '<p style="color:#afc5ce;">Haftanın günlerini tamamladınız.</p>' +
-          '</div>';
-        document.getElementById('fb').style.display = 'none';
-        var b = document.getElementById('action-btn');
-        b.textContent = 'YENİDEN BAŞLA 🔄';
-        b.onclick = startApp;
-      }
-    }
-  }
-
-  function startApp() {
-    questions = makeQuestions();
-    step = 0;
-    hearts = 5;
-    loadStep();
-  }
-
-  // Sayfa açıldığında doğrudan çalıştır
-  startApp();
-</script>
-</body>
-</html>
+        document.

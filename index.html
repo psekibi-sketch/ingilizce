@@ -2,140 +2,145 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>İngilizce Günler</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
-      background-color: #121f24;
+      background: #121f24;
       color: #ffffff;
-      font-family: Arial, sans-serif;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 15px;
-      box-sizing: border-box;
+      padding: 16px;
+      user-select: none;
     }
     .kutu {
-      background-color: #1f2e35;
+      background: #1f2e35;
       border: 2px solid #37464f;
       border-radius: 20px;
       width: 100%;
-      max-width: 420px;
-      padding: 20px;
-      box-sizing: border-box;
+      max-width: 440px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
-    .ust-bilgi {
+    .ust-panel {
       display: flex;
       justify-content: space-between;
-      font-weight: bold;
-      color: #58cc02;
-      margin-bottom: 15px;
+      font-weight: 700;
       font-size: 14px;
+      color: #58cc02;
+      margin-bottom: 16px;
     }
-    .can { color: #ff4b4b; }
-    .soru-baslik {
+    .can-kutu { color: #ff4b4b; }
+    .soru-metni {
       font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      min-height: 25px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      min-height: 28px;
     }
-    .ipucu-alani {
+    .ipucu-link {
       font-size: 13px;
-      color: #ffc800;
-      background: #18252a;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      display: none;
-    }
-    .ipucu-btn {
       color: #afc5ce;
-      font-size: 13px;
       text-decoration: underline;
       cursor: pointer;
       display: inline-block;
-      margin-bottom: 15px;
+      margin-bottom: 14px;
+    }
+    .ipucu-panel {
+      background: #18252a;
+      border: 1px dashed #4b626e;
+      color: #ffc800;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
     }
     .ses-kutusu {
       text-align: center;
-      margin-bottom: 15px;
-      display: none;
+      margin-bottom: 16px;
     }
-    .ses-butonu {
+    .ses-btn {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
       background: #1cb0f6;
       border: none;
-      color: white;
+      color: #ffffff;
       font-size: 28px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
       cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .secenekler {
+    .ses-btn:active { transform: scale(0.95); }
+    .siklar-kutusu {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
-    .secenek {
-      background-color: #2b3940;
-      color: #ffffff;
+    .sik-btn {
+      background: #2b3940;
       border: 2px solid #37464f;
-      padding: 14px;
-      border-radius: 12px;
+      border-radius: 14px;
+      padding: 15px;
+      color: #ffffff;
       font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
+      font-weight: 700;
       text-align: left;
+      cursor: pointer;
     }
-    .secenek.secildi {
+    .sik-btn:active { transform: translateY(1px); }
+    .sik-btn.secildi {
       border-color: #1cb0f6 !important;
-      background-color: #1a3847 !important;
+      background: #1a3847 !important;
+      color: #1cb0f6 !important;
     }
-    .secenek.dogru {
+    .sik-btn.dogru {
       border-color: #58cc02 !important;
-      background-color: #1e3b22 !important;
+      background: #1e3b22 !important;
       color: #58cc02 !important;
     }
-    .secenek.yanlis {
+    .sik-btn.yanlis {
       border-color: #ff4b4b !important;
-      background-color: #401e1e !important;
+      background: #401e1e !important;
       color: #ff4b4b !important;
     }
-    .mesaj-alani {
+    .sonuc-mesaji {
       padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      display: none;
+      border-radius: 12px;
       font-size: 14px;
       line-height: 1.4;
+      margin-bottom: 14px;
+      display: none;
     }
-    .mesaj-alani.dogru {
+    .sonuc-mesaji.dogru {
       background: rgba(88, 204, 2, 0.2);
       border: 1px solid #58cc02;
       color: #58cc02;
     }
-    .mesaj-alani.yanlis {
+    .sonuc-mesaji.yanlis {
       background: rgba(255, 75, 75, 0.2);
       border: 1px solid #ff4b4b;
       color: #ff4b4b;
     }
-    .ana-buton {
+    .ana-btn {
       width: 100%;
-      padding: 15px;
-      border-radius: 12px;
+      background: #58cc02;
       border: none;
-      background-color: #58cc02;
-      color: white;
+      border-radius: 14px;
+      padding: 16px;
+      color: #ffffff;
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 800;
       cursor: pointer;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .ana-buton.pasif {
-      background-color: #37464f;
+    .ana-btn:active { transform: scale(0.98); }
+    .ana-btn.pasif {
+      background: #37464f;
       color: #6a828e;
       cursor: not-allowed;
       pointer-events: none;
@@ -145,10 +150,56 @@
 <body>
 
 <div class="kutu">
-  <div class="ust-bilgi">
-    <span id="kalan-sayisi">Kalan Soru: 20</span>
-    <span class="can" id="can-sayisi">❤️ 5</span>
+  <div class="ust-panel">
+    <span id="kalan-txt">Kalan: 20</span>
+    <span class="can-kutu" id="can-txt">❤️ 5</span>
   </div>
 
-  <div id="oyun-alani">
-    <div class="soru-baslik" id="
+  <div id="ana-ekran">
+    <div class="soru-metni" id="soru-txt">...</div>
+    
+    <span class="ipucu-link" id="ipucu-ac-btn">💡 İpucu ister misin?</span>
+    <div class="ipucu-panel" id="ipucu-kutu"></div>
+
+    <div class="ses-kutusu" id="ses-kutusu" style="display: none;">
+      <button class="ses-btn" type="button" id="ses-btn">🔊</button>
+      <div style="font-size: 12px; color: #afc5ce; margin-top: 6px;">Dinlemek için dokunun</div>
+    </div>
+
+    <div class="siklar-kutusu" id="siklar-alani"></div>
+  </div>
+
+  <div class="sonuc-mesaji" id="mesaj-kutusu"></div>
+  <button class="ana-btn pasif" id="aksiyon-btn" type="button">KONTROL ET</button>
+</div>
+
+<script>
+  var gunler = [
+    { en: 'Monday', tr: 'Pazartesi', ipucu: 'Moon-day (Ay günü) - Haftanın 1. günü' },
+    { en: 'Tuesday', tr: 'Salı', ipucu: 'Two-sday (2. gün) - İkinci gün' },
+    { en: 'Wednesday', tr: 'Çarşamba', ipucu: 'Wed-nes-day - Ortadaki en uzun gün' },
+    { en: 'Thursday', tr: 'Perşembe', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi' },
+    { en: 'Friday', tr: 'Cuma', ipucu: 'Fri-day (Fries) - Hafta sonu kapısı' },
+    { en: 'Saturday', tr: 'Cumartesi', ipucu: 'Saturn-day - Hafta sonu başlangıcı' },
+    { en: 'Sunday', tr: 'Pazar', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü' }
+  ];
+
+  var sorular = [
+    { hedef: gunler[0], tip: 'tr_en' },
+    { hedef: gunler[1], tip: 'en_tr' },
+    { hedef: gunler[4], tip: 'ses' },
+    { hedef: gunler[2], tip: 'tr_en' },
+    { hedef: gunler[6], tip: 'en_tr' },
+    { hedef: gunler[3], tip: 'ses' },
+    { hedef: gunler[5], tip: 'tr_en' },
+    { hedef: gunler[0], tip: 'en_tr' },
+    { hedef: gunler[1], tip: 'ses' },
+    { hedef: gunler[4], tip: 'tr_en' },
+    { hedef: gunler[2], tip: 'en_tr' },
+    { hedef: gunler[3], tip: 'tr_en' },
+    { hedef: gunler[6], tip: 'ses' },
+    { hedef: gunler[5], tip: 'en_tr' },
+    { hedef: gunler[0], tip: 'ses' },
+    { hedef: gunler[1], tip: 'tr_en' },
+    { hedef: gunler[4], tip: 'en_tr' },
+    { hedef: gunler[2], tip: 'ses' },

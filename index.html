@@ -157,16 +157,6 @@
       justify-content: center;
     }
     .sound-btn:active { transform: translateY(2px); }
-    .sound-btn.listening {
-      background: #ff4b4b;
-      border-bottom-color: #ea2b2b;
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
     .feedback {
       border-radius: 14px;
       padding: 14px;
@@ -201,4 +191,53 @@
     }
     .main-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
     .main-btn.disabled {
-      background: #3746
+      background: #37464f;
+      border-bottom-color: #27333a;
+      color: #6a828e;
+      pointer-events: none;
+    }
+    .stat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+      text-align: left;
+    }
+    .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .stat-bar-bg {
+      height: 8px;
+      background: #18282f;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+    }
+    .weakness-alert {
+      background: rgba(255, 200, 0, 0.15);
+      border: 1px solid #ffc800;
+      color: #ffc800;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="top">
+    <div

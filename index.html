@@ -3,192 +3,235 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays - Duolingo Tarzı İngilizce Öğren</title>
+  <title>LingoDays - İngilizce Günler</title>
   <style>
-    :root {
-      --bg: #131f24;
-      --card: #202f36;
-      --accent: #58cc02;
-      --accent-shadow: #58a700;
-      --blue: #1cb0f6;
-      --blue-shadow: #1899d6;
-      --red: #ff4b4b;
-      --red-shadow: #ea2b2b;
-      --yellow: #ffc800;
-      --text: #ffffff;
-      --text-sub: #afc5ce;
-      --border: #37464f;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "DIN Round Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: #131f24;
+      color: #ffffff;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 12px;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
     }
-    .app-wrapper {
+    .app-card {
       width: 100%;
       max-width: 520px;
-      background: var(--card);
-      border-radius: 28px;
-      border: 2px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-height: 90vh;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      background: #202f36;
+      border: 2px solid #37464f;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       position: relative;
     }
-
-    /* Üst Bar */
     .top-bar {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 20px 24px 12px;
+      gap: 12px;
+      margin-bottom: 20px;
     }
     .progress-track {
       flex: 1;
-      height: 14px;
+      height: 12px;
       background: #37464f;
-      border-radius: 20px;
+      border-radius: 10px;
       overflow: hidden;
-      position: relative;
     }
-    .progress-bar {
+    .progress-fill {
+      width: 5%;
       height: 100%;
-      width: 0%;
-      background: var(--accent);
-      border-radius: 20px;
-      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #58cc02;
+      transition: width 0.3s;
     }
-    .hearts-box {
+    .hearts {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ff4b4b;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(28, 176, 246, 0.2);
+      color: #1cb0f6;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .prompt-title {
+      font-size: 22px;
       font-weight: 800;
-      font-size: 18px;
-      color: var(--red);
+      margin-bottom: 16px;
+      line-height: 1.3;
     }
-
-    /* Ana İçerik */
-    .content-area {
-      flex: 1;
-      padding: 16px 24px 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .exercise-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.25;
-      text-align: left;
-    }
-
-    /* Mnemonic Görsel Kart */
-    .mnemonic-banner {
+    .mnemonic-box {
       background: #18282f;
       border: 2px dashed #4b626e;
-      border-radius: 20px;
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    .mnemonic-banner:active { transform: scale(0.98); }
-    .mnemonic-icon { font-size: 48px; }
-    .mnemonic-info { flex: 1; }
-    .mnemonic-word { font-size: 22px; font-weight: 800; color: var(--blue); }
-    .mnemonic-trick { font-size: 14px; color: var(--text-sub); margin-top: 4px; line-height: 1.3; }
-
-    /* Butonlar & Seçenekler */
-    .options-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    .btn-3d {
-      background: var(--card);
-      border: 2px solid var(--border);
-      border-bottom: 5px solid var(--border);
       border-radius: 16px;
-      padding: 16px;
-      color: var(--text);
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 14px;
       display: flex;
       align-items: center;
       gap: 14px;
-      transition: all 0.1s;
-      outline: none;
-    }
-    .btn-3d:active {
-      transform: translateY(3px);
-      border-bottom-width: 2px;
-    }
-    .btn-3d.selected {
-      border-color: var(--blue);
-      border-bottom-color: var(--blue-shadow);
-      background: rgba(28, 176, 246, 0.15);
-      color: var(--blue);
-    }
-    .btn-3d.correct {
-      border-color: var(--accent) !important;
-      border-bottom-color: var(--accent-shadow) !important;
-      background: rgba(88, 204, 2, 0.2) !important;
-      color: var(--accent) !important;
-    }
-    .btn-3d.wrong {
-      border-color: var(--red) !important;
-      border-bottom-color: var(--red-shadow) !important;
-      background: rgba(255, 75, 75, 0.2) !important;
-      color: var(--red) !important;
-    }
-
-    /* Harf Dizme (Scramble) */
-    .scramble-slots {
-      min-height: 54px;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 8px 0;
-      align-items: center;
-    }
-    .scramble-bank {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-    .letter-chip {
-      background: #2a3c44;
-      border: 2px solid #3d515a;
-      border-bottom: 4px solid #3d515a;
-      border-radius: 12px;
-      padding: 10px 16px;
-      font-size: 20px;
-      font-weight: 800;
+      margin-bottom: 20px;
       cursor: pointer;
-      color: var(--text);
     }
-    .letter-chip:active { transform: translateY(2px); border-bottom-width: 2px; }
-    .letter-chip.used { opacity: 0.2; pointer-events: none; }
+    .mnemonic-icon { font-size: 42px; }
+    .mnemonic-word { font-size: 20px; font-weight: 800; color: #1cb0f6; }
+    .mnemonic-sub { font-size: 14px; color: #afc5ce; margin-top: 2px; }
 
-    /* Ses & Konuşma */
-    .audio-circle-btn {
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .opt-btn {
+      background: #27373f;
+      border: 2px solid #37464f;
+      border-bottom: 4px solid #37464f;
+      border-radius: 14px;
+      padding: 14px;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      touch-action: manipulation;
+    }
+    .opt-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .opt-btn.selected {
+      border-color: #1cb0f6;
+      border-bottom-color: #1899d6;
+      background: rgba(28, 176, 246, 0.15);
+      color: #1cb0f6;
+    }
+
+    /* Ses & Konuşma Butonu */
+    .mic-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .circle-btn {
       width: 76px;
       height: 76px;
       border-radius: 50%;
+      background: #1cb0f6;
+      border: none;
+      border-bottom: 4px solid #1899d6;
+      font-size: 32px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .circle-btn:active { transform: translateY(2px); }
+    .circle-btn.listening {
+      background: #ff4b4b;
+      border-bottom-color: #ea2b2b;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* Alt Geri Bildirim ve İlerleme */
+    .bottom-feedback {
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .bottom-feedback.correct {
+      background: rgba(88, 204, 2, 0.15);
+      border: 1px solid #58cc02;
+      color: #58cc02;
+    }
+    .bottom-feedback.wrong {
+      background: rgba(255, 75, 75, 0.15);
+      border: 1px solid #ff4b4b;
+      color: #ff4b4b;
+    }
+
+    .action-btn {
+      width: 100%;
+      background: #58cc02;
+      border: none;
+      border-bottom: 4px solid #58a700;
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .action-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
+    .action-btn.disabled {
+      background: #37464f;
+      border-bottom-color: #27333a;
+      color: #6a828e;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-card">
+  <!-- Üst Bar -->
+  <div class="top-bar">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="hearts">❤️ <span id="hearts-count">5</span></div>
+  </div>
+
+  <!-- Soru Alanı -->
+  <div id="exercise-box"></div>
+
+  <!-- Sonuç / Geri Bildirim -->
+  <div class="bottom-feedback" id="feedback-box"></div>
+
+  <!-- Alt Buton -->
+  <button class="action-btn disabled" id="action-btn" onclick="onActionClick()">KONTROL ET</button>
+</div>
+
+<script>
+  const days = [
+    { en: 'Monday', tr: 'Pazartesi', icon: '🌙', hint: 'Moon-day (Ay Günü) ➔ Haftanın 1. günü' },
+    { en: 'Tuesday', tr: 'Salı', icon: '⚔️', hint: 'Two-sday ➔ Haftanın 2. günü' },
+    { en: 'Wednesday', tr: 'Çarşamba', icon: '🧙‍♂️', hint: 'Wed-nes-day ➔ En uzun yazılan gün' },
+    { en: 'Thursday', tr: 'Perşembe', hint: 'Thor-sday ➔ Şimşek Tanrısı Thor günü' },
+    { en: 'Friday', tr: 'Cuma', hint: 'Fri-day (Fries) ➔ Hafta sonu neşesi' },
+    { en: 'Saturday', tr: 'Cumartesi', icon: '🪐', hint: 'Saturn-day ➔ Satürn gezegeni günü' },
+    { en: 'Sunday', tr: 'Pazar', icon: '☀️', hint: 'Sun-day (Güneş Günü) ➔ Güneş ve dinlenme günü' }
+  ];
+
+  let questions = [];
+  let currentIndex = 0;
+  let hearts = 5;
+  let selected = null;
+  let isChecked = false;
+
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);

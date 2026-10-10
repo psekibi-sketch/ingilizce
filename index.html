@@ -133,6 +133,17 @@
       color: #ffffff;
     }
 
+    .soru-okunus-etiket {
+      display: inline-block;
+      font-size: 14px;
+      color: #38bdf8;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: 4px;
+    }
+
     .ses-btn, .yavas-ses-btn {
       border: none;
       border-radius: 50%;
@@ -148,13 +159,6 @@
       width: 44px;
       height: 44px;
       font-size: 20px;
-    }
-
-    .ses-btn.kilitli {
-      background: #273740 !important;
-      color: #64748b !important;
-      cursor: not-allowed;
-      border: 1px dashed #475569;
     }
 
     .yavas-ses-btn {
@@ -216,10 +220,20 @@
       font-weight: 600;
     }
 
-    .sesli-algilanan {
+    .telaffuz-rehber-kutu {
+      background: #201a35;
+      border: 1px solid #a855f7;
+      padding: 8px 14px;
+      border-radius: 10px;
       font-size: 13px;
       color: #fef08a;
+    }
+
+    .sesli-algilanan {
+      font-size: 13px;
+      color: #38bdf8;
       min-height: 20px;
+      font-weight: bold;
     }
 
     .pas-gec-btn {
@@ -266,10 +280,8 @@
       background: #273740;
       border: 2px solid #3b4e5a;
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       color: #ffffff;
-      font-size: 16px;
-      font-weight: 700;
       cursor: pointer;
       text-align: left;
       display: flex;
@@ -282,10 +294,31 @@
       transform: translateY(1px);
     }
 
+    .secenek-sol {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .secenek-ana-yazi {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .secenek-okunus {
+      font-size: 12px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
     .secenek-btn.dogru {
       border-color: #22c55e !important;
       background: #143521 !important;
       color: #22c55e !important;
+    }
+
+    .secenek-btn.dogru .secenek-okunus {
+      color: #4ade80 !important;
     }
 
     .secenek-btn.yanlis {
@@ -399,6 +432,12 @@
       color: #ffffff;
     }
 
+    .rehber-okunus {
+      color: #38bdf8;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
     .rehber-turkce {
       font-size: 14px;
       color: #22c55e;
@@ -442,14 +481,21 @@
       font-size: 11px;
       color: #38bdf8;
       font-weight: 800;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       letter-spacing: 1px;
     }
 
     .flashcard-kelime {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 900;
-      margin-bottom: 6px;
+      margin-bottom: 2px;
+    }
+
+    .flashcard-okunus {
+      font-size: 16px;
+      color: #38bdf8;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
     .flashcard-alt {
@@ -506,7 +552,7 @@
       <div class="soru-satiri">
         <div class="soru-baslik" id="soru-basligi">Yükleniyor...</div>
         <div style="display:flex; gap:6px; align-items:center;">
-          <button class="ses-btn" id="ses-btn" title="Sesli Dinle" type="button">🔊</button>
+          <button class="ses-btn" id="ses-btn" title="Soruyu Tekrar Dinle" type="button">🔊</button>
           <button class="yavas-ses-btn" id="yavas-ses-btn" title="Yavaş Dinle" type="button">🐢</button>
         </div>
       </div>
@@ -518,6 +564,10 @@
       <div class="sesli-cevap-alani" id="sesli-cevap-alani">
         <button class="dev-mikrofon-btn" id="dev-mikrofon-btn" type="button">🎙️</button>
         <div class="sesli-talimat" id="sesli-talimat">Mikrofona bas ve İngilizce söyle!</div>
+        
+        <!-- Çocuk için okunuş telaffuz kartı -->
+        <div class="telaffuz-rehber-kutu" id="telaffuz-rehber-kutu"></div>
+
         <div class="sesli-algilanan" id="sesli-algilanan"></div>
         <button class="pas-gec-btn" type="button" onclick="sesliyiSiklaraDonustur()">Şıkları Göster 🔲</button>
       </div>
@@ -531,10 +581,10 @@
 
     <!-- Başlangıç Butonu -->
     <div class="baslangic-kutu" id="baslangic-kutusu">
-      <div style="font-size: 52px; margin-bottom: 12px;">🎲🗣️</div>
-      <h2 style="color:#38bdf8; font-size:22px; margin-bottom: 8px;">Karışık 20 Soru</h2>
+      <div style="font-size: 52px; margin-bottom: 12px;">🔊🎙️</div>
+      <h2 style="color:#38bdf8; font-size:22px; margin-bottom: 8px;">Sesli & Okunuşlu Test</h2>
       <p style="color:#94a3b8; font-size:14px; margin-bottom: 24px; line-height:1.5;">
-        Sorular her seferinde rastgele sıralanır. 15 soru çoktan seçmeli, <strong>5 tanesi şıksız özel sesli telaffuz</strong> görevidir!
+        Her soruda soru sesli okunur. Kelimelerin altında <strong>kolay okunuşları</strong> yer alır! 5 soruda ise şıksız mikrofona konuşma görevi bulunur.
       </p>
       <button class="ana-btn" style="display:block;" onclick="testiIlkKezBaslat()">TESTE BAŞLA 🚀</button>
     </div>
@@ -548,6 +598,7 @@
     <div class="flashcard" id="aktif-flashcard" onclick="flashcardCevir()">
       <div class="flashcard-etiket" id="fc-etiket">İNGİLİZCE</div>
       <div class="flashcard-kelime" id="fc-kelime">Monday</div>
+      <div class="flashcard-okunus" id="fc-okunus">[Mandey]</div>
       <div class="flashcard-alt" id="fc-alt">Dokun ve Türkçesini gör 👆</div>
     </div>
     <div class="flashcard-nav">
@@ -559,17 +610,17 @@
 </div>
 
 <script>
+  // Günler ve Çocuklar İçin Türkçe Okunuşları
   const gunler = [
-    { en: 'Monday', tr: 'Pazartesi', kisa: 'Mon', ipucu: 'Moon-day (Ay günü) - 1. gün', fonetik: '/ˈmʌn.deɪ/', ornek: 'I start work on Monday.' },
-    { en: 'Tuesday', tr: 'Salı', kisa: 'Tue', ipucu: 'Two-sday (2. gün) - Salı', fonetik: '/ˈtjuːz.deɪ/', ornek: 'See you on Tuesday.' },
-    { en: 'Wednesday', tr: 'Çarşamba', kisa: 'Wed', ipucu: 'Wed-nes-day (d harfi okunmaz!) - Ortadaki en uzun gün', fonetik: '/ˈwenz.deɪ/', ornek: 'Wednesday is mid-week.' },
-    { en: 'Thursday', tr: 'Perşembe', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek tanrısı Thor) - Cuma öncesi', fonetik: '/ˈθɜːz.deɪ/', ornek: 'Thursday is almost weekend!' },
-    { en: 'Friday', tr: 'Cuma', kisa: 'Fri', ipucu: 'Fri-day (Fries / Özgürlük) - Hafta sonu kapısı', fonetik: '/ˈfraɪ.deɪ/', ornek: 'Thank God it\'s Friday!' },
-    { en: 'Saturday', tr: 'Cumartesi', kisa: 'Sat', ipucu: 'Saturn-day (Satürn gezegeni) - Hafta sonu eğlencesi', fonetik: '/ˈsæt.ə.deɪ/', ornek: 'Saturday is for relaxing.' },
-    { en: 'Sunday', tr: 'Pazar', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme ve aile günü', fonetik: '/ˈsʌn.deɪ/', ornek: 'Sunday is a peaceful day.' }
+    { en: 'Monday', tr: 'Pazartesi', okunus: 'Mandey', kisa: 'Mon', ipucu: 'Moon-day (Ay günü) - 1. gün', ornek: 'I start work on Monday.' },
+    { en: 'Tuesday', tr: 'Salı', okunus: 'Tyuuzdey', kisa: 'Tue', ipucu: 'Two-sday (2. gün) - Salı', ornek: 'See you on Tuesday.' },
+    { en: 'Wednesday', tr: 'Çarşamba', okunus: 'Wenzdey', kisa: 'Wed', ipucu: 'Wed-nes-day (d okunmaz!) - Ortadaki en uzun gün', ornek: 'Wednesday is mid-week.' },
+    { en: 'Thursday', tr: 'Perşembe', okunus: 'Törzdey', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek tanrısı Thor) - Cuma öncesi', ornek: 'Thursday is almost weekend!' },
+    { en: 'Friday', tr: 'Cuma', okunus: 'Fraydey', kisa: 'Fri', ipucu: 'Fri-day (Fries / Özgürlük) - Hafta sonu kapısı', ornek: 'Thank God it\'s Friday!' },
+    { en: 'Saturday', tr: 'Cumartesi', okunus: 'Setırdey', kisa: 'Sat', ipucu: 'Saturn-day (Satürn gezegeni) - Hafta sonu eğlencesi', ornek: 'Saturday is for relaxing.' },
+    { en: 'Sunday', tr: 'Pazar', okunus: 'Sandey', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme ve aile günü', ornek: 'Sunday is a peaceful day.' }
   ];
 
-  // Gerçek Karıştırma Fonksiyonu (Fisher-Yates Shuffle)
   function karistir(arr) {
     const kopya = arr.slice();
     for (let i = kopya.length - 1; i > 0; i--) {
@@ -608,7 +659,6 @@
     setTimeout(() => bip(164.81, 0.25, 'sawtooth'), 120);
   }
 
-  // İstatistikler
   const TOPLAM_SORU = 20;
   let ilkSeferdeDogru = 0;
   let sonaAtilipOgrenilen = 0;
@@ -622,7 +672,7 @@
     const secenekler = karistir([hedef, ...digerleri]);
     return {
       hedef,
-      tip, // 'tr_en' (şıklar), 'en_tr' (şıklar), 'sesli_gorev' (şıksız)
+      tip, // 'tr_en', 'en_tr', 'sesli_gorev'
       secenekler,
       dahaOnceYanlisMi: false
     };
@@ -636,7 +686,6 @@
     testiBaslat();
   }
 
-  // 20 Soruyu Rastgele Oluştur: Tam 5 tanesi Şıksız Sesli Görev, 15 tanesi Şıklı Test!
   function testiBaslat() {
     kuyruk = [];
     ilkSeferdeDogru = 0;
@@ -646,19 +695,17 @@
     can = 5;
     kilitli = false;
 
-    // 20 soru şablonu hazırla: 5 adet 'sesli_gorev', 8 adet 'tr_en', 7 adet 'en_tr'
+    // 5 Sesli Görev, 8 TR->EN, 7 EN->TR rastgele dağıtılır
     const soruTipleri = [
       'sesli_gorev', 'sesli_gorev', 'sesli_gorev', 'sesli_gorev', 'sesli_gorev',
       'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en',
       'en_tr', 'en_tr', 'en_tr', 'en_tr', 'en_tr', 'en_tr', 'en_tr'
     ];
 
-    // Soru tiplerini rastgele karıştır (böylece sesli sorular testin farklı yerlerine rastgele dağılır!)
     const karisikTipler = karistir(soruTipleri);
 
-    // Günleri de döngüyle ve rastgele seç
     for (let i = 0; i < TOPLAM_SORU; i++) {
-      const g = karistir(gunler)[0]; // Her adımda rastgele bir gün seç
+      const g = karistir(gunler)[0];
       kuyruk.push(soruUret(g, karisikTipler[i]));
     }
 
@@ -676,11 +723,13 @@
   const sesliCevapAlani = document.getElementById('sesli-cevap-alani');
   const devMikrofonBtn = document.getElementById('dev-mikrofon-btn');
   const sesliTalimat = document.getElementById('sesli-talimat');
+  const telaffuzRehberKutu = document.getElementById('telaffuz-rehber-kutu');
   const sesliAlgilanan = document.getElementById('sesli-algilanan');
   const seceneklerAlani = document.getElementById('secenekler-alani');
   const mesajAlani = document.getElementById('mesaj-alani');
   const devamBtn = document.getElementById('devam-btn');
 
+  // Gelişmiş Seslendirme (Her Soruyu Sesli Oku)
   function sesCal(metin, hiz = 0.85, dil = 'en-US', bittiginde = null) {
     try {
       if ('speechSynthesis' in window) {
@@ -701,33 +750,35 @@
     }
   }
 
-  // Hoparlör Butonu (Kopya vermez)
+  // Hoparlör: Soruyu tekrar seslendirir
   sesBtn.onclick = () => {
     if (kuyruk.length === 0) return;
-    const aktif = kuyruk[0];
-
-    if ((aktif.tip === 'tr_en' || aktif.tip === 'sesli_gorev') && !kilitli) {
-      mesajAlani.className = 'mesaj-kutusu d-err';
-      mesajAlani.innerHTML = '🔒 <strong>Kopya yok!</strong> Önce cevabını söyle veya işaretle, ardından telaffuzu dinleyebilirsin.';
-      mesajAlani.style.display = 'block';
-      setTimeout(() => {
-        if (!kilitli) mesajAlani.style.display = 'none';
-      }, 2500);
-      return;
-    }
-
-    sesCal(aktif.hedef.en, 0.85, 'en-US');
+    soruMetniniSeslendir();
   };
 
   yavasSesBtn.onclick = () => {
     if (kuyruk.length === 0) return;
     const aktif = kuyruk[0];
-    if ((aktif.tip === 'tr_en' || aktif.tip === 'sesli_gorev') && !kilitli) {
-      sesBtn.onclick();
-      return;
-    }
     sesCal(aktif.hedef.en, 0.6, 'en-US');
   };
+
+  function soruMetniniSeslendir(bittiginde = null) {
+    if (kuyruk.length === 0) return;
+    const aktif = kuyruk[0];
+
+    if (aktif.tip === 'sesli_gorev') {
+      sesCal(`${aktif.hedef.tr} nedir? İngilizcesini söyle!`, 0.9, 'tr-TR', bittiginde);
+    } else if (aktif.tip === 'tr_en') {
+      sesCal(`${aktif.hedef.tr} hangisidir?`, 0.9, 'tr-TR', bittiginde);
+    } else {
+      // EN -> TR: Önce İngilizce kelimeyi oku, sonra Türkçesini sor
+      sesCal(aktif.hedef.en, 0.85, 'en-US', () => {
+        setTimeout(() => {
+          sesCal("hangisidir?", 0.9, 'tr-TR', bittiginde);
+        }, 150);
+      });
+    }
+  }
 
   // Konuşma Tanıma (Speech Recognition)
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -743,7 +794,7 @@
     tani.onstart = () => {
       mikrofonDinliyor = true;
       devMikrofonBtn.classList.add('dinliyor');
-      sesliTalimat.textContent = '🎙️ Seni dinliyorum... İngilizce söyle!';
+      sesliTalimat.textContent = '🎙️ Seni dinliyorum... Hadi söyle!';
     };
 
     tani.onresult = (event) => {
@@ -761,7 +812,7 @@
         cevapKontrol(aktif.hedef, null, true);
       } else {
         mesajAlani.className = 'mesaj-kutusu d-err';
-        mesajAlani.innerHTML = `🎙️ <em>"${soylenen}"</em> algılandı. Mikrofona tekrar basıp deneyebilirsin.`;
+        mesajAlani.innerHTML = `🎙️ <em>"${soylenen}"</em> algılandı. Telaffuz ipucuna bakıp mikrofona tekrar basabilirsin.`;
         mesajAlani.style.display = 'block';
       }
     };
@@ -769,7 +820,7 @@
     tani.onerror = (e) => {
       mikrofonDinliyor = false;
       devMikrofonBtn.classList.remove('dinliyor');
-      sesliTalimat.textContent = 'Mikrofona basıp tekrar dene!';
+      sesliTalimat.textContent = 'Mikrofona basıp tekrar söyle!';
     };
 
     tani.onend = () => {
@@ -792,7 +843,6 @@
 
   function sesliyiSiklaraDonustur() {
     if (kuyruk.length === 0) return;
-    // Sesli soruyu şıklı soruya çevir
     kuyruk[0].tip = 'tr_en';
     soruyuGoster();
   }
@@ -818,57 +868,69 @@
     canlarEl.textContent = '❤️ ' + can;
     ipucuKutu.innerHTML = '<strong>💡 Hatırlatıcı İpucu:</strong><br>' + aktif.hedef.ipucu;
 
-    // 1. DURUM: ÖZEL ŞIKSIZ SESLİ GÖREV (5 Soru)
+    // 1. ŞIKSIZ SESLİ GÖREV (5 Soru)
     if (aktif.tip === 'sesli_gorev') {
       turEl.className = 'etiket sesli-gorev';
       turEl.textContent = '🎙️ SESLİ GÖREV (ŞIKSIZ)';
-      soruEl.textContent = `"${aktif.hedef.tr}" nedir? İngilizcesini söyle!`;
+      soruEl.innerHTML = `"${aktif.hedef.tr}" nedir?`;
 
       seceneklerAlani.style.display = 'none';
       sesliCevapAlani.style.display = 'flex';
       sesliTalimat.textContent = 'Mikrofona bas ve İngilizce söyle!';
+      
+      // Okunuşu göster (Çocuk ezberleyip söylesin)
+      telaffuzRehberKutu.innerHTML = `🗣️ Telaffuz İpucu: <strong>${aktif.hedef.en}</strong> ➔ <em>[${aktif.hedef.okunus}]</em>`;
 
-      sesBtn.classList.add('kilitli');
-      yavasSesBtn.style.display = 'none';
-
-      // Soruyu Türkçe seslendir ve mikrofonu otomatik başlat
-      sesCal(`${aktif.hedef.tr} nedir? İngilizcesini söyle!`, 0.9, 'tr-TR', () => {
-        setTimeout(mikrofonuBaslat, 300);
+      // Soruyu sesli oku ve mikrofonu aç
+      soruMetniniSeslendir(() => {
+        setTimeout(mikrofonuBaslat, 350);
       });
       return;
     }
 
-    // 2. DURUM: NORMAL 4 ŞIKLI SORULAR (15 Soru)
+    // 2. NORMAL ŞIKLI SORULAR (15 Soru)
     turEl.className = 'etiket';
     sesliCevapAlani.style.display = 'none';
     seceneklerAlani.style.display = 'flex';
 
     if (aktif.tip === 'tr_en') {
       turEl.textContent = 'TÜRKÇE ➔ İNGİLİZCE';
-      soruEl.textContent = `"${aktif.hedef.tr}" hangisidir?`;
-      sesBtn.classList.add('kilitli');
-      yavasSesBtn.style.display = 'none';
+      soruEl.innerHTML = `"${aktif.hedef.tr}" hangisidir?`;
     } else {
       turEl.textContent = 'İNGİLİZCE ➔ TÜRKÇE';
-      soruEl.textContent = `"${aktif.hedef.en}" ne demektir?`;
-      sesBtn.classList.remove('kilitli');
-      yavasSesBtn.style.display = 'flex';
-      // İngilizce sorulduğunda kelimeyi okur
-      sesCal(aktif.hedef.en, 0.85, 'en-US');
+      soruEl.innerHTML = `"${aktif.hedef.en}" <span class="soru-okunus-etiket">[${aktif.hedef.okunus}]</span> hangisidir?`;
     }
 
-    // 4 Şıkkı üret
+    // 4 Şıkkı Üret (İngilizce olan şıklara [Okunuş] eklendi!)
     seceneklerAlani.innerHTML = '';
     aktif.secenekler.forEach((secenek, idx) => {
       const btn = document.createElement('button');
       btn.className = 'secenek-btn';
       btn.type = 'button';
-      const metin = (aktif.tip === 'tr_en') ? secenek.en : secenek.tr;
-      const kisa = (aktif.tip === 'tr_en') ? secenek.kisa : '';
-      btn.innerHTML = `<span>${idx + 1}. ${metin}</span><span style="color:#94a3b8; font-size:12px;">${kisa}</span>`;
+
+      if (aktif.tip === 'tr_en') {
+        btn.innerHTML = `
+          <div class="secenek-sol">
+            <span class="secenek-ana-yazi">${idx + 1}. ${secenek.en}</span>
+            <span class="secenek-okunus">[${secenek.okunus}]</span>
+          </div>
+          <span style="color:#94a3b8; font-size:12px;">(${secenek.kisa})</span>
+        `;
+      } else {
+        btn.innerHTML = `
+          <div class="secenek-sol">
+            <span class="secenek-ana-yazi">${idx + 1}. ${secenek.tr}</span>
+          </div>
+          <span style="color:#94a3b8; font-size:12px;">${idx + 1}</span>
+        `;
+      }
+
       btn.onclick = () => cevapKontrol(secenek, btn);
       seceneklerAlani.appendChild(btn);
     });
+
+    // Soruyu her açılışta seslendir
+    soruMetniniSeslendir();
   }
 
   function cevapKontrol(secilen, tiklananBtn, mikrofondanGeldi = false) {
@@ -878,9 +940,6 @@
     if (tani && mikrofonDinliyor) {
       try { tani.stop(); } catch(e) {}
     }
-
-    sesBtn.classList.remove('kilitli');
-    yavasSesBtn.style.display = 'flex';
 
     const aktif = kuyruk[0];
     const dogruMu = (secilen.en === aktif.hedef.en);
@@ -901,14 +960,14 @@
 
       mesajAlani.className = 'mesaj-kutusu d-ok';
       const tebrikSes = mikrofondanGeldi ? '🎙️ <strong>Harika telaffuz!</strong> ' : '🎉 <strong>Doğru!</strong> ';
-      mesajAlani.innerHTML = tebrikSes + `${aktif.hedef.en} = ${aktif.hedef.tr}`;
+      mesajAlani.innerHTML = tebrikSes + `${aktif.hedef.en} [${aktif.hedef.okunus}] = ${aktif.hedef.tr}`;
       mesajAlani.style.display = 'block';
 
       kuyruk.shift();
 
       setTimeout(() => {
         sonrakiSoru();
-      }, 1100);
+      }, 1200);
     } else {
       yanlisSesi();
       toplamYanlis++;
@@ -922,7 +981,7 @@
       can--;
       canlarEl.textContent = '❤️ ' + Math.max(0, can);
       mesajAlani.className = 'mesaj-kutusu d-err';
-      mesajAlani.innerHTML = `<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>${aktif.hedef.en}</strong> (${aktif.hedef.tr})`;
+      mesajAlani.innerHTML = `<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>${aktif.hedef.en}</strong> [${aktif.hedef.okunus}] (${aktif.hedef.tr})`;
       mesajAlani.style.display = 'block';
 
       const yanlisSoru = kuyruk.shift();
@@ -1018,7 +1077,7 @@
         <div style="font-size:52px; margin-bottom:10px;">💔</div>
         <h2 style="color:#ef4444; font-size:24px; margin-bottom:8px;">Canların Tükendi!</h2>
         <p style="color:#94a3b8; font-size:14px; margin-bottom:20px;">
-          Pes etmek yok! İpuçlarına ve sesli telaffuzlara dikkat ederek tekrar deneyebilirsin.
+          Pes etmek yok! Okunuşlara ve sesli ipuçlarına bakarak tekrar deneyebilirsin.
         </p>
 
         <div class="karne-kutu">
@@ -1043,7 +1102,7 @@
 
   devamBtn.onclick = sonrakiSoru;
 
-  // REHBER SAYFASI
+  // REHBER SAYFASI (Okunuşlar Eklendi)
   function rehberiHazirla() {
     const bolum = document.getElementById('rehber-bolumu');
     bolum.innerHTML = '';
@@ -1054,8 +1113,8 @@
         <div class="rehber-ust">
           <div>
             <span class="rehber-gun-adi">${idx + 1}. ${g.en}</span>
-            <span style="color:#94a3b8; font-size:12px; margin-left:6px;">(${g.kisa})</span>
-            <div class="rehber-turkce">${g.tr} • ${g.fonetik}</div>
+            <span class="rehber-okunus">[${g.okunus}]</span>
+            <div class="rehber-turkce">${g.tr}</div>
           </div>
           <button class="ses-btn" onclick="sesCal('${g.en}')" style="width:36px; height:36px; font-size:16px;">🔊</button>
         </div>
@@ -1066,13 +1125,14 @@
     });
   }
 
-  // FLAŞ KARTLAR
+  // FLAŞ KARTLAR (Okunuşlar Eklendi)
   let flashcardIdx = 0;
   let flashcardOn = true;
 
   function flashcardGuncelle() {
     const g = gunler[flashcardIdx];
     const kelimeEl = document.getElementById('fc-kelime');
+    const okunusEl = document.getElementById('fc-okunus');
     const etiketEl = document.getElementById('fc-etiket');
     const altEl = document.getElementById('fc-alt');
 
@@ -1081,12 +1141,15 @@
       etiketEl.style.color = '#38bdf8';
       kelimeEl.textContent = g.en;
       kelimeEl.style.color = '#ffffff';
-      altEl.textContent = g.fonetik + ' • Dokununca Türkçesi açılır';
+      okunusEl.style.display = 'block';
+      okunusEl.textContent = `[${g.okunus}]`;
+      altEl.textContent = 'Dokununca Türkçesi açılır';
     } else {
       etiketEl.textContent = 'TÜRKÇE & İPUCU';
       etiketEl.style.color = '#22c55e';
       kelimeEl.textContent = g.tr;
       kelimeEl.style.color = '#22c55e';
+      okunusEl.style.display = 'none';
       altEl.textContent = g.ipucu;
     }
   }

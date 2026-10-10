@@ -191,13 +191,14 @@
     .mikrofon-bilgi {
       display: none;
       font-size: 13px;
-      color: #d8b4fe;
-      background: rgba(168, 85, 247, 0.15);
+      color: #fef08a;
+      background: rgba(168, 85, 247, 0.2);
       border: 1px solid #a855f7;
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin-bottom: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
       text-align: center;
+      line-height: 1.4;
     }
 
     .ipucu-link {
@@ -300,6 +301,12 @@
 
     .ana-btn:hover {
       background: #16a34a;
+    }
+
+    /* Başlangıç Ekranı */
+    .baslangic-kutu {
+      text-align: center;
+      padding: 24px 10px;
     }
 
     /* Özet / Karne Tablosu */
@@ -456,34 +463,44 @@
 
   <!-- TEST BÖLÜMÜ -->
   <div class="kart" id="test-bolumu">
-    <div class="ust-bar">
-      <span class="etiket" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
-      <div class="sayaclar">
-        <span id="sayac" style="color: #4ade80;">Kalan: 20</span>
-        <span id="canlar" style="color: #ef4444;">❤️ 5</span>
+    <div id="test-aktif-alani" style="display:none;">
+      <div class="ust-bar">
+        <span class="etiket" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
+        <div class="sayaclar">
+          <span id="sayac" style="color: #4ade80;">Kalan: 20</span>
+          <span id="canlar" style="color: #ef4444;">❤️ 5</span>
+        </div>
       </div>
+
+      <div class="soru-satiri">
+        <div class="soru-baslik" id="soru-basligi">Yükleniyor...</div>
+        <div class="aksiyon-buton-grubu">
+          <button class="mikrofon-btn" id="mikrofon-btn" title="İngilizce Telaffuz Et" type="button">🎙️</button>
+          <button class="ses-btn" id="ses-btn" title="Sesli Dinle" type="button">🔊</button>
+          <button class="yavas-ses-btn" id="yavas-ses-btn" title="Yavaş Dinle" type="button">🐢</button>
+        </div>
+      </div>
+
+      <div class="mikrofon-bilgi" id="mikrofon-bilgi">🎙️ Dinleniyor... Lütfen İngilizce günü söyleyin!</div>
+
+      <span class="ipucu-link" id="ipucu-btn">💡 İpucu ister misin?</span>
+      <div class="ipucu-kutu" id="ipucu-kutu"></div>
+
+      <div class="secenekler-kutusu" id="secenekler-alani"></div>
+
+      <div class="mesaj-kutusu" id="mesaj-alani"></div>
+      <button class="ana-btn" id="devam-btn" type="button">DEVAM ET</button>
     </div>
 
-    <div class="soru-satiri">
-      <div class="soru-baslik" id="soru-basligi">Yükleniyor...</div>
-      <div class="aksiyon-buton-grubu">
-        <!-- Mikrofon Butonu -->
-        <button class="mikrofon-btn" id="mikrofon-btn" title="İngilizce Telaffuz Et" type="button">🎙️</button>
-        <!-- Hoparlör Butonları -->
-        <button class="ses-btn" id="ses-btn" title="Sesli Dinle" type="button">🔊</button>
-        <button class="yavas-ses-btn" id="yavas-ses-btn" title="Yavaş Dinle" type="button">🐢</button>
-      </div>
+    <!-- İlk Giriş Başlat Ekranı (Tarayıcı ses ve mikrofon izni için tek tıklama) -->
+    <div class="baslangic-kutu" id="baslangic-kutusu">
+      <div style="font-size: 52px; margin-bottom: 12px;">🎧🎙️</div>
+      <h2 style="color:#38bdf8; font-size:22px; margin-bottom: 8px;">Sesli & Mikrofonlu Test</h2>
+      <p style="color:#94a3b8; font-size:14px; margin-bottom: 24px; line-height:1.5;">
+        Soru sorulduğunda İngilizce cevabı sesli olarak mikrofona söyleyebilir veya şıklardan seçebilirsiniz!
+      </p>
+      <button class="ana-btn" style="display:block;" onclick="testiIlkKezBaslat()">TESTE BAŞLA 🚀</button>
     </div>
-
-    <div class="mikrofon-bilgi" id="mikrofon-bilgi">🎙️ Dinleniyor... Lütfen İngilizce günü söyleyin!</div>
-
-    <span class="ipucu-link" id="ipucu-btn">💡 İpucu ister misin?</span>
-    <div class="ipucu-kutu" id="ipucu-kutu"></div>
-
-    <div class="secenekler-kutusu" id="secenekler-alani"></div>
-
-    <div class="mesaj-kutusu" id="mesaj-alani"></div>
-    <button class="ana-btn" id="devam-btn" type="button">DEVAM ET</button>
   </div>
 
   <!-- REHBER BÖLÜMÜ -->
@@ -568,11 +585,18 @@
       hedef,
       tip,
       secenekler,
-      dahaOnceYanlisMi: false // Sona atılmış soru mu takibi
+      dahaOnceYanlisMi: false
     };
   }
 
   let kuyruk = [];
+
+  function testiIlkKezBaslat() {
+    document.getElementById('baslangic-kutusu').style.display = 'none';
+    document.getElementById('test-aktif-alani').style.display = 'block';
+    testiBaslat();
+  }
+
   function testiBaslat() {
     kuyruk = [];
     ilkSeferdeDogru = 0;
@@ -604,27 +628,34 @@
   const mesajAlani = document.getElementById('mesaj-alani');
   const devamBtn = document.getElementById('devam-btn');
 
-  function sesCal(metin, hiz = 0.85) {
+  function sesCal(metin, hiz = 0.85, dil = 'en-US', bittiginde = null) {
     try {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(metin);
-        u.lang = 'en-US';
+        u.lang = dil;
         u.rate = hiz;
+        if (bittiginde) {
+          u.onend = bittiginde;
+          u.onerror = bittiginde;
+        }
         window.speechSynthesis.speak(u);
+      } else if (bittiginde) {
+        bittiginde();
       }
-    } catch (e) {}
+    } catch (e) {
+      if (bittiginde) bittiginde();
+    }
   }
 
-  // 1. DÜZELTME: Hoparlör Kopya Vermesin!
+  // Hoparlör Butonu (Kopya vermez)
   sesBtn.onclick = () => {
     if (kuyruk.length === 0) return;
     const aktif = kuyruk[0];
 
-    // Eğer soru Türkçe->İngilizce ise ve henüz cevap verilmediyse kopya verme!
     if (aktif.tip === 'tr_en' && !kilitli) {
       mesajAlani.className = 'mesaj-kutusu d-err';
-      mesajAlani.innerHTML = '🔒 <strong>Kopya yok!</strong> Önce şıklardan cevabını işaretle, ardından doğru telaffuzu dinleyebilirsin.';
+      mesajAlani.innerHTML = '🔒 <strong>Kopya yok!</strong> Önce cevabını söyle veya işaretle, ardından doğru telaffuzu dinleyebilirsin.';
       mesajAlani.style.display = 'block';
       setTimeout(() => {
         if (!kilitli) mesajAlani.style.display = 'none';
@@ -632,7 +663,7 @@
       return;
     }
 
-    sesCal(aktif.hedef.en, 0.85);
+    sesCal(aktif.hedef.en, 0.85, 'en-US');
   };
 
   yavasSesBtn.onclick = () => {
@@ -642,12 +673,13 @@
       sesBtn.onclick();
       return;
     }
-    sesCal(aktif.hedef.en, 0.6);
+    sesCal(aktif.hedef.en, 0.6, 'en-US');
   };
 
-  // 2. GELİŞTİRME: Mikrofonla Sesli Cevap Alma (Speech Recognition)
+  // Konuşma Tanıma (Speech Recognition)
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let tani = null;
+  let mikrofonAktif = false;
 
   if (SpeechRecognition) {
     tani = new SpeechRecognition();
@@ -656,24 +688,23 @@
     tani.interimResults = false;
 
     tani.onstart = () => {
+      mikrofonAktif = true;
       mikrofonBtn.classList.add('dinliyor');
       mikrofonBilgi.style.display = 'block';
-      mikrofonBilgi.textContent = '🎙️ Seni dinliyorum... Lütfen İngilizce günü söyle!';
+      mikrofonBilgi.innerHTML = '🎙️ <strong>Seni dinliyorum...</strong> Lütfen İngilizce günü söyle!';
     };
 
     tani.onresult = (event) => {
+      mikrofonAktif = false;
       mikrofonBtn.classList.remove('dinliyor');
       mikrofonBilgi.style.display = 'none';
       const soylenen = event.results[0][0].transcript.trim().toLowerCase();
-      console.log("Algılanan:", soylenen);
       
       if (kuyruk.length === 0 || kilitli) return;
       const aktif = kuyruk[0];
       const hedefEn = aktif.hedef.en.toLowerCase();
 
-      // Çocuk hedef kelimeyi içeriyor mu kontrol et
       if (soylenen.includes(hedefEn)) {
-        // Doğru şıkkı bul ve tetikle
         const tumButonlar = document.querySelectorAll('.secenek-btn');
         let hedefBtn = null;
         tumButonlar.forEach(b => {
@@ -682,42 +713,43 @@
         cevapKontrol(aktif.hedef, hedefBtn || tumButonlar[0], true);
       } else {
         mesajAlani.className = 'mesaj-kutusu d-err';
-        mesajAlani.innerHTML = `🎙️ <em>"${soylenen}"</em> algılandı. Tekrar deneyebilir veya şıklara tıklayabilirsin.`;
+        mesajAlani.innerHTML = `🎙️ <em>"${soylenen}"</em> algılandı. Şıklardan birine dokunabilir veya mikrofona tekrar basabilirsin.`;
         mesajAlani.style.display = 'block';
       }
     };
 
     tani.onerror = (e) => {
+      mikrofonAktif = false;
       mikrofonBtn.classList.remove('dinliyor');
       mikrofonBilgi.style.display = 'none';
-      if (e.error !== 'no-speech') {
-        alert("Mikrofon hatası: Lütfen tarayıcıdan mikrofon izni verdiğinizden emin olun.");
-      }
     };
 
     tani.onend = () => {
+      mikrofonAktif = false;
       mikrofonBtn.classList.remove('dinliyor');
       mikrofonBilgi.style.display = 'none';
     };
 
     mikrofonBtn.onclick = () => {
       if (kilitli) return;
-      try {
-        tani.start();
-      } catch (err) {
-        tani.stop();
-      }
+      mikrofonuBaslat();
     };
-  } else {
-    mikrofonBtn.onclick = () => {
-      alert("Tarayıcınız sesli konuşma tanıma (SpeechRecognition) özelliğini desteklemiyor. Google Chrome kullanmanız önerilir.");
-    };
+  }
+
+  function mikrofonuBaslat() {
+    if (!tani || kilitli || mikrofonAktif) return;
+    try {
+      tani.start();
+    } catch (err) {
+      // Zaten çalışıyorsa geç
+    }
   }
 
   ipucuBtn.onclick = () => {
     ipucuKutu.style.display = (ipucuKutu.style.display === 'block') ? 'none' : 'block';
   };
 
+  // Soruyu Göster ve Otomatik Olarak Soruyu Seslendirip Mikrofonu Aç
   function soruyuGoster() {
     if (kuyruk.length === 0) {
       zaferGoster();
@@ -735,24 +767,30 @@
     canlarEl.textContent = '❤️ ' + can;
     ipucuKutu.innerHTML = '<strong>💡 Hatırlatıcı İpucu:</strong><br>' + aktif.hedef.ipucu;
 
+    let seslendirilecekMetin = "";
+    let sesDili = "tr-TR";
+
     if (aktif.tip === 'tr_en') {
       turEl.textContent = 'TÜRKÇE ➔ İNGİLİZCE';
       soruEl.textContent = '"' + aktif.hedef.tr + '" hangisidir?';
-      // Türkçe sorulduğunda hoparlörü kilitli göster (Kopya verilmesin)
+      seslendirilecekMetin = aktif.hedef.tr + " hangisidir?";
+      sesDili = "tr-TR";
+
       sesBtn.classList.add('kilitli');
       sesBtn.title = "Cevapladıktan sonra dinleyebilirsiniz 🔒";
       yavasSesBtn.style.display = 'none';
     } else {
       turEl.textContent = 'İNGİLİZCE ➔ TÜRKÇE';
       soruEl.textContent = '"' + aktif.hedef.en + '" ne demektir?';
-      // İngilizce sorulduğunda hoparlör açık
+      seslendirilecekMetin = aktif.hedef.en;
+      sesDili = "en-US";
+
       sesBtn.classList.remove('kilitli');
       sesBtn.title = "Kelimeyi Dinle 🔊";
       yavasSesBtn.style.display = 'flex';
-      // Soru açıldığında otomatik telaffuz et
-      sesCal(aktif.hedef.en, 0.85);
     }
 
+    // Şıkları üret
     seceneklerAlani.innerHTML = '';
     aktif.secenekler.forEach((secenek, idx) => {
       const btn = document.createElement('button');
@@ -764,13 +802,26 @@
       btn.onclick = () => cevapKontrol(secenek, btn);
       seceneklerAlani.appendChild(btn);
     });
+
+    // Soruyu sesli oku ve soru biter bitmez MİKROFONU OTOMATİK AÇ!
+    sesCal(seslendirilecekMetin, 0.9, sesDili, () => {
+      // Soru bittikten 250ms sonra mikrofonu açıp çocuktan cevap bekle
+      setTimeout(() => {
+        if (!kilitli) {
+          mikrofonuBaslat();
+        }
+      }, 250);
+    });
   }
 
   function cevapKontrol(secilen, tiklananBtn, mikrofondanGeldi = false) {
     if (kilitli) return;
     kilitli = true;
 
-    // Hoparlör kilidini aç, artık telaffuz dinlenebilir
+    if (tani && mikrofonAktif) {
+      try { tani.stop(); } catch(e) {}
+    }
+
     sesBtn.classList.remove('kilitli');
     yavasSesBtn.style.display = 'flex';
 
@@ -779,13 +830,12 @@
     const tumButonlar = document.querySelectorAll('.secenek-btn');
 
     tumButonlar.forEach(b => b.disabled = true);
-    sesCal(aktif.hedef.en);
+    sesCal(aktif.hedef.en, 0.85, 'en-US');
 
     if (dogruMu) {
       dogruSesi();
       if (tiklananBtn) tiklananBtn.classList.add('dogru');
 
-      // İstatistik güncelle
       if (aktif.dahaOnceYanlisMi) {
         sonaAtilipOgrenilen++;
       } else {
@@ -801,7 +851,7 @@
 
       setTimeout(() => {
         sonrakiSoru();
-      }, 950);
+      }, 1100);
     } else {
       yanlisSesi();
       toplamYanlis++;
@@ -818,7 +868,6 @@
       mesajAlani.innerHTML = '<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>' + aktif.hedef.en + '</strong> (' + aktif.hedef.tr + ')';
       mesajAlani.style.display = 'block';
 
-      // Sona ekle ve flag'i işaretle
       const yanlisSoru = kuyruk.shift();
       yanlisSoru.dahaOnceYanlisMi = true;
       yanlisSoru.secenekler = karistir(yanlisSoru.secenekler);
@@ -844,10 +893,8 @@
     }
   }
 
-  // 3. GELİŞTİRME: 100 Üzerinden Detaylı Başarı Karnesi
+  // 100 Üzerinden Detaylı Başarı Karnesi
   function zaferGoster() {
-    // 100 Üzerinden Başarı Oranı Formülü:
-    // İlk seferde bilinenler tam puan (%100), sona atılıp tekrar geldiğinde öğrenilenler kısmi puan (%60) alır.
     const hamPuan = ((ilkSeferdeDogru * 1.0) + (sonaAtilipOgrenilen * 0.6)) / TOPLAM_SORU * 100;
     const basariPuani = Math.min(100, Math.max(0, Math.round(hamPuan)));
 
@@ -1022,10 +1069,6 @@
       flashcardGuncelle();
     }
   }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    testiBaslat();
-  });
 </script>
 </body>
 </html>

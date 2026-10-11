@@ -2,997 +2,223 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays - 2. Sınıf İngilizce Ders & Ödev</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LingoDays - 2. Sınıf Theme 2: Classroom Life</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-inner: #334155;
+      --primary: #38bdf8;
+      --success: #10b981;
+      --error: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
     }
-
-    body {
-      background: #0b1318;
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 12px;
-      padding-bottom: 80px;
-      overflow-x: hidden;
-    }
-
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 1;
-    }
-
-    /* Üst Bar */
-    .app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px;
-    }
-
-    .app-title {
-      font-size: 22px;
-      font-weight: 900;
-      color: #38bdf8;
-      letter-spacing: -0.5px;
-    }
-
-    .app-subtitle {
-      font-size: 12px;
-      color: #94a3b8;
-    }
-
-    .mini-btn {
-      background: #1e2c34;
-      border: 1px solid #38bdf8;
-      color: #38bdf8;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Üst Maskot */
-    .maskot-kutusu {
-      background: linear-gradient(135deg, #1e2c34 0%, #15242d 100%);
-      border: 1px solid #33444f;
-      border-radius: 16px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .maskot-avatar {
-      font-size: 32px;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-    }
-
-    .maskot-mesaj {
-      font-size: 13px;
-      color: #cbd5e1;
-      font-weight: 600;
-      line-height: 1.3;
-    }
-
-    .maskot-mesaj strong {
-      color: #38bdf8;
-    }
-
-    /* Sabit Alt Menü (Dersler / Ödevler / Test / Oyun) */
-    .alt-nav-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #15242d;
-      border-top: 2px solid #33444f;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 10px;
-      z-index: 100;
-      box-shadow: 0 -8px 25px rgba(0,0,0,0.6);
-    }
-
-    .alt-nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: none;
-      border: none;
-      color: #94a3b8;
-      font-size: 11px;
-      font-weight: 800;
-      gap: 4px;
-      cursor: pointer;
-      padding: 4px 10px;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-
-    .alt-nav-item .icon {
-      font-size: 18px;
-    }
-
-    .alt-nav-item.aktif {
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-    }
-
-    /* Kart Yapıları */
-    .ana-kart {
-      background: #1e2c34;
-      border: 2px solid #33444f;
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    /* DERSLER BÖLÜMÜ STİLLERİ */
-    .unite-baslik-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      border-bottom: 1px solid #33444f;
-      padding-bottom: 8px;
-    }
-
-    .sayfa-secici-scroll {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
-      scrollbar-width: none;
-    }
-    .sayfa-secici-scroll::-webkit-scrollbar { display: none; }
-
-    .sayfa-tab-btn {
-      background: #273740;
-      border: 1px solid #3b4e5a;
-      color: #94a3b8;
-      font-size: 12px;
-      font-weight: 800;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .sayfa-tab-btn.aktif {
-      background: #38bdf8;
-      color: #0b1318;
-      border-color: #38bdf8;
-    }
-
-    .kitap-sayfasi {
-      display: none;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .kitap-sayfasi.gorunur {
-      display: flex;
-    }
-
-    .etkinlik-kutusu {
-      background: #111b21;
-      border: 1px solid #33444f;
-      border-radius: 14px;
-      padding: 14px;
-    }
-
-    .etkinlik-baslik {
-      font-size: 13px;
-      font-weight: 800;
-      color: #facc15;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Sayfa 10 Öğeleri */
-    .s10-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .s10-kart {
-      background: #1e2c34;
-      border: 1px solid #33444f;
-      border-radius: 12px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .s10-img-temsili {
-      height: 70px;
-      background: #15242d;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      border: 1px dashed #38bdf8;
-    }
-
-    .s10-secenek {
-      background: #273740;
-      border: 1px solid #3b4e5a;
-      color: white;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .s10-secenek.dogru {
-      background: #143521 !important;
-      border-color: #22c55e !important;
-      color: #4ade80 !important;
-    }
-
-    .s10-secenek.yanlis {
-      background: #3b1818 !important;
-      border-color: #ef4444 !important;
-      color: #f87171 !important;
-    }
-
-    /* Sayfa 11 Okul Haritası */
-    .harita-noktalar-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .harita-nokta {
-      background: #273740;
-      border: 1px solid #3b4e5a;
-      border-radius: 10px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .harita-no {
-      background: #38bdf8;
-      color: #0b1318;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    /* Sayfa 12 Cümle Kurma */
-    .cumle-kur-satir {
-      background: #1e2c34;
-      border: 1px solid #33444f;
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 8px;
-    }
-
-    .kelime-baloncuklar {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin: 6px 0;
-    }
-
-    .kelime-balon {
-      background: #273740;
-      border: 1px solid #38bdf8;
-      color: #ffffff;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .kelime-balon.secildi {
-      opacity: 0.2;
-      pointer-events: none;
-    }
-
-    .olusturulan-cumle {
-      min-height: 28px;
-      background: #111b21;
-      border: 1px dashed #475569;
-      border-radius: 8px;
-      padding: 4px 8px;
-      font-size: 13px;
-      font-weight: 800;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-    }
-
-    /* Sayfa 14 Tren Vagonları */
-    .tren-satiri {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #1e2c34;
-      border: 1px solid #33444f;
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 8px;
-      overflow-x: auto;
-    }
-
-    .vagon {
-      flex: 1;
-      min-width: 90px;
-      background: #273740;
-      border: 2px solid #3b4e5a;
-      border-radius: 10px;
-      padding: 8px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .vagon.bos {
-      border-style: dashed;
-      border-color: #facc15;
-      color: #facc15;
-      cursor: pointer;
-    }
-
-    .vagon.dolu-dogru {
-      background: #143521;
-      border-color: #22c55e;
-      color: #4ade80;
-    }
-
-    /* Genel Butonlar */
-    .ana-btn {
-      width: 100%;
-      background: #22c55e;
-      border: none;
-      color: #0b1318;
-      font-size: 15px;
-      font-weight: 900;
-      padding: 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Ses Butonları */
-    .ses-icon-btn {
-      background: #38bdf8;
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #0b1318;
-    }
-
-    /* Sayfa 16 Bulmaca Grid */
-    .wordsearch-grid {
-      display: grid;
-      grid-template-columns: repeat(11, 1fr);
-      gap: 2px;
-      background: #15242d;
-      padding: 6px;
-      border-radius: 10px;
-      margin: 10px 0;
-      user-select: none;
-    }
-
-    .grid-harf {
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1e2c34;
-      font-weight: 900;
-      font-size: 11px;
-      color: #cbd5e1;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .grid-harf.secili {
-      background: #38bdf8;
-      color: #0b1318;
-    }
-
-    .grid-harf.bulundu {
-      background: #22c55e;
-      color: #0b1318;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 650px; }
+    
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .header h1 { font-size: 20px; font-weight: 800; color: #fff; }
+    .header p { font-size: 13px; color: var(--primary); }
+    .timer-badge { background: #1e293b; border: 1px solid var(--primary); padding: 6px 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: var(--primary); }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 16px; }
+    .tab-btn { background: var(--card-bg); color: var(--muted); border: 1px solid var(--card-inner); padding: 8px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap; font-weight: 600; font-size: 13px; }
+    .tab-btn.active { background: var(--primary); color: #0f172a; border-color: var(--primary); font-weight: 800; }
+    
+    /* Card */
+    .card { background: var(--card-bg); border-radius: 16px; padding: 16px; margin-bottom: 14px; border: 1px solid var(--card-inner); }
+    .card-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .card-title { font-size: 16px; font-weight: bold; }
+    .reset-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
+    .reset-btn:hover { background: var(--primary); color: #0f172a; }
+    
+    /* Item row */
+    .item-box { background: var(--card-inner); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+    .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .speak-btn { background: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
+    
+    /* Options */
+    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+    .opt-btn { background: #1e293b; color: white; border: 2px solid transparent; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.2s; }
+    .opt-btn.correct { background: var(--success); border-color: #059669; }
+    .opt-btn.wrong { background: var(--error); border-color: #b91c1c; }
+    
+    .status-msg { margin-top: 8px; font-size: 12px; font-weight: bold; }
+    .status-msg.error { color: var(--error); }
+    .status-msg.success { color: var(--success); }
+    
+    .cipher-box { background: #0f172a; padding: 14px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold; letter-spacing: 2px; color: #f472b6; margin: 10px 0; }
   </style>
 </head>
 <body>
-
-<canvas id="confetti-canvas"></canvas>
-
-<div class="container">
-  <!-- Üst Başlık -->
-  <div class="app-header">
-    <div>
-      <div class="app-title">LingoDays 📚</div>
-      <div class="app-subtitle">2. Sınıf İngilizce - Theme 1: School Life</div>
-    </div>
-    <div style="display:flex; gap:6px;">
-      <button class="mini-btn" onclick="sesTesti()">🔊 Ses</button>
-    </div>
-  </div>
-
-  <!-- Canlı Maskot -->
-  <div class="maskot-kutusu">
-    <div class="maskot-avatar" id="maskot-avatar">🦉</div>
-    <div class="maskot-mesaj" id="maskot-mesaj">
-      Hoş geldin! <strong>Theme 1 (School Life)</strong> sayfalarını aşağıdan seçip dersleri işleyebilirsin! 🎒
-    </div>
-  </div>
-
-  <!-- ==========================================
-       1. BÖLÜM: DERSLER (KİTAP SAYFALARI 9-16)
-       ========================================== -->
-  <div class="ana-kart" id="bolum-dersler">
-    <div class="unite-baslik-bar">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
       <div>
-        <span style="font-size:11px; color:#38bdf8; font-weight:800;">MEB 2. SINIF İNGİLİZCE</span>
-        <h2 style="font-size:17px; font-weight:900;">Theme 1: SCHOOL LIFE</h2>
+        <h1>📖 2. Sınıf İngilizce Kitabı</h1>
+        <p>2. Ünite: CLASSROOM LIFE (Sayfa 17 - 24)</p>
       </div>
-      <span style="font-size:11px; background:#273740; padding:4px 8px; border-radius:6px; color:#facc15; font-weight:bold;">
-        Ünite 1 / 6
-      </span>
+      <div id="studyTimer" class="timer-badge">⏱️ 00:00</div>
     </div>
 
-    <!-- Sayfa Numaraları Seçici -->
-    <div class="sayfa-secici-scroll">
-      <button class="sayfa-tab-btn aktif" onclick="sayfaAc(9)">Sayfa 9</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(10)">Sayfa 10</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(11)">Sayfa 11</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(12)">Sayfa 12</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(13)">Sayfa 13</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(14)">Sayfa 14</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(15)">Sayfa 15</button>
-      <button class="sayfa-tab-btn" onclick="sayfaAc(16)">Sayfa 16</button>
+    <!-- Page Tabs -->
+    <div class="tabs" id="pageTabs">
+      <button class="tab-btn active" onclick="switchPage(17)">Sayfa 17 (Kapak)</button>
+      <button class="tab-btn" onclick="switchPage(18)">Sayfa 18 (Eşyalar)</button>
+      <button class="tab-btn" onclick="switchPage(19)">Sayfa 19 (Rehber)</button>
+      <button class="tab-btn" onclick="switchPage(20)">Sayfa 20 (Şifre)</button>
+      <button class="tab-btn" onclick="switchPage(21)">Sayfa 21 (Boya)</button>
+      <button class="tab-btn" onclick="switchPage(22)">Sayfa 22 (Matematik)</button>
+      <button class="tab-btn" onclick="switchPage(23)">Sayfa 23 (Hikaye)</button>
+      <button class="tab-btn" onclick="switchPage(24)">Sayfa 24 (Kaç Tane?)</button>
     </div>
 
-    <!-- SAYFA 9 (KAPAK) -->
-    <div class="kitap-sayfasi gorunur" id="sayfa-9">
-      <div class="etkinlik-kutusu" style="text-align:center; padding:20px 10px;">
-        <div style="font-size:54px; margin-bottom:8px;">🏫</div>
-        <h3 style="color:#38bdf8; font-size:22px; font-weight:900;">THEME 1: SCHOOL LIFE</h3>
-        <p style="color:#94a3b8; font-size:13px; margin:8px 0 16px;">
-          Ankara-Mamak Atatürk İlkokulu'na hoş geldiniz! Bu ünitede okulumuzu, öğretmenlerimizi ve günlerimizi öğreniyoruz.
-        </p>
-        <button class="ana-btn" onclick="sayfaAc(10)">1. Derse Başla (Sayfa 10) ➡️</button>
-      </div>
-    </div>
-
-    <!-- SAYFA 10 (1. CHOOSE AND CHECK) -->
-    <div class="kitap-sayfasi" id="sayfa-10">
-      <div class="etkinlik-baslik">
-        <span>1) Choose and Tick (✓)</span>
-        <span style="font-size:11px; color:#94a3b8;">Resme göre doğru şıkkı seç</span>
-      </div>
-      <div class="s10-grid" id="s10-sorular"></div>
-    </div>
-
-    <!-- SAYFA 11 (2. LOOK AND WRITE) -->
-    <div class="kitap-sayfasi" id="sayfa-11">
-      <div class="etkinlik-baslik">
-        <span>2) Look and Write (School Map)</span>
-        <span style="font-size:11px; color:#38bdf8;">Okul Alanlarına Dokun & Dinle</span>
-      </div>
-      <div style="font-size:12px; color:#cbd5e1; margin-bottom:8px;">
-        Atatürk İlkokulu krokisindeki numaralara dokunup telaffuzlarını dinle:
-      </div>
-      <div class="harita-noktalar-grid" id="s11-harita-noktalari"></div>
-    </div>
-
-    <!-- SAYFA 12 (3. ORDER THE WORDS & MATCH) -->
-    <div class="kitap-sayfasi" id="sayfa-12">
-      <div class="etkinlik-baslik">
-        <span>3) Order the words & Match</span>
-        <span style="font-size:11px; color:#facc15;">Kelimeleri Sıraya Diz</span>
-      </div>
-      <div id="s12-cumle-alani"></div>
-    </div>
-
-    <!-- SAYFA 13 (4. LOOK AND COMPLETE) -->
-    <div class="kitap-sayfasi" id="sayfa-13">
-      <div class="etkinlik-baslik">
-        <span>4) Look and Complete (Diyaloglar)</span>
-        <span style="font-size:11px; color:#38bdf8;">Boşlukları Doldur</span>
-      </div>
-      <div id="s13-diyalog-alani"></div>
-    </div>
-
-    <!-- SAYFA 14 (5. WRITE THE DAYS) -->
-    <div class="kitap-sayfasi" id="sayfa-14">
-      <div class="etkinlik-baslik">
-        <span>5) Write the days - Tren Vagonları</span>
-        <span style="font-size:11px; color:#facc15;">Eksik Gün Vagonunu Bul</span>
-      </div>
-      <div id="s14-tren-alani"></div>
-    </div>
-
-    <!-- SAYFA 15 (6. READ AND NUMBER) -->
-    <div class="kitap-sayfasi" id="sayfa-15">
-      <div class="etkinlik-baslik">
-        <span>6) Read and number (My School)</span>
-        <span style="font-size:11px; color:#38bdf8;">Okuma Parçası</span>
-      </div>
-      <div id="s15-okuma-alani"></div>
-    </div>
-
-    <!-- SAYFA 16 (7. WORD SEARCH & CHECK) -->
-    <div class="kitap-sayfasi" id="sayfa-16">
-      <div class="etkinlik-baslik">
-        <span>7) Find the words in the school</span>
-        <span style="font-size:11px; color:#facc15;">Kelime Avı Bulmacası</span>
-      </div>
-      <div style="font-size:12px; color:#94a3b8;">Bulunacak Kelimeler: TEACHER, CANTEEN, PLAYGROUND, CLASSROOM, HEADMASTER, SPORTS HALL</div>
-      <div class="wordsearch-grid" id="s16-grid"></div>
-      <div id="s16-bulunanlar" style="font-size:12px; color:#22c55e; font-weight:bold;"></div>
-    </div>
+    <!-- Page Contents -->
+    <div id="pageContainer"></div>
   </div>
 
-  <!-- ==========================================
-       2. BÖLÜM: ÖDEVLER (ÖDEV MODU)
-       ========================================== -->
-  <div class="ana-kart" id="bolum-odevler" style="display:none;">
-    <div class="unite-baslik-bar">
-      <div>
-        <span style="font-size:11px; color:#facc15; font-weight:800;">1. ÜNİTE ÖDEVLERİ</span>
-        <h2 style="font-size:17px; font-weight:900;">Ödev Görevleri & Sıralı Sayma</h2>
-      </div>
-    </div>
-    
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <div class="etkinlik-kutusu">
-        <h4 style="color:#38bdf8; margin-bottom:4px;">1. Ödev: Günleri 1'den 7'ye Sıralı Say</h4>
-        <p style="color:#94a3b8; font-size:12px; margin-bottom:8px;">Öğretmenin istediği gibi Monday'den Sunday'e kadar takılmadan sayma görevi.</p>
-        <button class="ana-btn" onclick="odevSayfasiBaslat('sirali')">Ödeve Başla 🎙️</button>
-      </div>
-
-      <div class="etkinlik-kutusu">
-        <h4 style="color:#38bdf8; margin-bottom:4px;">2. Ödev: Sayfa 14 Tren Vagonlarını Tamamla</h4>
-        <p style="color:#94a3b8; font-size:12px; margin-bottom:8px;">Haftanın günleri sıralamasındaki eksik vagonları doğru yerleştir.</p>
-        <button class="ana-btn" onclick="sayfaAc(14); sekmeGec('dersler');">Vagon Ödevine Git 🚂</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       3. BÖLÜM: TEST (PRATİK VE SINAV)
-       ========================================== -->
-  <div class="ana-kart" id="bolum-test" style="display:none;">
-    <div class="unite-baslik-bar">
-      <div>
-        <span style="font-size:11px; color:#22c55e; font-weight:800;">SINAV MODU</span>
-        <h2 style="font-size:17px; font-weight:900;">Ünite 1 Değerlendirme Testi</h2>
-      </div>
-    </div>
-    <div style="text-align:center; padding:20px 0;">
-      <div style="font-size:48px; margin-bottom:10px;">📝</div>
-      <p style="color:#94a3b8; font-size:13px; margin-bottom:14px;">
-        Okul hayatı ve günler konularını kapsayan 20 soruluk sınav. (Can sınırı yoktur, emojiler gizlidir.)
-      </p>
-      <button class="ana-btn" onclick="alert('Sınav başlatılıyor...');">Sınavı Başlat 🚀</button>
-    </div>
-  </div>
-</div>
-
-<!-- SABİT ALT NAVİGASYON (DERSLER - ÖDEVLER - TEST) -->
-<div class="alt-nav-bar">
-  <button class="alt-nav-item aktif" id="nav-btn-dersler" onclick="sekmeGec('dersler')">
-    <span class="icon">📚</span>
-    <span>Dersler</span>
-  </button>
-  <button class="alt-nav-item" id="nav-btn-odevler" onclick="sekmeGec('odevler')">
-    <span class="icon">📝</span>
-    <span>Ödevler</span>
-  </button>
-  <button class="alt-nav-item" id="nav-btn-test" onclick="sekmeGec('test')">
-    <span class="icon">🎯</span>
-    <span>Test</span>
-  </button>
-</div>
-
-<script>
-  // 1. SES MOTORU
-  let sesCtx = null;
-  function audioBaslat() {
-    try {
-      if (!sesCtx) sesCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (sesCtx && sesCtx.state === 'suspended') sesCtx.resume();
-    } catch(e){}
-  }
-
-  function bip(f, sure = 0.1) {
-    if (!sesCtx) return;
-    try {
-      const osc = sesCtx.createOscillator();
-      const gain = sesCtx.createGain();
-      osc.frequency.setValueAtTime(f, sesCtx.currentTime);
-      gain.gain.setValueAtTime(0.1, sesCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, sesCtx.currentTime + sure);
-      osc.connect(gain);
-      gain.connect(sesCtx.destination);
-      osc.start();
-      osc.stop(sesCtx.currentTime + sure);
-    }catch(e){}
-  }
-
-  function seslendir(metin, bitti = null) {
-    audioBaslat();
-    if (!('speechSynthesis' in window)) { if (bitti) bitti(); return; }
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(metin);
-    u.lang = 'en-US';
-    u.rate = 0.85;
-    u.onend = () => { if (bitti) bitti(); };
-    window.speechSynthesis.speak(u);
-  }
-
-  function sesTesti() {
-    audioBaslat();
-    bip(523, 0.1);
-    seslendir("Hello! Welcome to School Life!");
-  }
-
-  function maskotSoyle(avatar, yazi) {
-    document.getElementById('maskot-avatar').textContent = avatar;
-    document.getElementById('maskot-mesaj').innerHTML = yazi;
-  }
-
-  // 2. NAVİGASYON
-  function sekmeGec(hedef) {
-    audioBaslat();
-    document.querySelectorAll('.alt-nav-item').forEach(b => b.classList.remove('aktif'));
-    document.getElementById('bolum-dersler').style.display = 'none';
-    document.getElementById('bolum-odevler').style.display = 'none';
-    document.getElementById('bolum-test').style.display = 'none';
-
-    if (hedef === 'dersler') {
-      document.getElementById('nav-btn-dersler').classList.add('aktif');
-      document.getElementById('bolum-dersler').style.display = 'block';
-      maskotSoyle('📚', 'Kitap sayfalarını yukarıdan seçip dersleri adım adım takip et!');
-    } else if (hedef === 'odevler') {
-      document.getElementById('nav-btn-odevler').classList.add('aktif');
-      document.getElementById('bolum-odevler').style.display = 'block';
-      maskotSoyle('📝', 'Ödev görevleri burada! Sıralı sayma ve tren vagonları seni bekliyor.');
-    } else if (hedef === 'test') {
-      document.getElementById('nav-btn-test').classList.add('aktif');
-      document.getElementById('bolum-test').style.display = 'block';
-      maskotSoyle('🎯', 'Tüm üniteyi pekiştirmek için teste hazır mısın?');
+  <script>
+    // Seslendirme Motoru
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.85;
+        window.speechSynthesis.speak(utter);
+      }
     }
-  }
 
-  function sayfaAc(no) {
-    audioBaslat();
-    document.querySelectorAll('.sayfa-tab-btn').forEach(b => b.classList.remove('aktif'));
-    document.querySelectorAll('.kitap-sayfasi').forEach(s => s.classList.remove('gorunur'));
+    // 10 Saniye Hareketsizlik Algılayan Çalışma Sayacı
+    let studySeconds = 0;
+    let lastActivity = Date.now();
+    setInterval(() => {
+      if (Date.now() - lastActivity <= 10000) {
+        studySeconds++;
+        const mins = String(Math.floor(studySeconds / 60)).padStart(2, '0');
+        const secs = String(studySeconds % 60).padStart(2, '0');
+        document.getElementById('studyTimer').innerText = `⏱️ ${mins}:${secs}`;
+      }
+    }, 1000);
+    window.addEventListener('click', () => { lastActivity = Date.now(); });
 
-    const btn = Array.from(document.querySelectorAll('.sayfa-tab-btn')).find(b => b.textContent.includes(`Sayfa ${no}`));
-    if (btn) btn.classList.add('aktif');
+    // Sayfa 18 Verileri
+    const page18Data = [
+      { id: 1, correct: "a pencil case", tr: "kalem kutusu", ph: "e pensıl keys", emoji: "👝", opts: ["a desk", "a pencil case", "a sharpener"] },
+      { id: 2, correct: "a ruler", tr: "cetvel", ph: "e ruulır", emoji: "📏", opts: ["scissors", "a ruler", "a crayon"] },
+      { id: 3, correct: "a chair", tr: "sandalye", ph: "e çeer", emoji: "🪑", opts: ["a computer", "a clock", "a chair"] },
+      { id: 4, correct: "a whiteboard", tr: "yazı tahtası", ph: "e vaytbord", emoji: "📋", opts: ["a table", "a whiteboard", "a window"] },
+      { id: 5, correct: "a bookcase", tr: "kitaplık", ph: "e buk-keys", emoji: "📚", opts: ["a bookcase", "a wall", "a door"] },
+      { id: 6, correct: "a notebook", tr: "defter", ph: "e nootbuk", emoji: "📓", opts: ["a tablet", "a rubber", "a notebook"] }
+    ];
 
-    const sayfaEl = document.getElementById(`sayfa-${no}`);
-    if (sayfaEl) sayfaEl.classList.add('gorunur');
+    let p18Answers = {};
+    let activePage = 18;
 
-    maskotSoyle('📖', `<strong>Sayfa ${no}</strong> açıldı! Etkinlikleri tamamlayalım.`);
-  }
-
-  // ==========================================
-  // SAYFA 10: 1) CHOOSE AND CHECK
-  // ==========================================
-  const s10Data = [
-    { no: 1, emoji: "🏫", d: "a classroom", options: ["a classroom", "a canteen", "a sports hall"] },
-    { no: 2, emoji: "👨‍🏫", d: "a teacher", options: ["a kid", "a friend", "a teacher"] },
-    { no: 3, emoji: "👔", d: "a headmaster", options: ["a pupil", "a headmistress", "a headmaster"] },
-    { no: 4, emoji: "🛝", d: "a playground", options: ["a playground", "a lunch hall", "a teacher's room"] },
-    { no: 5, emoji: "📚", d: "a library", options: ["a garden", "a library", "a classroom"] },
-    { no: 6, emoji: "👧", d: "a pupil", options: ["a boy", "a teacher", "a pupil"] }
-  ];
-
-  function s10Yukle() {
-    const kutu = document.getElementById('s10-sorular');
-    kutu.innerHTML = '';
-    s10Data.forEach(item => {
-      const k = document.createElement('div');
-      k.className = 's10-kart';
-      k.innerHTML = `
-        <div class="s10-img-temsili" onclick="seslendir('${item.d}')">${item.emoji}</div>
-        <div style="font-size:11px; font-weight:800; color:#38bdf8;">${item.no}) Seçiniz:</div>
-      `;
-      item.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 's10-secenek';
-        btn.textContent = opt;
-        btn.onclick = () => {
-          seslendir(opt);
-          if (opt === item.d) {
-            bip(600, 0.1);
-            btn.classList.add('dogru');
-            btn.textContent = `✓ ${opt}`;
-          } else {
-            bip(200, 0.15);
-            btn.classList.add('yanlis');
-          }
-        };
-        k.appendChild(btn);
-      });
-      kutu.appendChild(k);
-    });
-  }
-
-  // ==========================================
-  // SAYFA 11: 2) LOOK AND WRITE (OKUL HARİTASI)
-  // ==========================================
-  const s11Data = [
-    { no: 1, en: "a headmaster", tr: "Müdür", emoji: "👔" },
-    { no: 2, en: "a boy", tr: "Erkek Öğrenci", emoji: "👦" },
-    { no: 3, en: "teacher", tr: "Öğretmen", emoji: "👩‍🏫" },
-    { no: 4, en: "sports hall", tr: "Spor Salonu", emoji: "🏀" },
-    { no: 5, en: "classroom", tr: "Sınıf", emoji: "🏫" },
-    { no: 6, en: "library", tr: "Kütüphane", emoji: "📚" },
-    { no: 7, en: "canteen", tr: "Kantin", emoji: "🥪" },
-    { no: 8, en: "playground", tr: "Okul Bahçesi / Oyun Alanı", emoji: "🛝" }
-  ];
-
-  function s11Yukle() {
-    const kutu = document.getElementById('s11-harita-noktalari');
-    kutu.innerHTML = '';
-    s11Data.forEach(d => {
-      const btn = document.createElement('div');
-      btn.className = 'harita-nokta';
-      btn.innerHTML = `
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span class="harita-no">${d.no}</span>
-          <div>
-            <div>${d.en}</div>
-            <div style="font-size:10px; color:#94a3b8;">${d.tr}</div>
+    function renderPage18() {
+      let html = `
+        <div class="card">
+          <div class="card-title-row">
+            <div>
+              <div class="card-title">Sayfa 18: Listen and Choose</div>
+              <div style="font-size:12px;color:var(--muted)">Çocuk kendisi doğruyu bulana kadar diğer şıkları deneyebilir!</div>
+            </div>
+            <button class="reset-btn" onclick="resetP18()">🔄 Dersi Sıfırla</button>
           </div>
-        </div>
-        <button class="ses-icon-btn" onclick="seslendir('${d.en}')">🔊</button>
       `;
-      kutu.appendChild(btn);
-    });
-  }
 
-  // ==========================================
-  // SAYFA 12: 3) ORDER THE WORDS & MATCH
-  // ==========================================
-  const s12Data = [
-    { soru: "What is this?", parcalar: ["is", "What", "this"], cevap: "d) It is a playground." },
-    { soru: "Who is he?", parcalar: ["he", "is", "Who"], cevap: "e) He is Mr Yılmaz." },
-    { soru: "Where is Tom?", parcalar: ["Tom", "Where", "is"], cevap: "a) He is in the classroom." },
-    { soru: "What's your name?", parcalar: ["name", "What's", "your"], cevap: "c) My name is Melis." },
-    { soru: "How are you?", parcalar: ["you", "are", "How"], cevap: "b) I'm fine, thanks!" }
-  ];
+      page18Data.forEach(item => {
+        const userChoice = p18Answers[item.id];
+        const isAnswered = userChoice !== undefined;
+        const isCorrect = userChoice === item.correct;
 
-  function s12Yukle() {
-    const kutu = document.getElementById('s12-cumle-alani');
-    kutu.innerHTML = '';
-    s12Data.forEach((d, idx) => {
-      const satir = document.createElement('div');
-      satir.className = 'cumle-kur-satir';
-      satir.innerHTML = `
-        <div style="font-size:12px; font-weight:800; color:#38bdf8;">${idx + 1}. Cümleyi Kur:</div>
-        <div class="kelime-baloncuklar" id="s12-balonlar-${idx}"></div>
-        <div class="olusturulan-cumle" id="s12-sonuc-${idx}">(Kelimelere dokunarak sıraya diz)</div>
-        <div style="font-size:11px; color:#22c55e; margin-top:4px; font-weight:bold;">Eşleşen Cevap: ${d.cevap}</div>
-      `;
-      kutu.appendChild(satir);
+        html += `
+          <div class="item-box">
+            <div class="item-header">
+              <div>
+                <span style="font-size:24px">${item.emoji}</span>
+                <strong>${isCorrect ? item.correct : 'Doğruyu Seç'}</strong>
+                <div style="font-size:12px;color:var(--primary)">${item.tr} • [${item.ph}]</div>
+              </div>
+              <button class="speak-btn" onclick="speak('${item.correct}')">🔊 Dinle</button>
+            </div>
+            <div class="options-grid">
+        `;
 
-      const bKutu = satir.querySelector(`#s12-balonlar-${idx}`);
-      const sonucKutu = satir.querySelector(`#s12-sonuc-${idx}`);
-      let secilenler = [];
-
-      d.parcalar.forEach(p => {
-        const b = document.createElement('button');
-        b.className = 'kelime-balon';
-        b.textContent = p;
-        b.onclick = () => {
-          seslendir(p);
-          b.classList.add('secildi');
-          secilenler.push(p);
-          sonucKutu.textContent = secilenler.join(' ') + '?';
-          if (secilenler.length === d.parcalar.length) {
-            bip(650, 0.15);
-            seslendir(d.soru);
-            sonucKutu.style.color = '#22c55e';
-            sonucKutu.textContent = `✓ ${d.soru}`;
+        item.opts.forEach(opt => {
+          let cls = 'opt-btn';
+          if (userChoice === opt) {
+            cls += (opt === item.correct) ? ' correct' : ' wrong';
           }
-        };
-        bKutu.appendChild(b);
+          html += `<button class="${cls}" onclick="checkP18(${item.id}, '${opt}')">${opt}</button>`;
+        });
+
+        html += `</div>`;
+        if (isAnswered && !isCorrect) {
+          html += `<div class="status-msg error">❌ Yanlış şık! Lütfen doğru cevabı kendin bulana kadar tekrar dene.</div>`;
+        } else if (isCorrect) {
+          html += `<div class="status-msg success">✓ Aferin! Doğru cevap!</div>`;
+        }
+        html += `</div>`;
       });
-    });
-  }
 
-  // ==========================================
-  // SAYFA 13: 4) LOOK AND COMPLETE (DİYALOGLAR)
-  // ==========================================
-  const s13Data = [
-    { no: 1, metin: "Hello! My name is Duru. What's your name? / My name is Osman.", kelime: "Hello" },
-    { no: 2, metin: "Hi! I'm Ali. What's your name? / My name is Mete.", kelime: "I'm" },
-    { no: 3, metin: "Good morning, Mrs Kelly. How are you? / I'm fine, thanks Ece!", kelime: "How" },
-    { no: 4, metin: "See you tomorrow, Kerim! / Goodbye, Ertan.", kelime: "Goodbye" }
-  ];
+      html += `</div>`;
+      document.getElementById('pageContainer').innerHTML = html;
+    }
 
-  function s13Yukle() {
-    const kutu = document.getElementById('s13-diyalog-alani');
-    kutu.innerHTML = '';
-    s13Data.forEach(d => {
-      const k = document.createElement('div');
-      k.className = 'etkinlik-kutusu';
-      k.style.marginBottom = '8px';
-      k.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong style="color:#38bdf8;">Diyalog ${d.no}</strong>
-          <button class="ses-icon-btn" onclick="seslendir('${d.metin}')">🔊</button>
+    function checkP18(id, opt) {
+      speak(opt);
+      p18Answers[id] = opt;
+      renderPage18();
+    }
+
+    function resetP18() {
+      p18Answers = {};
+      renderPage18();
+    }
+
+    // Sayfa 20: Şifre
+    function renderPage20() {
+      document.getElementById('pageContainer').innerHTML = `
+        <div class="card">
+          <div class="card-title-row">
+            <div class="card-title">Sayfa 20: Gizli Çiçek Şifresi & Yönergeler</div>
+            <button class="reset-btn" onclick="renderPage20()">🔄 Dersi Sıfırla</button>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Öğretmenin sınıf yönergeleri ve kitaptaki gizli çiçek şifresi:</p>
+          <div class="cipher-box">🌸 GİZLİ SORU: CAN I OPEN THE DOOR?</div>
+          <button class="speak-btn" style="width:100%;padding:12px;" onclick="speak('Can I open the door, please?')">🔊 "Can I open the door, please?" Dinle</button>
         </div>
-        <div style="font-size:13px; margin-top:6px; line-height:1.4;">${d.metin}</div>
       `;
-      kutu.appendChild(k);
-    });
-  }
+    }
 
-  // ==========================================
-  // SAYFA 14: 5) TREN VAGONLARI (GÜNLER)
-  // ==========================================
-  const s14Data = [
-    { v1: "Wednesday", v2: "Thursday", v3: "Friday", eksik: null },
-    { v1: "Monday", v2: "?", v3: "Wednesday", eksik: "Tuesday" },
-    { v1: "Tuesday", v2: "?", v3: "Thursday", eksik: "Wednesday" },
-    { v1: "Friday", v2: "?", v3: "Sunday", eksik: "Saturday" },
-    { v1: "Thursday", v2: "?", v3: "Saturday", eksik: "Friday" }
-  ];
+    // Sayfa Değiştirici
+    function switchPage(page) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      activePage = page;
+      if (page === 18) renderPage18();
+      else if (page === 20) renderPage20();
+      else {
+        document.getElementById('pageContainer').innerHTML = `
+          <div class="card">
+            <div class="card-title-row">
+              <div class="card-title">Sayfa ${page}</div>
+              <button class="reset-btn" onclick="switchPage(${page})">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="font-size:13px;color:var(--muted)">Sayfa ${page} içeriği Android uygulamanızda tam interaktif olarak mevcuttur.</p>
+          </div>
+        `;
+      }
+    }
 
-  function s14Yukle() {
-    const kutu = document.getElementById('s14-tren-alani');
-    kutu.innerHTML = '';
-    s14Data.forEach((d, idx) => {
-      const tren = document.createElement('div');
-      tren.className = 'tren-satiri';
-      tren.innerHTML = `
-        <span style="font-size:20px;">🚂</span>
-        <div class="vagon" onclick="seslendir('${d.v1}')">${d.v1}</div>
-        <div class="vagon ${d.eksik ? 'bos' : ''}" id="vagon-${idx}" onclick="vagonTikla(${idx}, '${d.eksik}')">
-          ${d.v2}
-        </div>
-        <div class="vagon" onclick="seslendir('${d.v3}')">${d.v3}</div>
-      `;
-      kutu.appendChild(tren);
-    });
-  }
-
-  function vagonTikla(idx, dogruCevap) {
-    if (!dogruCevap) return;
-    const vEl = document.getElementById(`vagon-${idx}`);
-    vEl.textContent = `✓ ${dogruCevap}`;
-    vEl.className = 'vagon dolu-dogru';
-    bip(650, 0.1);
-    seslendir(dogruCevap);
-  }
-
-  // ==========================================
-  // SAYFA 15: 6) READ AND NUMBER (MY SCHOOL)
-  // ==========================================
-  const s15Data = [
-    { no: 1, text: "Hello! My name is Jane. I'm a pupil. This is my school.", resim: "c) Okul Binası" },
-    { no: 2, text: "This is Mrs Williams. She is my English teacher.", resim: "d) İngilizce Öğretmeni" },
-    { no: 3, text: "Alex and Rose are my friends. They are in the garden.", resim: "b) Bahçedeki Arkadaşlar" },
-    { no: 4, text: "This is Mr Robinson. He is a headmaster. He is in the library.", resim: "a) Kütüphanedeki Müdür" }
-  ];
-
-  function s15Yukle() {
-    const kutu = document.getElementById('s15-okuma-alani');
-    kutu.innerHTML = '';
-    s15Data.forEach(d => {
-      const el = document.createElement('div');
-      el.className = 'etkinlik-kutusu';
-      el.style.marginBottom = '8px';
-      el.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong style="color:#facc15;">${d.no}. Cümle ➔ Eşleşen: ${d.resim}</strong>
-          <button class="ses-icon-btn" onclick="seslendir('${d.text}')">🔊</button>
-        </div>
-        <p style="font-size:13px; margin-top:4px;">"${d.text}"</p>
-      `;
-      kutu.appendChild(el);
-    });
-  }
-
-  // ==========================================
-  // SAYFA 16: 7) WORD SEARCH BULMACA
-  // ==========================================
-  const gridHarfler = [
-    'C','A','N','T','E','E','N','P','B','V','B',
-    'T','G','T','S','B','W','H','A','C','C','O',
-    'E','P','L','A','Y','G','R','O','U','N','D',
-    'A','G','W','H','A','S','B','W','H','P','Z',
-    'C','L','A','S','S','R','O','O','M','U','A',
-    'H','G','S','B','G','T','S','B','H','P','Z',
-    'E','F','R','I','E','N','D','E','S','I','E',
-    'R','G','T','K','K','N','F','K','N','L','W',
-    'M','H','E','A','D','M','A','S','T','E','R',
-    'Z','L','C','G','C','E','R','A','D','A','N',
-    'S','P','O','R','T','S','H','A','L','L','T'
-  ];
-
-  function s16Yukle() {
-    const kutu = document.getElementById('s16-grid');
-    kutu.innerHTML = '';
-    gridHarfler.forEach((h, idx) => {
-      const cell = document.createElement('div');
-      cell.className = 'grid-harf';
-      cell.textContent = h;
-      cell.onclick = () => {
-        cell.classList.toggle('secili');
-        bip(440, 0.05);
-      };
-      kutu.appendChild(cell);
-    });
-  }
-
-  // Başlangıç Yüklemeleri
-  window.onload = () => {
-    s10Yukle();
-    s11Yukle();
-    s12Yukle();
-    s13Yukle();
-    s14Yukle();
-    s15Yukle();
-    s16Yukle();
-  };
-</script>
+    // Başlangıçta Sayfa 18'i yükle
+    renderPage18();
+  </script>
 </body>
 </html>

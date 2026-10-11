@@ -2,746 +2,1474 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LingoDays - MEB 2. Sınıf İngilizce (Tüm Üniteler & Testler)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LingoDays - 2. Sınıf İngilizce</title>
   <style>
     :root {
-      --bg: #0b1120;
+      --bg: #0f172a;
       --card-bg: #1e293b;
-      --card-inner: #334155;
-      --primary: #38bdf8;
-      --primary-hover: #0284c7;
+      --card-hover: #334155;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #06b6d4;
       --success: #10b981;
-      --error: #ef4444;
+      --danger: #ef4444;
       --warning: #f59e0b;
       --text: #f8fafc;
       --muted: #94a3b8;
+      --border: #334155;
+      --radius: 16px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 12px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 760px; padding-bottom: 60px; }
 
-    /* Üst Başlık & Aktif Sayaç */
-    .header { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 14px 18px; border-radius: 16px; margin-bottom: 14px; border: 1px solid #1f2937; }
-    .header h1 { font-size: 20px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .header p { font-size: 12px; color: var(--primary); font-weight: 600; }
-    .timer-badge { background: #1e293b; border: 1px solid var(--primary); padding: 6px 12px; border-radius: 10px; font-size: 13px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    /* Ana Menü Sekmeleri (Üniteler & Test) */
-    .main-nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; }
-    .main-nav button { background: var(--card-bg); color: var(--muted); border: 1px solid var(--card-inner); padding: 9px 14px; border-radius: 10px; cursor: pointer; white-space: nowrap; font-weight: 700; font-size: 13px; transition: 0.2s; }
-    .main-nav button.active { background: var(--primary); color: #0b1120; border-color: var(--primary); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 75px;
+    }
 
-    /* Alt Sayfa Sekmeleri */
-    .sub-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; }
-    .sub-tabs button { background: #172554; color: #93c5fd; border: 1px solid #1e3a8a; padding: 6px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap; font-size: 12px; font-weight: 600; }
-    .sub-tabs button.active { background: #2563eb; color: #fff; border-color: #60a5fa; font-weight: 800; }
+    /* TOP HEADER */
+    header {
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    /* Kartlar */
-    .card { background: var(--card-bg); border-radius: 16px; padding: 18px; margin-bottom: 14px; border: 1px solid var(--card-inner); }
-    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .card-title { font-size: 17px; font-weight: 800; color: #fff; }
-    .reset-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
-    .reset-btn:hover { background: var(--primary); color: #0b1120; }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-    /* Egzersiz Kutusu */
-    .item-box { background: var(--card-inner); border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1px solid #475569; }
-    .item-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .speak-btn { background: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
-    .speak-btn:hover { background: #0369a1; }
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    /* Şıklar Grid */
-    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 8px; }
-    .opt-btn { background: #1e293b; color: white; border: 2px solid transparent; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13px; text-align: center; }
-    .opt-btn.correct { background: var(--success) !important; border-color: #059669; }
-    .opt-btn.wrong { background: var(--error) !important; border-color: #b91c1c; }
+    .logo-icon {
+      font-size: 24px;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-    .msg { margin-top: 8px; font-size: 12px; font-weight: 700; }
-    .msg.error { color: #f87171; }
-    .msg.success { color: #34d399; }
+    .title-area h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+    }
 
-    /* Soru / Eşleştirme Grupları */
-    .word-badge { background: #1e293b; border: 1px solid #475569; padding: 6px 10px; border-radius: 6px; display: inline-block; font-weight: 700; margin: 3px; font-size: 13px; }
-    .order-slot { background: #0f172a; border: 2px dashed #475569; border-radius: 8px; padding: 10px; min-height: 42px; margin: 6px 0; display: flex; gap: 6px; flex-wrap: wrap; }
-    .cipher-card { background: #0f172a; padding: 16px; border-radius: 12px; text-align: center; font-size: 18px; font-weight: 900; letter-spacing: 2px; color: #f472b6; margin: 12px 0; border: 1px solid #334155; }
+    .title-area p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .header-widgets {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timer-badge {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #38bdf8;
+    }
+
+    .timer-badge.paused {
+      color: var(--warning);
+      border-color: var(--warning);
+    }
+
+    .sound-btn {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* MAIN NAV TABS */
+    .nav-scroll {
+      max-width: 900px;
+      margin: 10px auto 0;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .nav-tab {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-tab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    /* CONTAINER */
+    main {
+      max-width: 900px;
+      width: 100%;
+      margin: 16px auto;
+      padding: 0 16px;
+      flex: 1;
+    }
+
+    /* CARD STYLES */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reset-btn {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .reset-btn:hover { background: rgba(239, 68, 68, 0.25); }
+
+    /* PAGE CHIPS */
+    .page-nav-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+
+    .page-chip {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .page-chip.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+    }
+
+    /* WORD GRID */
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .word-tile {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .word-tile:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .word-tile .tile-icon { font-size: 28px; margin-bottom: 6px; }
+    .word-tile .en-text { font-size: 14px; font-weight: 700; color: #fff; }
+    .word-tile .tr-text { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .speaker-icon {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-size: 12px;
+      opacity: 0.6;
+    }
+
+    /* SENTENCE BUILDER / ORDERING */
+    .order-slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 48px;
+      padding: 10px;
+      background: #0f172a;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      margin: 12px 0;
+      align-items: center;
+    }
+
+    .word-chip {
+      background: var(--primary);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      user-select: none;
+    }
+
+    .word-chip.pool {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    /* QUIZ STYLES */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .quiz-question-box {
+      margin: 16px 0;
+    }
+
+    .quiz-prompt {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .quiz-word {
+      font-size: 26px;
+      font-weight: 800;
+      color: #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .option-btn {
+      background: #0f172a;
+      border: 2px solid var(--border);
+      color: #fff;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover {
+      border-color: var(--primary);
+      background: #1e293b;
+    }
+
+    .option-btn.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: var(--success) !important;
+      color: #34d399 !important;
+    }
+
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: var(--danger) !important;
+      color: #f87171 !important;
+    }
+
+    /* FEEDBACK BANNER */
+    .feedback-banner {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .feedback-banner.success {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--success);
+      color: #34d399;
+    }
+
+    .feedback-banner.error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid var(--danger);
+      color: #f87171;
+    }
+
+    .action-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .action-btn.retry {
+      background: var(--warning);
+      color: #0f172a;
+    }
+
+    /* FLASHCARD */
+    .flashcard-container {
+      perspective: 1000px;
+      max-width: 320px;
+      margin: 20px auto;
+      cursor: pointer;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 200px;
+      background: #1e293b;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s;
+    }
+
+    .flashcard:hover {
+      border-color: var(--accent);
+    }
+
+    /* DAYS SORTING */
+    .sortable-item {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sort-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .sort-btn {
+      background: #334155;
+      color: #fff;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 100;
+    }
+
+    .b-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .b-nav-item.active {
+      color: var(--primary);
+    }
+
+    .b-nav-item .b-icon {
+      font-size: 18px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Üst Başlık -->
-    <div class="header">
-      <div>
-        <h1>📚 LingoDays 2. Sınıf</h1>
-        <p id="unitSubTitle">Theme 3: Personal Life (Sayfa 25-32)</p>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-top">
+      <div class="logo-group">
+        <div class="logo-icon">📚</div>
+        <div class="title-area">
+          <h1>LingoDays 2. Sınıf</h1>
+          <p id="subHeaderTitle">İngilizce Öğrenme & Pratik</p>
+        </div>
       </div>
-      <div id="studyTimer" class="timer-badge">⏱️ 00:00</div>
+      <div class="header-widgets">
+        <div class="timer-badge" id="studyTimerBadge" title="10 saniye hareketsiz kalırsanız durur">
+          ⏱️ <span id="studyTimerText">00:00</span>
+        </div>
+        <button class="sound-btn" id="soundToggleBtn" onclick="toggleSound()" title="Sesi Aç/Kapat">🔊</button>
+      </div>
     </div>
 
-    <!-- Ana Ünite / Mod Menüsü -->
-    <div class="main-nav">
-      <button class="active" onclick="switchMainTab('unit3')">3. Ünite: Personal Life (Yeni)</button>
-      <button onclick="switchMainTab('unit2')">2. Ünite: Classroom Life</button>
-      <button onclick="switchMainTab('ordering')">Sıralama: Days of the Week</button>
-      <button onclick="switchMainTab('quiz')">Ödev & Test Modu</button>
-      <button onclick="switchMainTab('flashcards')">Kelime Kartları</button>
+    <!-- MAIN NAV SCROLL -->
+    <div class="nav-scroll">
+      <button class="nav-tab active" onclick="switchMainTab('unit3')" id="tab_unit3">👤 3. Ünite: Personal Life</button>
+      <button class="nav-tab" onclick="switchMainTab('unit2')" id="tab_unit2">🏫 2. Ünite: Classroom Life</button>
+      <button class="nav-tab" onclick="switchMainTab('days_sort')" id="tab_days_sort">📅 Gün Sıralama</button>
+      <button class="nav-tab" onclick="switchMainTab('quiz')" id="tab_quiz">🎯 Ödev & Test</button>
+      <button class="nav-tab" onclick="switchMainTab('flashcards')" id="tab_flashcards">🃏 Kelime Kartları</button>
+      <button class="nav-tab" onclick="switchMainTab('guide')" id="tab_guide">📖 Günler Rehberi</button>
     </div>
+  </header>
 
-    <!-- Alt Sayfa Seçenekleri (Dinamik) -->
-    <div class="sub-tabs" id="subTabs"></div>
+  <!-- MAIN CONTENT CONTAINER -->
+  <main id="appContent"></main>
 
-    <!-- İçerik Alanı -->
-    <div id="mainContent"></div>
-  </div>
+  <!-- BOTTOM MOBILE NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="b-nav-item active" onclick="switchMainTab('unit3')" id="bnav_unit3">
+      <span class="b-icon">👤</span>
+      <span>3. Ünite</span>
+    </button>
+    <button class="b-nav-item" onclick="switchMainTab('unit2')" id="bnav_unit2">
+      <span class="b-icon">🏫</span>
+      <span>2. Ünite</span>
+    </button>
+    <button class="b-nav-item" onclick="switchMainTab('days_sort')" id="bnav_days_sort">
+      <span class="b-icon">📅</span>
+      <span>Sıralama</span>
+    </button>
+    <button class="b-nav-item" onclick="switchMainTab('quiz')" id="bnav_quiz">
+      <span class="b-icon">🎯</span>
+      <span>Test</span>
+    </button>
+    <button class="b-nav-item" onclick="switchMainTab('flashcards')" id="bnav_flashcards">
+      <span class="b-icon">🃏</span>
+      <span>Kartlar</span>
+    </button>
+  </nav>
 
   <script>
-    // ---------------- SESLENDİRME MOTORU (TTS) ----------------
-    function speak(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US';
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
-      }
-    }
+    /* ========================================================
+       1. GLOBAL STATE & SOUND & INACTIVITY TIMER
+    ======================================================== */
+    let currentMainTab = 'unit3';
+    let currentUnit3Page = 25;
+    let currentUnit2Page = 18;
+    let soundEnabled = true;
 
-    // ---------------- 10 SANİYE HAREKETSİZLİK SAYACI ----------------
-    let studySecs = 0;
-    let lastActive = Date.now();
+    // Çalışma Sayacı (10 saniye hareketsizlik algılayıcılı)
+    let totalSeconds = 0;
+    let idleSeconds = 0;
+    let isPaused = false;
+
     setInterval(() => {
-      if (Date.now() - lastActive <= 10000) {
-        studySecs++;
-        const m = String(Math.floor(studySecs / 60)).padStart(2, '0');
-        const s = String(studySecs % 60).padStart(2, '0');
-        document.getElementById('studyTimer').innerText = `⏱️ ${m}:${s}`;
+      idleSeconds++;
+      if (idleSeconds >= 10) {
+        isPaused = true;
+        document.getElementById('studyTimerBadge').classList.add('paused');
+      } else {
+        isPaused = false;
+        document.getElementById('studyTimerBadge').classList.remove('paused');
+        totalSeconds++;
+        const mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+        const secs = String(totalSeconds % 60).padStart(2, '0');
+        document.getElementById('studyTimerText').textContent = `${mins}:${secs}`;
       }
     }, 1000);
-    window.addEventListener('click', () => { lastActive = Date.now(); });
-    window.addEventListener('keydown', () => { lastActive = Date.now(); });
 
-    // ---------------- VERİLER ----------------
-    // 3. ÜNİTE VERİLERİ (Görsellerinizden Alınan Sayfalar 25-32)
-    const unit3Pages = {
-      26: {
-        title: "Sayfa 26: Vücudumuz (Look and write)",
-        desc: "Kelimeleri doğru vücut bölümleriyle eşleştirin. Yanlış seçilirse kilitlenmez, doğruyu kendiniz bulana kadar deneyebilirsiniz!",
-        items: [
-          { id: 1, en: "a head", tr: "baş / kafa", ph: "e hed", emoji: "👦", opts: ["a head", "hair", "a face"] },
-          { id: 2, en: "an ear", tr: "kulak", ph: "en iır", emoji: "👂", opts: ["an ear", "an eye", "a nose"] },
-          { id: 3, en: "a mouth", tr: "ağız", ph: "e mavt", emoji: "👄", opts: ["a mouth", "a face", "a nose"] },
-          { id: 4, en: "a hand", tr: "el", ph: "e hend", emoji: "✋", opts: ["a hand", "an arm", "a leg"] },
-          { id: 5, en: "a leg", tr: "bacak", ph: "e leg", emoji: "🦵", opts: ["a leg", "a body", "a foot"] },
-          { id: 6, en: "hair", tr: "saç", ph: "heer", emoji: "💇", opts: ["hair", "a head", "an ear"] },
-          { id: 7, en: "an eye", tr: "göz", ph: "en ay", emoji: "👁️", opts: ["an eye", "a nose", "an ear"] },
-          { id: 8, en: "a nose", tr: "burun", ph: "e noz", emoji: "👃", opts: ["a nose", "a mouth", "an eye"] },
-          { id: 9, en: "a face", tr: "yüz", ph: "e feys", emoji: "😀", opts: ["a face", "a head", "a body"] },
-          { id: 10, en: "an arm", tr: "kol", ph: "en aarm", emoji: "💪", opts: ["an arm", "a hand", "a leg"] },
-          { id: 11, en: "a body", tr: "gövde / vücut", ph: "e badi", emoji: "🧍", opts: ["a body", "a leg", "an arm"] }
-        ]
-      },
-      27: {
-        title: "Sayfa 27: Giysiler Bulmacası & Hava Durumu",
-        desc: "Giysileri ve hava durumu ifadelerini öğrenelim.",
-        clothes: [
-          { en: "glasses", tr: "gözlük", emoji: "👓" },
-          { en: "coat", tr: "kaban / palto", emoji: "🧥" },
-          { en: "shirt", tr: "gömlek", emoji: "👔" },
-          { en: "scarf", tr: "atkı", emoji: "🧣" },
-          { en: "shoes", tr: "ayakkabılar", emoji: "👞" },
-          { en: "trousers", tr: "pantolon", emoji: "👖" },
-          { en: "t-shirt", tr: "tişört", emoji: "👕" },
-          { en: "dress", tr: "elbise", emoji: "👗" },
-          { en: "hat", tr: "şapka", emoji: "👒" }
-        ],
-        weathers: [
-          { q: "a) Kar ve buz ikonu", en: "It's cold.", tr: "Hava soğuk.", emoji: "❄️", opts: ["It's cold.", "It's hot.", "It's rainy."] },
-          { q: "b) Güneş ikonu", en: "It's sunny.", tr: "Hava güneşli.", emoji: "☀️", opts: ["It's sunny.", "It's snowy.", "It's cold."] },
-          { q: "c) Yağmur ve şemsiye", en: "It's rainy.", tr: "Hava yağmurlu.", emoji: "🌧️", opts: ["It's rainy.", "It's cold.", "It's sunny."] },
-          { q: "d) Kar yağışı", en: "It's snowy.", tr: "Hava karlı.", emoji: "☃️", opts: ["It's snowy.", "It's hot.", "It's rainy."] }
-        ]
-      },
-      28: {
-        title: "Sayfa 28: Melis'in Doğum Günü (Look and circle)",
-        desc: "Resme bak ve doğru ifadeyi bul:",
-        questions: [
-          { id: 1, text: "Ayşe has got green...", ans: "eyes", tr: "Ayşe'nin yeşil gözleri var.", opts: ["hair", "eyes"] },
-          { id: 2, text: "Melis is...", ans: "eight", tr: "Melis sekiz yaşında (pastadaki 8 mum).", opts: ["seven", "eight"] },
-          { id: 3, text: "Ali is...", ans: "tall", tr: "Ali uzun boyludur.", opts: ["tall", "short"] },
-          { id: 4, text: "Ömer has got a green...", ans: "hat", tr: "Ömer'in yeşil şapkası var.", opts: ["hat", "scarf"] },
-          { id: 5, text: "Ahmet has got blue...", ans: "glasses", tr: "Ahmet'in mavi gözlüğü var.", opts: ["glasses", "trousers"] },
-          { id: 6, text: "Damla has got...", ans: "blonde hair", tr: "Damla sarı saçlıdır.", opts: ["black hair", "blonde hair"] },
-          { id: 7, text: "Sema has got...", ans: "red shoes", tr: "Sema'nın kırmızı ayakkabıları var.", opts: ["red shoes", "blue shoes"] }
-        ]
-      },
-      29: {
-        title: "Sayfa 29: Kelimeleri Sırala ve Cevapla (Order & Match)",
-        desc: "Karışık verilen kelimeleri doğru cümle haline getirin:",
-        sentences: [
-          { id: 1, words: "you / old / are / How", correct: "How old are you?", match: "b) I'm nine." },
-          { id: 2, words: "it / today / is / What / day", correct: "What day is it today?", match: "e) It's Friday." },
-          { id: 3, words: "this / What / is", correct: "What is this?", match: "f) This is an ear." },
-          { id: 4, words: "colour / is / What / it", correct: "What colour is it?", match: "c) It is purple." },
-          { id: 5, words: "weather / How / the / is", correct: "How is the weather?", match: "a) It's cold." },
-          { id: 6, words: "have / you / What / got", correct: "What have you got?", match: "d) I've got blue glasses." }
-        ]
-      },
-      30: {
-        title: "Sayfa 30: Zürafa Parçası (Read & choose)",
-        textEn: "I am a very tall animal. I have got four long legs, two small ears on my head. I can see with my big brown eyes. I have got a small nose. I have got brown spots on my body. Yes, I am a giraffe!",
-        textTr: "Ben çok uzun bir hayvanım. Dört uzun bacağım, kafamda iki küçük kulağım var. Büyük kahverengi gözlerimle görebilirim. Küçük bir burnum var. Gövdemde kahverengi benekler var. Evet, ben bir zürafayım!"
-      },
-      31: {
-        title: "Sayfa 31: Labirent Eşleştirme (Match and write)",
-        pairs: [
-          { name: "1. Deniz", item: "has got brown trousers.", tr: "kahverengi pantolonu var." },
-          { name: "2. Ceylin", item: "has got a yellow dress.", tr: "sarı elbisesi var." },
-          { name: "3. Defne", item: "has got glasses.", tr: "gözlüğü var." },
-          { name: "4. Selin", item: "has got blue shoes.", tr: "mavi ayakkabıları var." },
-          { name: "5. Bartu", item: "has got a red scarf.", tr: "kırmızı atkısı var." },
-          { name: "6. Aras", item: "has got a green hat.", tr: "yeşil şapkası var." }
-        ]
+    function recordActivity() {
+      idleSeconds = 0;
+      if (isPaused) {
+        isPaused = false;
+        document.getElementById('studyTimerBadge').classList.remove('paused');
       }
-    };
+    }
+    ['mousedown', 'mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+      window.addEventListener(evt, recordActivity, { passive: true });
+    });
 
-    // 2. ÜNİTE VERİLERİ (Classroom Life)
-    const unit2Data = [
-      { id: 1, correct: "a pencil case", tr: "kalem kutusu", ph: "e pensıl keys", emoji: "👝", opts: ["a desk", "a pencil case", "a sharpener"] },
-      { id: 2, correct: "a ruler", tr: "cetvel", ph: "e ruulır", emoji: "📏", opts: ["scissors", "a ruler", "a crayon"] },
-      { id: 3, correct: "a chair", tr: "sandalye", ph: "e çeer", emoji: "🪑", opts: ["a computer", "a clock", "a chair"] },
-      { id: 4, correct: "a whiteboard", tr: "yazı tahtası", ph: "e vaytbord", emoji: "📋", opts: ["a table", "a whiteboard", "a window"] },
-      { id: 5, correct: "a bookcase", tr: "kitaplık", ph: "e buk-keys", emoji: "📚", opts: ["a bookcase", "a wall", "a door"] },
-      { id: 6, correct: "a notebook", tr: "defter", ph: "e nootbuk", emoji: "📓", opts: ["a tablet", "a rubber", "a notebook"] }
-    ];
+    // Ses Telaffuzu (Web Speech API)
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundToggleBtn').textContent = soundEnabled ? '🔊' : '🔇';
+    }
 
-    // HAFTANIN GÜNLERİ (Sıralama & Quiz İçin)
-    const allDays = [
-      { id: 1, en: "Monday", tr: "Pazartesi", ph: "mandey", num: "1. Gün" },
-      { id: 2, en: "Tuesday", tr: "Salı", ph: "tuyzdey", num: "2. Gün" },
-      { id: 3, en: "Wednesday", tr: "Çarşamba", ph: "wenzdey", num: "3. Gün" },
-      { id: 4, en: "Thursday", tr: "Perşembe", ph: "törzdey", num: "4. Gün" },
-      { id: 5, en: "Friday", tr: "Cuma", ph: "fraydey", num: "5. Gün" },
-      { id: 6, en: "Saturday", tr: "Cumartesi", ph: "satırdey", num: "6. Gün" },
-      { id: 7, en: "Sunday", tr: "Pazar", ph: "sandey", num: "7. Gün" }
-    ];
+    function speakText(text) {
+      recordActivity();
+      if (!soundEnabled || !window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
 
-    // Durum Değişkenleri
-    let currentMainTab = 'unit3';
-    let currentSubPage = 26;
-    let userAnswers = {};
+    /* ========================================================
+       2. TAB NAVIGATION
+    ======================================================== */
+    function switchMainTab(tabId) {
+      recordActivity();
+      currentMainTab = tabId;
 
-    // ---------------- SEKME GEÇİŞLERİ ----------------
-    function switchMainTab(tab) {
-      currentMainTab = tab;
-      document.querySelectorAll('.main-nav button').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      const activeNavTab = document.getElementById(`tab_${tabId}`);
+      if (activeNavTab) activeNavTab.classList.add('active');
 
-      const subTabs = document.getElementById('subTabs');
-      subTabs.innerHTML = '';
+      document.querySelectorAll('.b-nav-item').forEach(b => b.classList.remove('active'));
+      const activeBNav = document.getElementById(`bnav_${tabId}`);
+      if (activeBNav) activeBNav.classList.add('active');
 
-      if (tab === 'unit3') {
-        document.getElementById('unitSubTitle').innerText = 'Theme 3: Personal Life (Sayfa 25 - 32)';
-        [26, 27, 28, 29, 30, 31].forEach(p => {
-          const btn = document.createElement('button');
-          btn.innerText = `Sayfa ${p}`;
-          if (p === 26) btn.classList.add('active');
-          btn.onclick = (e) => {
-            document.querySelectorAll('#subTabs button').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            renderUnit3Page(p);
-          };
-          subTabs.appendChild(btn);
-        });
-        renderUnit3Page(26);
-      } else if (tab === 'unit2') {
-        document.getElementById('unitSubTitle').innerText = 'Theme 2: Classroom Life (Sayfa 17 - 24)';
+      if (tabId === 'unit3') {
+        document.getElementById('subHeaderTitle').textContent = `3. Ünite: Personal Life (Sayfa ${currentUnit3Page})`;
+        renderUnit3();
+      } else if (tabId === 'unit2') {
+        document.getElementById('subHeaderTitle').textContent = `2. Ünite: Classroom Life (Sayfa ${currentUnit2Page})`;
         renderUnit2();
-      } else if (tab === 'ordering') {
-        document.getElementById('unitSubTitle').innerText = 'Ödev: Günleri Sıraya Diz';
-        renderOrdering();
-      } else if (tab === 'quiz') {
-        document.getElementById('unitSubTitle').innerText = 'Ödev & Sınav Testi (Tüm Sorular)';
-        initQuiz();
-      } else if (tab === 'flashcards') {
-        document.getElementById('unitSubTitle').innerText = 'Flaş Kartlar (Dokun ve Çevir)';
+      } else if (tabId === 'days_sort') {
+        document.getElementById('subHeaderTitle').textContent = 'Haftanın Günleri Sıralama Ödevi';
+        renderDaysSort();
+      } else if (tabId === 'quiz') {
+        document.getElementById('subHeaderTitle').textContent = 'Ödev & Test Modu (Can Yok / Tekrar Haklı)';
+        renderQuiz();
+      } else if (tabId === 'flashcards') {
+        document.getElementById('subHeaderTitle').textContent = 'Kelimeler & Flaş Kartlar';
         renderFlashcards();
+      } else if (tabId === 'guide') {
+        document.getElementById('subHeaderTitle').textContent = 'Günler ve Telaffuz Rehberi';
+        renderDaysGuide();
       }
     }
 
-    // ---------------- 3. ÜNİTE ÇİZDİRME ----------------
-    function renderUnit3Page(page) {
-      currentSubPage = page;
-      const container = document.getElementById('mainContent');
-      const data = unit3Pages[page];
+    /* ========================================================
+       3. UNIT 3: PERSONAL LIFE (SAYFA 25 - 32)
+    ======================================================== */
+    const u3BodyParts = [
+      { en: "Head", tr: "Baş / Kafa", icon: "👤" },
+      { en: "Eye", tr: "Göz", icon: "👁️" },
+      { en: "Nose", tr: "Burun", icon: "👃" },
+      { en: "Mouth", tr: "Ağız", icon: "👄" },
+      { en: "Ear", tr: "Kulak", icon: "👂" },
+      { en: "Hair", tr: "Saç", icon: "💇" },
+      { en: "Arm", tr: "Kol", icon: "💪" },
+      { en: "Hand", tr: "El", icon: "✋" },
+      { en: "Leg", tr: "Bacak", icon: "🦵" },
+      { en: "Body", tr: "Vücut", icon: "🧍" }
+    ];
 
-      if (page === 26) {
-        let html = `
-          <div class="card">
-            <div class="card-head">
-              <div>
-                <div class="card-title">${data.title}</div>
-                <div style="font-size:12px;color:var(--muted)">${data.desc}</div>
-              </div>
-              <button class="reset-btn" onclick="resetPage(26)">🔄 Dersi Sıfırla</button>
-            </div>
-        `;
-        data.items.forEach(it => {
-          const ans = userAnswers[`p26_${it.id}`];
-          const isDone = ans !== undefined;
-          const isCorrect = ans === it.en;
+    const u3Clothes = [
+      { en: "Glasses", tr: "Gözlük", icon: "👓" },
+      { en: "Coat", tr: "Palto / Kaban", icon: "🧥" },
+      { en: "Shirt", tr: "Gömlek", icon: "👔" },
+      { en: "Scarf", tr: "Atkı", icon: "🧣" },
+      { en: "Shoes", tr: "Ayakkabı", icon: "👞" },
+      { en: "Trousers", tr: "Pantolon", icon: "👖" },
+      { en: "T-shirt", tr: "Tişört", icon: "👕" },
+      { en: "Dress", tr: "Elbise", icon: "👗" },
+      { en: "Hat", tr: "Şapka", icon: "🧢" }
+    ];
 
-          html += `
-            <div class="item-box">
-              <div class="item-head">
-                <div>
-                  <span style="font-size:24px">${it.emoji}</span>
-                  <strong>${it.id}. ${isCorrect ? it.en : 'Doğruyu Seç'}</strong>
-                  <div style="font-size:12px;color:var(--primary)">${it.tr} • [${it.ph}]</div>
-                </div>
-                <button class="speak-btn" onclick="speak('${it.en}')">🔊 Dinle</button>
-              </div>
-              <div class="options-grid">
-          `;
-          it.opts.forEach(opt => {
-            let cls = 'opt-btn';
-            if (ans === opt) cls += (opt === it.en) ? ' correct' : ' wrong';
-            html += `<button class="${cls}" onclick="chooseAnswer('p26_${it.id}', '${opt}', '${it.en}', 26)">${opt}</button>`;
-          });
-          html += `</div>`;
-          if (isDone && !isCorrect) {
-            html += `<div class="msg error">❌ Yanlış şık! Lütfen doğru kelimeyi kendiniz bulana kadar deneyin.</div>`;
-          } else if (isCorrect) {
-            html += `<div class="msg success">✓ Aferin! Doğru cevap.</div>`;
-          }
-          html += `</div>`;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-      else if (page === 27) {
-        let html = `
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">${data.title}</div>
-              <button class="reset-btn" onclick="resetPage(27)">🔄 Dersi Sıfırla</button>
-            </div>
-            <div style="margin-bottom:14px;font-size:13px;font-weight:bold;color:var(--primary)">👕 Giysiler ve Aksesuarlar (Dinle ve Öğren):</div>
-            <div class="options-grid" style="margin-bottom:20px;">
-        `;
-        data.clothes.forEach(c => {
-          html += `
-            <div class="item-box" style="text-align:center;padding:10px;">
-              <div style="font-size:28px">${c.emoji}</div>
-              <strong>${c.en}</strong>
-              <div style="font-size:11px;color:var(--muted)">${c.tr}</div>
-              <button class="speak-btn" style="margin-top:6px;width:100%;justify-content:center;" onclick="speak('${c.en}')">🔊 Dinle</button>
-            </div>
-          `;
-        });
-        html += `</div><div style="margin-bottom:10px;font-size:13px;font-weight:bold;color:var(--primary)">⛅ Hava Durumu (How is the weather?):</div>`;
-        data.weathers.forEach((w, idx) => {
-          const ans = userAnswers[`p27_${idx}`];
-          const isDone = ans !== undefined;
-          const isCorrect = ans === w.en;
-          html += `
-            <div class="item-box">
-              <div class="item-head">
-                <div>
-                  <span style="font-size:22px">${w.emoji}</span> <strong>${w.q}</strong>
-                  <div style="font-size:12px;color:var(--muted)">${w.tr}</div>
-                </div>
-                <button class="speak-btn" onclick="speak('${w.en}')">🔊 Dinle</button>
-              </div>
-              <div class="options-grid">
-          `;
-          w.opts.forEach(opt => {
-            let cls = 'opt-btn';
-            if (ans === opt) cls += (opt === w.en) ? ' correct' : ' wrong';
-            html += `<button class="${cls}" onclick="chooseAnswer('p27_${idx}', '${opt}', '${w.en}', 27)">${opt}</button>`;
-          });
-          html += `</div>`;
-          if (isDone && !isCorrect) html += `<div class="msg error">❌ Yanlış! Doğru olanı bulana kadar diğer şıkkı dene.</div>`;
-          else if (isCorrect) html += `<div class="msg success">✓ Doğru!</div>`;
-          html += `</div>`;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-      else if (page === 28) {
-        let html = `
-          <div class="card">
-            <div class="card-head">
-              <div>
-                <div class="card-title">${data.title}</div>
-                <div style="font-size:12px;color:var(--muted)">${data.desc}</div>
-              </div>
-              <button class="reset-btn" onclick="resetPage(28)">🔄 Dersi Sıfırla</button>
-            </div>
-        `;
-        data.questions.forEach(q => {
-          const ans = userAnswers[`p28_${q.id}`];
-          const isDone = ans !== undefined;
-          const isCorrect = ans === q.ans;
-          html += `
-            <div class="item-box">
-              <div class="item-head">
-                <div>
-                  <strong>${q.id}. ${q.text}</strong>
-                  <div style="font-size:12px;color:var(--primary)">${q.tr}</div>
-                </div>
-                <button class="speak-btn" onclick="speak('${q.text.replace('...', q.ans)}')">🔊 Dinle</button>
-              </div>
-              <div class="options-grid">
-          `;
-          q.opts.forEach(opt => {
-            let cls = 'opt-btn';
-            if (ans === opt) cls += (opt === q.ans) ? ' correct' : ' wrong';
-            html += `<button class="${cls}" onclick="chooseAnswer('p28_${q.id}', '${opt}', '${q.ans}', 28)">${opt}</button>`;
-          });
-          html += `</div>`;
-          if (isDone && !isCorrect) html += `<div class="msg error">❌ Yanlış! Doğru olanı bulana kadar dene.</div>`;
-          else if (isCorrect) html += `<div class="msg success">✓ Doğru bildin!</div>`;
-          html += `</div>`;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-      else if (page === 29) {
-        let html = `
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">${data.title}</div>
-              <button class="reset-btn" onclick="resetPage(29)">🔄 Dersi Sıfırla</button>
-            </div>
-            <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Cümlelerin doğru sıralanışını ve eşleşen cevaplarını dinleyip inceleyin:</p>
-        `;
-        data.sentences.forEach(s => {
-          html += `
-            <div class="item-box">
-              <div style="font-size:12px;color:var(--warning);font-weight:bold;margin-bottom:4px;">Karışık: ${s.words}</div>
-              <div class="item-head">
-                <div>
-                  <strong style="color:#fff;font-size:15px">${s.id}. ${s.correct}</strong>
-                  <div style="font-size:12px;color:var(--primary);margin-top:2px;">Eşleşen Cevap: <strong>${s.match}</strong></div>
-                </div>
-                <button class="speak-btn" onclick="speak('${s.correct} ${s.match}')">🔊 Dinle</button>
-              </div>
-            </div>
-          `;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-      else if (page === 30) {
-        container.innerHTML = `
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">${data.title}</div>
-              <button class="reset-btn" onclick="renderUnit3Page(30)">🔄 Dersi Sıfırla</button>
-            </div>
-            <div class="item-box">
-              <div style="font-size:36px;text-align:center;margin-bottom:10px;">🦒</div>
-              <p style="font-size:14px;line-height:22px;color:#fff;font-style:italic;margin-bottom:10px;">"${data.textEn}"</p>
-              <p style="font-size:12px;line-height:18px;color:var(--primary);margin-bottom:14px;">"${data.textTr}"</p>
-              <button class="speak-btn" style="width:100%;justify-content:center;padding:12px;" onclick="speak('${data.textEn}')">🔊 Hikayeyi Sesli Dinle</button>
-            </div>
-          </div>
-        `;
-      }
-      else if (page === 31) {
-        let html = `
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">${data.title}</div>
-              <button class="reset-btn" onclick="renderUnit3Page(31)">🔄 Dersi Sıfırla</button>
-            </div>
-        `;
-        data.pairs.forEach(p => {
-          html += `
-            <div class="item-box">
-              <div class="item-head">
-                <div>
-                  <strong>${p.name} ${p.item}</strong>
-                  <div style="font-size:12px;color:var(--primary)">${p.tr}</div>
-                </div>
-                <button class="speak-btn" onclick="speak('${p.name.split('.')[1]} ${p.item}')">🔊 Dinle</button>
-              </div>
-            </div>
-          `;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-    }
+    let page28Selected = [];
+    const page28CorrectWords = ["This", "is", "my", "hat"];
 
-    function chooseAnswer(key, selected, correct, page) {
-      speak(selected);
-      userAnswers[key] = selected;
-      if (currentMainTab === 'unit3') renderUnit3Page(page);
-      else if (currentMainTab === 'unit2') renderUnit2();
-    }
-
-    function resetPage(page) {
-      Object.keys(userAnswers).forEach(k => {
-        if (k.startsWith(`p${page}_`)) delete userAnswers[k];
-      });
-      if (currentMainTab === 'unit3') renderUnit3Page(page);
-      else if (currentMainTab === 'unit2') renderUnit2();
-    }
-
-    // ---------------- 2. ÜNİTE ÇİZDİRME ----------------
-    function renderUnit2() {
-      const container = document.getElementById('mainContent');
-      let html = `
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Theme 2: CLASSROOM LIFE (Sayfa 18)</div>
-              <div style="font-size:12px;color:var(--muted)">Sınıf eşyaları. Doğruyu bulana kadar diğer şıkları deneyebilirsiniz!</div>
-            </div>
-            <button class="reset-btn" onclick="resetPage('u2')">🔄 Dersi Sıfırla</button>
-          </div>
-      `;
-      unit2Data.forEach(it => {
-        const ans = userAnswers[`pu2_${it.id}`];
-        const isDone = ans !== undefined;
-        const isCorrect = ans === it.correct;
-        html += `
-          <div class="item-box">
-            <div class="item-head">
-              <div>
-                <span style="font-size:24px">${it.emoji}</span>
-                <strong>${it.id}. ${isCorrect ? it.correct : 'Doğruyu Seç'}</strong>
-                <div style="font-size:12px;color:var(--primary)">${it.tr} • [${it.ph}]</div>
-              </div>
-              <button class="speak-btn" onclick="speak('${it.correct}')">🔊 Dinle</button>
-            </div>
-            <div class="options-grid">
-        `;
-        it.opts.forEach(opt => {
-          let cls = 'opt-btn';
-          if (ans === opt) cls += (opt === it.correct) ? ' correct' : ' wrong';
-          html += `<button class="${cls}" onclick="chooseAnswer('pu2_${it.id}', '${opt}', '${it.correct}', 'u2')">${opt}</button>`;
-        });
-        html += `</div>`;
-        if (isDone && !isCorrect) html += `<div class="msg error">❌ Yanlış! Kendin doğruyu bulana kadar tekrar dene.</div>`;
-        else if (isCorrect) html += `<div class="msg success">✓ Harika! Doğru cevap.</div>`;
-        html += `</div>`;
-      });
-      html += `
-        <div class="cipher-card">🌸 ÇİÇEK ŞİFRESİ: CAN I OPEN THE DOOR?</div>
-        <button class="speak-btn" style="width:100%;justify-content:center;padding:12px;" onclick="speak('Can I open the door, please?')">🔊 "Can I open the door, please?" Dinle</button>
+    function renderUnit3() {
+      let pageNavHtml = `
+        <div class="page-nav-bar">
+          ${[25, 26, 27, 28, 29, 30, 31, 32].map(p => `
+            <button class="page-chip ${currentUnit3Page === p ? 'active' : ''}" onclick="selectUnit3Page(${p})">
+              Sayfa ${p}
+            </button>
+          `).join('')}
         </div>
       `;
-      container.innerHTML = html;
-    }
 
-    // ---------------- SIRALAMA ÖDEVİ ----------------
-    let orderedList = [];
-    let poolList = [...allDays].sort(() => Math.random() - 0.5);
+      let contentHtml = '';
 
-    function renderOrdering() {
-      const container = document.getElementById('mainContent');
-      let html = `
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Haftanın Günlerini Sıraya Diz (1'den 7'ye)</div>
-              <div style="font-size:12px;color:var(--muted)">Aşağıdaki günlere sırasıyla tıklayarak 1. günden 7. güne kadar dizin!</div>
+      if (currentUnit3Page === 25) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">📖 Sayfa 25: Theme 3 - Personal Life Giriş</div>
+              <button class="reset-btn" onclick="renderUnit3()">🔄 Dersi Sıfırla</button>
             </div>
-            <button class="reset-btn" onclick="resetOrdering()">🔄 Yeniden Başlat</button>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Vücudumuzun bölümlerini öğrenelim. Hoparlöre veya karta dokunarak sesli dinleyin.</p>
+            <div class="word-grid">
+              ${u3BodyParts.map(item => `
+                <div class="word-tile" onclick="speakText('${item.en}')">
+                  <span class="speaker-icon">🔊</span>
+                  <div class="tile-icon">${item.icon}</div>
+                  <div class="en-text">${item.en}</div>
+                  <div class="tr-text">${item.tr}</div>
+                </div>
+              `).join('')}
+            </div>
           </div>
-          <div style="font-size:13px;font-weight:bold;margin-bottom:6px;color:var(--primary)">Dizilen Günler (Sırayla):</div>
-          <div class="order-slot">
-      `;
-      if (orderedList.length === 0) {
-        html += `<span style="color:var(--muted);font-size:12px;">Henüz gün seçilmedi. Aşağıdan 1. Gün olan Monday'e dokunun.</span>`;
-      } else {
-        orderedList.forEach((d, idx) => {
-          html += `<span class="word-badge" style="background:#059669;color:#fff;">${idx+1}. ${d.en}</span>`;
-        });
-      }
-      html += `</div>`;
-
-      if (orderedList.length === 7) {
-        html += `<div class="msg success" style="font-size:15px;margin:12px 0;">🎉 TEBRİKLER! Tüm günleri mükemmel sırada tamamladınız!</div>`;
-      } else {
-        html += `
-          <div style="font-size:13px;font-weight:bold;margin:12px 0 6px 0;color:var(--warning)">Seçilecek Günler (Karışık):</div>
-          <div class="options-grid">
         `;
-        poolList.forEach(d => {
-          html += `<button class="opt-btn" onclick="pickOrderDay(${d.id})">${d.en} (${d.tr})</button>`;
-        });
-        html += `</div>`;
+      } else if (currentUnit3Page === 26) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">👂 Sayfa 26: Listen and Point (Dinle ve Göster)</div>
+              <button class="reset-btn" onclick="resetPage26()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;">Soruyu dinleyin ve doğru vücut bölümüne dokunun.</p>
+            <div style="text-align:center;margin:16px 0;">
+              <button class="action-btn" onclick="speakText('Touch your nose')">🔊 "Touch your nose" Dinle</button>
+            </div>
+            <div id="page26Feedback"></div>
+            <div class="word-grid">
+              ${[
+                { en: "Eye", tr: "Göz", icon: "👁️" },
+                { en: "Nose", tr: "Burun", icon: "👃", correct: true },
+                { en: "Mouth", tr: "Ağız", icon: "👄" },
+                { en: "Ear", tr: "Kulak", icon: "👂" }
+              ].map(opt => `
+                <div class="word-tile" onclick="checkPage26(${!!opt.correct}, '${opt.en}')">
+                  <div class="tile-icon">${opt.icon}</div>
+                  <div class="en-text">${opt.en}</div>
+                  <div class="tr-text">${opt.tr}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (currentUnit3Page === 27) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">👗 Sayfa 27: Clothes & Accessories (Giysiler)</div>
+              <button class="reset-btn" onclick="renderUnit3()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Giysi ve aksesuarlarımızın İngilizcelerini öğrenelim. Dinlemek için dokunun.</p>
+            <div class="word-grid">
+              ${u3Clothes.map(item => `
+                <div class="word-tile" onclick="speakText('${item.en}')">
+                  <span class="speaker-icon">🔊</span>
+                  <div class="tile-icon">${item.icon}</div>
+                  <div class="en-text">${item.en}</div>
+                  <div class="tr-text">${item.tr}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (currentUnit3Page === 28) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🧩 Sayfa 28: Order the Words (Cümle Kurma)</div>
+              <button class="reset-btn" onclick="resetPage28()">🔄 Baştan Başla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;">Kelimeleri sırayla seçerek doğru cümleyi kurun: <b>"Bu benim şapkam."</b></p>
+            
+            <div style="margin:14px 0;">
+              <span style="font-size:12px;color:var(--muted)">Oluşturulan Cümle:</span>
+              <div class="order-slots" id="p28Slots">
+                ${page28Selected.length === 0 ? '<span style="color:var(--muted);font-size:12px;">Aşağıdan kelimelere tıklayın...</span>' : ''}
+                ${page28Selected.map((w, idx) => `
+                  <span class="word-chip" onclick="removeP28Word(${idx})">${w} ✕</span>
+                `).join('')}
+              </div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+              <span style="font-size:12px;color:var(--muted)">Kelimeler:</span>
+              <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
+                ${["hat", "This", "my", "is"].filter(w => !page28Selected.includes(w)).map(w => `
+                  <button class="word-chip pool" onclick="addP28Word('${w}')">${w}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <div id="p28Feedback"></div>
+            <button class="action-btn" onclick="checkP28()">Cümleyi Kontrol Et</button>
+          </div>
+        `;
+      } else if (currentUnit3Page === 29) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🦒 Sayfa 29: Reading - The Giraffe (Zürafa)</div>
+              <button class="reset-btn" onclick="renderUnit3()">🔄 Dersi Sıfırla</button>
+            </div>
+            <div style="background:#0f172a;padding:14px;border-radius:12px;margin-bottom:14px;border:1px solid var(--border);">
+              <p style="font-size:15px;line-height:1.6;color:#e2e8f0;">
+                "Look at the giraffe! It is <b>tall</b>. It has got a <b>long neck</b> and four <b>legs</b>. It is yellow and brown."
+              </p>
+              <button class="action-btn" style="margin-top:10px;font-size:12px;" onclick="speakText('Look at the giraffe! It is tall. It has got a long neck and four legs.')">🔊 Metni Dinle</button>
+            </div>
+
+            <p style="font-size:13px;color:var(--muted);margin-bottom:8px;"><b>Soru:</b> Is the giraffe short or tall? (Zürafa kısa mı uzun mu?)</p>
+            <div style="display:flex;gap:10px;">
+              <button class="option-btn" style="flex:1" onclick="alertGiraffe(true)">Tall (Uzun) ✅</button>
+              <button class="option-btn" style="flex:1" onclick="alertGiraffe(false)">Short (Kısa) ❌</button>
+            </div>
+            <div id="p29Feedback" style="margin-top:12px;"></div>
+          </div>
+        `;
+      } else if (currentUnit3Page === 30) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">❄️☀️ Sayfa 30: Weather & Clothes (Hava ve Giysiler)</div>
+              <button class="reset-btn" onclick="renderUnit3()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Hava durumuna göre uygun kıyafeti seçin:</p>
+            <div class="word-grid">
+              <div class="word-tile" onclick="speakText('It is cold. Wear your coat.')">
+                <div class="tile-icon">🥶</div>
+                <div class="en-text">It is cold</div>
+                <div class="tr-text">Wear a coat 🧥</div>
+              </div>
+              <div class="word-tile" onclick="speakText('It is hot and sunny. Wear your hat.')">
+                <div class="tile-icon">☀️</div>
+                <div class="en-text">It is sunny</div>
+                <div class="tr-text">Wear a hat 🧢</div>
+              </div>
+              <div class="word-tile" onclick="speakText('It is rainy. Take an umbrella.')">
+                <div class="tile-icon">🌧️</div>
+                <div class="en-text">It is rainy</div>
+                <div class="tr-text">Take umbrella ☂️</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (currentUnit3Page === 31) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🎂 Sayfa 31: Melis's Birthday (Doğum Günü)</div>
+              <button class="reset-btn" onclick="renderUnit3()">🔄 Dersi Sıfırla</button>
+            </div>
+            <div style="background:#0f172a;padding:14px;border-radius:12px;margin-bottom:14px;border:1px solid var(--border);text-align:center;">
+              <div style="font-size:40px;margin-bottom:8px;">🎂 🎉</div>
+              <p style="font-size:16px;font-weight:bold;color:#38bdf8;">- "How old are you, Melis?"</p>
+              <p style="font-size:16px;font-weight:bold;color:#a78bfa;margin-top:6px;">- "I am eight years old!"</p>
+              <button class="action-btn" style="margin-top:10px;font-size:12px;" onclick="speakText('How old are you, Melis? I am eight years old!')">🔊 Diyaloğu Dinle</button>
+            </div>
+            <p style="font-size:13px;color:var(--muted);text-align:center;">Melis kaç yaşında? Doğru cevaba dokunun:</p>
+            <div style="display:flex;gap:10px;margin-top:10px;">
+              <button class="option-btn" style="flex:1;" onclick="checkMelisAge(7)">7 (Seven)</button>
+              <button class="option-btn" style="flex:1;" onclick="checkMelisAge(8)">8 (Eight)</button>
+              <button class="option-btn" style="flex:1;" onclick="checkMelisAge(9)">9 (Nine)</button>
+            </div>
+            <div id="p31Feedback" style="margin-top:12px;"></div>
+          </div>
+        `;
+      } else if (currentUnit3Page === 32) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">⭐ Sayfa 32: Unit 3 Revision (Ünite Değerlendirme)</div>
+              <button class="reset-btn" onclick="renderUnit3()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Tebrikler! 3. Ünitenin tüm kelimelerini başarıyla tamamladınız.</p>
+            <div style="text-align:center;padding:20px;background:#0f172a;border-radius:12px;border:1px solid var(--border);">
+              <div style="font-size:48px;">🏆 🌟 🎓</div>
+              <h2 style="font-size:18px;margin:10px 0;color:#34d399;">Harika Başarı!</h2>
+              <p style="font-size:13px;color:var(--muted);max-width:400px;margin:0 auto 16px;">
+                Vücut bölümlerini ve giysileri öğrendiniz. Şimdi Test Moduna geçerek kendini sınayabilirsin!
+              </p>
+              <button class="action-btn" onclick="switchMainTab('quiz')">🎯 Test Moduna Geç</button>
+            </div>
+          </div>
+        `;
       }
-      html += `</div>`;
-      container.innerHTML = html;
+
+      document.getElementById('appContent').innerHTML = pageNavHtml + contentHtml;
     }
 
-    function pickOrderDay(id) {
-      const day = poolList.find(d => d.id === id);
-      const expected = orderedList.length + 1;
-      speak(day.en);
-      if (day.id === expected) {
-        orderedList.push(day);
-        poolList = poolList.filter(d => d.id !== id);
-        renderOrdering();
-        if (orderedList.length === 7) speak("Great job! All days are in perfect order!");
+    function selectUnit3Page(page) {
+      currentUnit3Page = page;
+      document.getElementById('subHeaderTitle').textContent = `3. Ünite: Personal Life (Sayfa ${currentUnit3Page})`;
+      renderUnit3();
+    }
+
+    function checkPage26(isCorrect, word) {
+      const fb = document.getElementById('page26Feedback');
+      if (isCorrect) {
+        speakText('Correct! Well done!');
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 Doğru! "Nose" burun demektir!</span></div>`;
       } else {
-        alert(`❌ Yanlış sıra! Şu anda sırada ${expected}. gün olmalı.`);
+        speakText('Try again');
+        fb.innerHTML = `
+          <div class="feedback-banner error">
+            <span>❌ Tekrar dene! Aranan kelime "Nose" idi.</span>
+            <button class="action-btn retry" onclick="resetPage26()">Tekrar Dene</button>
+          </div>
+        `;
+      }
+    }
+    function resetPage26() {
+      const fb = document.getElementById('page26Feedback');
+      if (fb) fb.innerHTML = '';
+    }
+
+    function addP28Word(w) { page28Selected.push(w); renderUnit3(); }
+    function removeP28Word(idx) { page28Selected.splice(idx, 1); renderUnit3(); }
+    function resetPage28() { page28Selected = []; renderUnit3(); }
+    function checkP28() {
+      const current = page28Selected.join(' ');
+      const target = page28CorrectWords.join(' ');
+      const fb = document.getElementById('p28Feedback');
+      if (current === target) {
+        speakText(target);
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 Tebrikler! Doğru Cümle: "This is my hat."</span></div>`;
+      } else {
+        speakText('Try again');
+        fb.innerHTML = `
+          <div class="feedback-banner error">
+            <span>❌ Sıralama hatalı! Doğrusunu bulana kadar tekrar deneyin.</span>
+            <button class="action-btn retry" onclick="resetPage28()">Sıfırla ve Tekrar Dene</button>
+          </div>
+        `;
       }
     }
 
-    function resetOrdering() {
-      orderedList = [];
-      poolList = [...allDays].sort(() => Math.random() - 0.5);
-      renderOrdering();
+    function alertGiraffe(isTall) {
+      const fb = document.getElementById('p29Feedback');
+      if (isTall) {
+        speakText('The giraffe is tall. Great!');
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 Harika! Zürafa "tall" (uzun) dur.</span></div>`;
+      } else {
+        speakText('No, try again');
+        fb.innerHTML = `<div class="feedback-banner error"><span>❌ Zürafa kısa değildir. Tekrar deneyin!</span></div>`;
+      }
     }
 
-    // ---------------- ÖDEV & TEST MODU (Kendin Bulana Kadar Geçmez) ----------------
-    let quizQList = [];
-    let quizIdx = 0;
-    let quizSelected = null;
-    let quizIsCorrect = null;
-
-    function initQuiz() {
-      // Günler + Sınıf Eşyaları + Vücut Bölümlerinden test soruları oluşturulur
-      quizQList = [
-        { q: "Monday", ans: "Pazartesi", opts: ["Pazartesi", "Salı", "Çarşamba", "Pazar"] },
-        { q: "Wednesday", ans: "Çarşamba", opts: ["Cuma", "Çarşamba", "Perşembe", "Salı"] },
-        { q: "Friday", ans: "Cuma", opts: ["Cumartesi", "Cuma", "Pazartesi", "Perşembe"] },
-        { q: "Sunday", ans: "Pazar", opts: ["Cumartesi", "Salı", "Pazar", "Çarşamba"] },
-        { q: "pencil case", ans: "kalem kutusu", opts: ["kalem kutusu", "cetvel", "defter", "kitaplık"] },
-        { q: "ruler", ans: "cetvel", opts: ["silgi", "cetvel", "makas", "çanta"] },
-        { q: "head", ans: "baş / kafa", opts: ["baş / kafa", "kol", "bacak", "göz"] },
-        { q: "eye", ans: "göz", opts: ["kulak", "burun", "göz", "ağız"] },
-        { q: "shoes", ans: "ayakkabılar", opts: ["şapka", "ayakkabılar", "pantolon", "gömlek"] },
-        { q: "coat", ans: "kaban / palto", opts: ["kaban / palto", "tişört", "atkı", "çorap"] }
-      ].sort(() => Math.random() - 0.5);
-
-      quizIdx = 0;
-      quizSelected = null;
-      quizIsCorrect = null;
-      renderQuiz();
+    function checkMelisAge(age) {
+      const fb = document.getElementById('p31Feedback');
+      if (age === 8) {
+        speakText('Correct! She is eight years old.');
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 Doğru! Melis 8 yaşında ("I am eight").</span></div>`;
+      } else {
+        speakText('Try again');
+        fb.innerHTML = `<div class="feedback-banner error"><span>❌ Yanlış! Diyaloğu tekrar dinleyip tekrar dene.</span></div>`;
+      }
     }
+
+    /* ========================================================
+       4. UNIT 2: CLASSROOM LIFE (SAYFA 17 - 24)
+    ======================================================== */
+    const u2Objects = [
+      { en: "Book", tr: "Kitap", icon: "📖" },
+      { en: "Pencil", tr: "Kurşun Kalem", icon: "✏️" },
+      { en: "Ruler", tr: "Cetvel", icon: "📏" },
+      { en: "Eraser", tr: "Silgi", icon: "🧹" },
+      { en: "School Bag", tr: "Okul Çantası", icon: "🎒" },
+      { en: "Desk", tr: "Sıra / Masa", icon: "🪑" },
+      { en: "Chair", tr: "Sandalye", icon: "💺" },
+      { en: "Board", tr: "Yazı Tahtası", icon: "📋" }
+    ];
+
+    function renderUnit2() {
+      let pageNavHtml = `
+        <div class="page-nav-bar">
+          ${[17, 18, 19, 20, 21, 22, 23, 24].map(p => `
+            <button class="page-chip ${currentUnit2Page === p ? 'active' : ''}" onclick="selectUnit2Page(${p})">
+              Sayfa ${p}
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      let contentHtml = '';
+
+      if (currentUnit2Page === 17) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🏫 Sayfa 17: Theme 2 - Classroom Life Giriş</div>
+              <button class="reset-btn" onclick="renderUnit2()">🔄 Dersi Sıfırla</button>
+            </div>
+            <div style="text-align:center;padding:20px;">
+              <div style="font-size:48px;margin-bottom:10px;">🏫 🎒 ✏️</div>
+              <h2 style="font-size:20px;color:#38bdf8;margin-bottom:8px;">CLASSROOM LIFE</h2>
+              <p style="color:var(--muted);font-size:13px;max-width:400px;margin:0 auto 16px;">
+                Sınıf eşyaları, talimatlar ve okul kuralları. Sayfa 18'e geçerek kelimeleri öğrenmeye başlayabilirsiniz.
+              </p>
+              <button class="action-btn" onclick="selectUnit2Page(18)">Sayfa 18'e Geç ➔</button>
+            </div>
+          </div>
+        `;
+      } else if (currentUnit2Page === 18) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">✏️ Sayfa 18: Classroom Objects (Sınıf Eşyaları)</div>
+              <button class="reset-btn" onclick="renderUnit2()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Sınıfımızdaki temel eşyalar. Telaffuzları dinlemek için dokunun.</p>
+            <div class="word-grid">
+              ${u2Objects.map(item => `
+                <div class="word-tile" onclick="speakText('${item.en}')">
+                  <span class="speaker-icon">🔊</span>
+                  <div class="tile-icon">${item.icon}</div>
+                  <div class="en-text">${item.en}</div>
+                  <div class="tr-text">${item.tr}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (currentUnit2Page === 19) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🗣️ Sayfa 19: Classroom Instructions (Yönergeler)</div>
+              <button class="reset-btn" onclick="renderUnit2()">🔄 Dersi Sıfırla</button>
+            </div>
+            <div class="word-grid">
+              ${[
+                { en: "Stand up", tr: "Ayağa kalk", icon: "🧍" },
+                { en: "Sit down", tr: "Otur", icon: "🪑" },
+                { en: "Open your book", tr: "Kitabını aç", icon: "📖" },
+                { en: "Close your book", tr: "Kitabını kapat", icon: "📕" },
+                { en: "Listen", tr: "Dinle", icon: "👂" },
+                { en: "Be quiet", tr: "Sessiz ol", icon: "🤫" }
+              ].map(item => `
+                <div class="word-tile" onclick="speakText('${item.en}')">
+                  <span class="speaker-icon">🔊</span>
+                  <div class="tile-icon">${item.icon}</div>
+                  <div class="en-text">${item.en}</div>
+                  <div class="tr-text">${item.tr}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (currentUnit2Page === 20) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🔢 Sayfa 20: How many? (Kaç tane?)</div>
+              <button class="reset-btn" onclick="renderUnit2()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Nesneleri sayalım ve cevaplayalım:</p>
+            <div style="background:#0f172a;padding:16px;border-radius:12px;border:1px solid var(--border);text-align:center;">
+              <div style="font-size:32px;letter-spacing:6px;margin-bottom:8px;">✏️ ✏️ ✏️ ✏️ ✏️</div>
+              <p style="font-weight:bold;margin-bottom:12px;">"How many pencils?" (Kaç kurşun kalem var?)</p>
+              <div style="display:flex;gap:10px;justify-content:center;">
+                <button class="option-btn" style="padding:10px 20px;" onclick="checkCount(3, false)">3</button>
+                <button class="option-btn" style="padding:10px 20px;" onclick="checkCount(5, true)">5</button>
+                <button class="option-btn" style="padding:10px 20px;" onclick="checkCount(7, false)">7</button>
+              </div>
+              <div id="p20Feedback" style="margin-top:12px;"></div>
+            </div>
+          </div>
+        `;
+      } else if (currentUnit2Page === 21) {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">🌸 Sayfa 21: Flower Password (Çiçek Şifresi)</div>
+              <button class="reset-btn" onclick="renderUnit2()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Çiçek yapraklarındaki harfleri birleştirip gizli kelimeyi bulun: <b>S - C - H - O - O - L</b></p>
+            <div style="text-align:center;padding:16px;background:#0f172a;border-radius:12px;border:1px solid var(--border);">
+              <div style="font-size:40px;margin-bottom:8px;">🌸 🔑</div>
+              <p style="font-size:20px;font-weight:bold;color:#38bdf8;letter-spacing:4px;">_ C H O O L</p>
+              <p style="font-size:13px;color:var(--muted);margin:8px 0 12px;">Eksik olan ilk harf hangisidir?</p>
+              <div style="display:flex;gap:10px;justify-content:center;">
+                <button class="option-btn" style="padding:10px 20px;" onclick="checkFlowerLetter('B', false)">B</button>
+                <button class="option-btn" style="padding:10px 20px;" onclick="checkFlowerLetter('S', true)">S</button>
+                <button class="option-btn" style="padding:10px 20px;" onclick="checkFlowerLetter('P', false)">P</button>
+              </div>
+              <div id="p21Feedback" style="margin-top:12px;"></div>
+            </div>
+          </div>
+        `;
+      } else {
+        contentHtml = `
+          <div class="card">
+            <div class="card-header-bar">
+              <div class="card-title">📖 Sayfa ${currentUnit2Page}: Classroom Life Alıştırma</div>
+              <button class="reset-btn" onclick="renderUnit2()">🔄 Dersi Sıfırla</button>
+            </div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Bu sayfadaki tüm kelimeleri hoparlöre dokunarak dinleyebilirsiniz.</p>
+            <div class="word-grid">
+              ${u2Objects.slice(0, 6).map(item => `
+                <div class="word-tile" onclick="speakText('${item.en}')">
+                  <span class="speaker-icon">🔊</span>
+                  <div class="tile-icon">${item.icon}</div>
+                  <div class="en-text">${item.en}</div>
+                  <div class="tr-text">${item.tr}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('appContent').innerHTML = pageNavHtml + contentHtml;
+    }
+
+    function selectUnit2Page(p) {
+      currentUnit2Page = p;
+      document.getElementById('subHeaderTitle').textContent = `2. Ünite: Classroom Life (Sayfa ${currentUnit2Page})`;
+      renderUnit2();
+    }
+
+    function checkCount(val, isCorrect) {
+      const fb = document.getElementById('p20Feedback');
+      if (isCorrect) {
+        speakText('Five pencils. Correct!');
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 Harika! 5 adet kalem var ("Five pencils").</span></div>`;
+      } else {
+        speakText('No, count again');
+        fb.innerHTML = `<div class="feedback-banner error"><span>❌ Yanlış! Kalemleri tekrar sayıp doğruyu bul.</span></div>`;
+      }
+    }
+
+    function checkFlowerLetter(letter, isCorrect) {
+      const fb = document.getElementById('p21Feedback');
+      if (isCorrect) {
+        speakText('School. Great job!');
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 Doğru! Gizli Kelime: SCHOOL (Okul).</span></div>`;
+      } else {
+        speakText('Try again');
+        fb.innerHTML = `<div class="feedback-banner error"><span>❌ Yanlış harf! Tekrar dene.</span></div>`;
+      }
+    }
+
+    /* ========================================================
+       5. DAYS OF THE WEEK SORTING (SIRALAMA ÖDEVİ)
+    ======================================================== */
+    const correctDaysOrder = [
+      { en: "Monday", tr: "Pazartesi" },
+      { en: "Tuesday", tr: "Salı" },
+      { en: "Wednesday", tr: "Çarşamba" },
+      { en: "Thursday", tr: "Perşembe" },
+      { en: "Friday", tr: "Cuma" },
+      { en: "Saturday", tr: "Cumartesi" },
+      { en: "Sunday", tr: "Pazar" }
+    ];
+
+    let userDaysOrder = [
+      { en: "Wednesday", tr: "Çarşamba" },
+      { en: "Monday", tr: "Pazartesi" },
+      { en: "Friday", tr: "Cuma" },
+      { en: "Tuesday", tr: "Salı" },
+      { en: "Sunday", tr: "Pazar" },
+      { en: "Thursday", tr: "Perşembe" },
+      { en: "Saturday", tr: "Cumartesi" }
+    ];
+
+    function renderDaysSort() {
+      const html = `
+        <div class="card">
+          <div class="card-header-bar">
+            <div class="card-title">📅 Haftanın Günlerini Sıraya Dizme Ödevi</div>
+            <button class="reset-btn" onclick="resetDaysSort()">🔄 Sıralamayı Sıfırla</button>
+          </div>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">
+            Haftanın günlerini Pazartesi'den Pazar'a doğru sıraya dizin. Yukarı (⬆️) ve Aşağı (⬇️) okları kullanarak yerlerini değiştirin.
+          </p>
+
+          <div id="daysListContainer">
+            ${userDaysOrder.map((d, idx) => `
+              <div class="sortable-item">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-weight:bold;color:var(--accent);width:24px;">${idx + 1}.</span>
+                  <div>
+                    <span style="font-weight:bold;font-size:15px;color:#fff;">${d.en}</span>
+                    <span style="font-size:12px;color:var(--muted);margin-left:6px;">(${d.tr})</span>
+                  </div>
+                  <button style="background:none;border:none;cursor:pointer;font-size:14px;" onclick="speakText('${d.en}')">🔊</button>
+                </div>
+                <div class="sort-controls">
+                  <button class="sort-btn" onclick="moveDayUp(${idx})"${idx === 0 ? ' disabled style="opacity:0.3"' : ''}>⬆️</button>
+                  <button class="sort-btn" onclick="moveDayDown(${idx})"${idx === userDaysOrder.length - 1 ? ' disabled style="opacity:0.3"' : ''}>⬇️</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div id="daysSortFeedback" style="margin-top:14px;"></div>
+
+          <button class="action-btn" style="width:100%;margin-top:14px;" onclick="checkDaysOrder()">
+            Sıralamayı Kontrol Et ✅
+          </button>
+        </div>
+      `;
+      document.getElementById('appContent').innerHTML = html;
+    }
+
+    function moveDayUp(idx) {
+      if (idx <= 0) return;
+      const tmp = userDaysOrder[idx];
+      userDaysOrder[idx] = userDaysOrder[idx - 1];
+      userDaysOrder[idx - 1] = tmp;
+      renderDaysSort();
+    }
+
+    function moveDayDown(idx) {
+      if (idx >= userDaysOrder.length - 1) return;
+      const tmp = userDaysOrder[idx];
+      userDaysOrder[idx] = userDaysOrder[idx + 1];
+      userDaysOrder[idx + 1] = tmp;
+      renderDaysSort();
+    }
+
+    function resetDaysSort() {
+      userDaysOrder = [
+        { en: "Wednesday", tr: "Çarşamba" },
+        { en: "Monday", tr: "Pazartesi" },
+        { en: "Friday", tr: "Cuma" },
+        { en: "Tuesday", tr: "Salı" },
+        { en: "Sunday", tr: "Pazar" },
+        { en: "Thursday", tr: "Perşembe" },
+        { en: "Saturday", tr: "Cumartesi" }
+      ];
+      renderDaysSort();
+    }
+
+    function checkDaysOrder() {
+      let isAllCorrect = true;
+      let wrongCount = 0;
+      for (let i = 0; i < correctDaysOrder.length; i++) {
+        if (userDaysOrder[i].en !== correctDaysOrder[i].en) {
+          isAllCorrect = false;
+          wrongCount++;
+        }
+      }
+
+      const fb = document.getElementById('daysSortFeedback');
+      if (isAllCorrect) {
+        speakText('Excellent! Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Perfect order!');
+        fb.innerHTML = `<div class="feedback-banner success"><span>🎉 TEBRİKLER! Tüm günler tam sırasında: Monday ... Sunday!</span></div>`;
+      } else {
+        speakText('Some days are not in the right order. Try again.');
+        fb.innerHTML = `<div class="feedback-banner error"><span>❌ Sıralamada ${wrongCount} gün yanlış yerde! Okları kullanarak düzeltin.</span></div>`;
+      }
+    }
+
+    /* ========================================================
+       6. QUIZ / TEST MODU (CAN YOK, YANLIŞTA TEKRAR DENETİR)
+    ======================================================== */
+    const quizQuestions = [
+      { prompt: "Aşağıdakilerden hangisi 'BURUN' demektir?", word: "Burun", correct: "Nose", options: ["Eye", "Nose", "Ear", "Head"] },
+      { prompt: "'PENCIL' kelimesinin Türkçe karşılığı nedir?", word: "Pencil", correct: "Kurşun Kalem", options: ["Silgi", "Kitap", "Kurşun Kalem", "Cetvel"] },
+      { prompt: "Haftanın ilk günü hangisidir?", word: "Pazartesi", correct: "Monday", options: ["Sunday", "Friday", "Monday", "Tuesday"] },
+      { prompt: "'SHOES' kelimesinin Türkçe anlamı nedir?", word: "Shoes", correct: "Ayakkabı", options: ["Ayakkabı", "Gözlük", "Şapka", "Pantolon"] },
+      { prompt: "'STAND UP' komutu ne anlama gelir?", word: "Stand up", correct: "Ayağa kalk", options: ["Otur", "Ayağa kalk", "Kitabı aç", "Sessiz ol"] },
+      { prompt: "'EYE' kelimesi ne anlama gelir?", word: "Eye", correct: "Göz", options: ["Burun", "Ağız", "Göz", "Kulak"] },
+      { prompt: "'FRIDAY' hangi gündür?", word: "Friday", correct: "Cuma", options: ["Perşembe", "Cuma", "Cumartesi", "Pazar"] },
+      { prompt: "'HAT' kelimesi ne anlama gelir?", word: "Hat", correct: "Şapka", options: ["Elbise", "Şapka", "Atkı", "Gömlek"] },
+      { prompt: "'RULER' kelimesi nedir?", word: "Ruler", correct: "Cetvel", options: ["Cetvel", "Silgi", "Kalem", "Çanta"] },
+      { prompt: "'SUNDAY' hangi gündür?", word: "Sunday", correct: "Pazar", options: ["Cumartesi", "Pazar", "Salı", "Çarşamba"] }
+    ];
+
+    let currentQuizIndex = 0;
+    let quizSelectedAnswer = null;
+    let quizState = 'pending';
 
     function renderQuiz() {
-      const container = document.getElementById('mainContent');
-      if (quizIdx >= quizQList.length) {
-        container.innerHTML = `
-          <div class="card" style="text-align:center;padding:30px;">
-            <div style="font-size:48px;">🏆</div>
-            <div class="card-title" style="font-size:22px;margin:10px 0;">Tebrikler! Testi Başarıyla Bitirdiniz!</div>
-            <p style="color:var(--muted);margin-bottom:20px;">Tüm soruları doğru çözene kadar mücadele ettiniz.</p>
-            <button class="reset-btn" style="padding:10px 20px;font-size:14px;" onclick="initQuiz()">🔄 Testi Baştan Başlat</button>
+      if (currentQuizIndex >= quizQuestions.length) {
+        document.getElementById('appContent').innerHTML = `
+          <div class="quiz-card">
+            <div style="font-size:54px;margin-bottom:12px;">🏆 🌟 🎉</div>
+            <h2 style="font-size:22px;color:#34d399;margin-bottom:10px;">Testi Başarıyla Tamamladınız!</h2>
+            <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">
+              Tüm 10 soruyu doğru cevaplayana kadar pratik yaptınız. Harika bir çalışma!
+            </p>
+            <button class="action-btn" onclick="restartQuiz()">Testi Tekrar Başlat 🔄</button>
           </div>
         `;
         return;
       }
 
-      const q = quizQList[quizIdx];
-      let html = `
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Soru ${quizIdx + 1} / ${quizQList.length}</div>
-              <div style="font-size:12px;color:var(--muted)">Doğruyu kendiniz yapana kadar bir sonraki soruya geçilmez!</div>
+      const q = quizQuestions[currentQuizIndex];
+
+      const html = `
+        <div class="quiz-card">
+          <div class="card-header-bar" style="border:none;margin-bottom:0;">
+            <div style="font-size:13px;font-weight:700;color:var(--accent);">
+              Soru ${currentQuizIndex + 1} / ${quizQuestions.length}
             </div>
-            <button class="reset-btn" onclick="initQuiz()">🔄 Testi Sıfırla</button>
+            <button class="reset-btn" onclick="restartQuiz()">🔄 Testi Sıfırla</button>
           </div>
-          <div class="item-box" style="text-align:center;padding:24px;">
-            <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">Bu kelimenin Türkçesi nedir?</div>
-            <div style="font-size:28px;font-weight:900;color:#fff;margin-bottom:10px;">${q.q}</div>
-            <button class="speak-btn" onclick="speak('${q.q}')">🔊 Kelimeyi Dinle</button>
+
+          <div class="quiz-question-box">
+            <div class="quiz-prompt">${q.prompt}</div>
+            <div class="quiz-word" onclick="speakText('${q.correct}')">
+              ${q.word} <span>🔊</span>
+            </div>
           </div>
+
+          <!-- YAZILI ŞIKLAR (Emoji ipucu yok, ezberletir) -->
           <div class="options-grid">
+            ${q.options.map(opt => {
+              let btnClass = 'option-btn';
+              if (quizState === 'correct' && opt === q.correct) btnClass += ' correct';
+              if (quizState === 'wrong' && opt === quizSelectedAnswer) btnClass += ' wrong';
+              return `
+                <button class="${btnClass}" onclick="handleQuizAnswer('${opt}')" ${quizState === 'correct' ? 'disabled' : ''}>
+                  ${opt}
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          <div id="quizFeedbackArea">
+            ${quizState === 'correct' ? `
+              <div class="feedback-banner success">
+                <span>🎉 Harika! Doğru cevap!</span>
+                <button class="action-btn" onclick="nextQuizQuestion()">Sonraki Soru ➔</button>
+              </div>
+            ` : ''}
+
+            ${quizState === 'wrong' ? `
+              <div class="feedback-banner error">
+                <span>❌ Yanlış cevap! Çocuğun kendisi bulana kadar tekrar deneyin.</span>
+                <button class="action-btn retry" onclick="retryQuizQuestion()">Tekrar Dene 🔄</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
       `;
 
-      q.opts.forEach(opt => {
-        let cls = 'opt-btn';
-        if (quizSelected === opt) {
-          cls += (opt === q.ans) ? ' correct' : ' wrong';
-        }
-        html += `<button class="${cls}" onclick="checkQuizAnswer('${opt}')">${opt}</button>`;
-      });
-
-      html += `</div>`;
-
-      if (quizIsCorrect === false) {
-        html += `
-          <div class="item-box" style="background:#450a0a;border-color:#b91c1c;margin-top:14px;text-align:center;">
-            <div style="color:#f87171;font-weight:bold;margin-bottom:8px;">❌ Yanlış oldu! Tekrar dene.</div>
-            <button class="opt-btn" style="background:var(--error);width:100%;" onclick="retryQuizQuestion()">🔄 TEKRAR DENE (Kendin Bul)</button>
-          </div>
-        `;
-      } else if (quizIsCorrect === true) {
-        html += `
-          <div class="item-box" style="background:#064e3b;border-color:#059669;margin-top:14px;text-align:center;">
-            <div style="color:#34d399;font-weight:bold;margin-bottom:8px;">🎉 Doğru bildin!</div>
-            <button class="opt-btn" style="background:var(--success);width:100%;" onclick="nextQuizQuestion()">SONRAKİ SORUYA GEÇ ➔</button>
-          </div>
-        `;
-      }
-
-      html += `</div>`;
-      container.innerHTML = html;
+      document.getElementById('appContent').innerHTML = html;
     }
 
-    function checkQuizAnswer(opt) {
-      const q = quizQList[quizIdx];
-      speak(opt);
-      quizSelected = opt;
-      if (opt === q.ans) {
-        quizIsCorrect = true;
+    function handleQuizAnswer(opt) {
+      quizSelectedAnswer = opt;
+      const q = quizQuestions[currentQuizIndex];
+      if (opt === q.correct) {
+        quizState = 'correct';
+        speakText('Excellent! Correct!');
       } else {
-        quizIsCorrect = false;
+        quizState = 'wrong';
+        speakText('Try again');
       }
       renderQuiz();
     }
 
     function retryQuizQuestion() {
-      quizSelected = null;
-      quizIsCorrect = null;
+      quizState = 'pending';
+      quizSelectedAnswer = null;
       renderQuiz();
     }
 
     function nextQuizQuestion() {
-      quizIdx++;
-      quizSelected = null;
-      quizIsCorrect = null;
+      currentQuizIndex++;
+      quizState = 'pending';
+      quizSelectedAnswer = null;
       renderQuiz();
     }
 
-    // ---------------- FLAŞ KARTLAR ----------------
-    let cardIdx = 0;
-    let isFlipped = false;
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizState = 'pending';
+      quizSelectedAnswer = null;
+      renderQuiz();
+    }
+
+    /* ========================================================
+       7. FLASHCARDS (FLAŞ KARTLAR)
+    ======================================================== */
+    const allFlashcards = [
+      ...u3BodyParts,
+      ...u3Clothes,
+      ...u2Objects,
+      ...correctDaysOrder
+    ];
+
+    let flashcardIndex = 0;
+    let flashcardFlipped = false;
+
     function renderFlashcards() {
-      const container = document.getElementById('mainContent');
-      const item = allDays[cardIdx];
-      container.innerHTML = `
+      const card = allFlashcards[flashcardIndex];
+
+      const html = `
         <div class="card" style="text-align:center;">
-          <div class="card-head">
-            <div class="card-title">Kart ${cardIdx + 1} / ${allDays.length}</div>
-            <button class="reset-btn" onclick="cardIdx=0;isFlipped=false;renderFlashcards()">🔄 Başa Dön</button>
+          <div class="card-header-bar">
+            <div class="card-title">🃏 Kelime Kartları (${flashcardIndex + 1} / ${allFlashcards.length})</div>
+            <button class="reset-btn" onclick="flashcardIndex=0;flashcardFlipped=false;renderFlashcards();">🔄 Başa Dön</button>
           </div>
-          <div class="item-box" style="min-height:220px;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;background:${isFlipped ? '#064e3b':'#1e293b'};border:2px solid ${isFlipped ? '#10b981':'#38bdf8'}" onclick="flipCard()">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">(Çevirmek için dokun)</div>
-            <div style="font-size:32px;font-weight:900;color:#fff;">${isFlipped ? item.tr : item.en}</div>
-            <div style="font-size:14px;color:var(--primary);margin-top:6px;">${isFlipped ? item.en : `Okunuşu: [${item.ph}]`}</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Karta tıklayarak Türkçesini görün veya arkasını çevirin.</p>
+
+          <div class="flashcard-container" onclick="flipFlashcard()">
+            <div class="flashcard">
+              <div style="font-size:48px;margin-bottom:8px;">${card.icon || '📖'}</div>
+              <h2 style="font-size:24px;color:#38bdf8;">${flashcardFlipped ? card.tr : card.en}</h2>
+              <p style="font-size:12px;color:var(--muted);margin-top:6px;">
+                ${flashcardFlipped ? 'İngilizcesi: ' + card.en : 'Dokununca Türkçesini gösterir'}
+              </p>
+            </div>
           </div>
-          <div style="display:flex;gap:10px;margin-top:14px;">
-            <button class="opt-btn" style="flex:1" onclick="prevCard()">⬅ Önceki</button>
-            <button class="speak-btn" style="flex:1;justify-content:center;" onclick="speak('${item.en}')">🔊 Dinle</button>
-            <button class="opt-btn" style="flex:1" onclick="nextCard()">Sonraki ➡</button>
+
+          <div style="display:flex;justify-content:center;gap:12px;margin-top:14px;">
+            <button class="sort-btn" style="width:44px;height:44px;" onclick="prevFlashcard()">◀</button>
+            <button class="action-btn" onclick="speakText('${card.en}')">🔊 Seslendir</button>
+            <button class="sort-btn" style="width:44px;height:44px;" onclick="nextFlashcard()">▶</button>
           </div>
         </div>
       `;
-    }
-    function flipCard() { isFlipped = !isFlipped; renderFlashcards(); }
-    function nextCard() { cardIdx = (cardIdx + 1) % allDays.length; isFlipped = false; renderFlashcards(); speak(allDays[cardIdx].en); }
-    function prevCard() { cardIdx = (cardIdx - 1 + allDays.length) % allDays.length; isFlipped = false; renderFlashcards(); speak(allDays[cardIdx].en); }
 
-    // Başlangıçta 3. Üniteyi (Sayfa 26) yükle
+      document.getElementById('appContent').innerHTML = html;
+    }
+
+    function flipFlashcard() {
+      flashcardFlipped = !flashcardFlipped;
+      renderFlashcards();
+    }
+
+    function nextFlashcard() {
+      flashcardIndex = (flashcardIndex + 1) % allFlashcards.length;
+      flashcardFlipped = false;
+      renderFlashcards();
+    }
+
+    function prevFlashcard() {
+      flashcardIndex = (flashcardIndex - 1 + allFlashcards.length) % allFlashcards.length;
+      flashcardFlipped = false;
+      renderFlashcards();
+    }
+
+    /* ========================================================
+       8. DAYS GUIDE (GÜNLER REHBERİ)
+    ======================================================== */
+    function renderDaysGuide() {
+      const html = `
+        <div class="card">
+          <div class="card-header-bar">
+            <div class="card-title">📖 Haftanın Günleri Telaffuz & Bilgi Rehberi</div>
+            <button class="reset-btn" onclick="renderDaysGuide()">🔄 Yenile</button>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Her güne tıklayarak doğru telaffuzunu dinleyebilirsiniz.</p>
+          <div class="word-grid">
+            ${correctDaysOrder.map((d, idx) => `
+              <div class="word-tile" onclick="speakText('${d.en}')">
+                <span class="speaker-icon">🔊</span>
+                <div class="tile-icon">📅</div>
+                <div class="en-text">${idx + 1}. ${d.en}</div>
+                <div class="tr-text">${d.tr}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.getElementById('appContent').innerHTML = html;
+    }
+
+    // Başlangıçta 3. Üniteyi yükle
     switchMainTab('unit3');
   </script>
 </body>

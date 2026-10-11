@@ -24,7 +24,6 @@
       overflow-x: hidden;
     }
 
-    /* Konfeti Canvas */
     #confetti-canvas {
       position: fixed;
       top: 0;
@@ -44,7 +43,7 @@
       z-index: 1;
     }
 
-    /* Üst Başlık & Butonlar */
+    /* Üst Başlık */
     .app-header {
       display: flex;
       justify-content: space-between;
@@ -111,7 +110,7 @@
       color: #0b1318;
     }
 
-    /* Canlı Maskot Alanı */
+    /* Canlı Maskot */
     .maskot-kutusu {
       background: linear-gradient(135deg, #1e2c34 0%, #15242d 100%);
       border: 1px solid #33444f;
@@ -158,6 +157,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .etiket {
@@ -184,6 +185,23 @@
       font-size: 13px;
     }
 
+    .calisma-sayaci {
+      background: #111b21;
+      border: 1px solid #3b4e5a;
+      color: #facc15;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .calisma-sayaci.durakladi {
+      color: #94a3b8;
+      border-color: #64748b;
+    }
+
     .soru-satiri {
       display: flex;
       align-items: center;
@@ -193,7 +211,7 @@
     }
 
     .soru-baslik {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 800;
       line-height: 1.35;
       color: #ffffff;
@@ -248,7 +266,7 @@
       transform: scale(0.92);
     }
 
-    /* ŞIKSIZ SESLİ GÖREV ALANI */
+    /* ŞIKSIZ SESLİ GÖREV */
     .sesli-cevap-alani {
       display: none;
       flex-direction: column;
@@ -378,9 +396,6 @@
     .secenek-ana-yazi {
       font-size: 16px;
       font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .secenek-okunus {
@@ -506,7 +521,7 @@
       margin: 10px 0;
     }
 
-    /* HARF BALONLARI OYUNU */
+    /* HARF BALONLARI */
     .balon-oyunu-alani {
       display: none;
       flex-direction: column;
@@ -615,9 +630,6 @@
       font-size: 18px;
       font-weight: 800;
       color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .rehber-okunus {
@@ -717,10 +729,10 @@
   <div class="app-header">
     <div>
       <div class="app-title">LingoDays 🌟</div>
-      <div class="app-subtitle">İngilizce Günler Macera Oyunu</div>
+      <div class="app-subtitle">İngilizce Günler Öğrenme Uygulaması</div>
     </div>
     <div class="header-sag-butonlar">
-      <button class="mini-btn" onclick="gunlerSarkisiniCal()" title="Tüm günleri ritmik dinle">🎵 Şarkı</button>
+      <button class="mini-btn" onclick="gunlerSarkisiniCal()" title="Tüm günleri dinle">🎵 Şarkı</button>
       <button class="mini-btn" onclick="sesTestiYap()" title="Sesi kontrol et">🔊 Ses Testi</button>
     </div>
   </div>
@@ -733,11 +745,11 @@
     <button class="nav-btn" id="tab-kartlar" onclick="sekmeDegistir('kartlar')">🃏 Flaş Kartlar</button>
   </div>
 
-  <!-- İnteraktif Maskot (Lingo Baykuş) -->
+  <!-- Canlı Maskot -->
   <div class="maskot-kutusu" id="maskot-kutusu">
     <div class="maskot-avatar" id="maskot-avatar">🦉</div>
     <div class="maskot-mesaj" id="maskot-mesaj">
-      Merhaba küçük şampiyon! <strong>İngilizce günleri</strong> keşfetmeye hazır mısın? 🚀
+      Merhaba küçük şampiyon! Hazır olduğunda <strong>Teste Başla</strong> butonuna dokun! 🚀
     </div>
   </div>
 
@@ -746,13 +758,18 @@
     <div id="test-aktif-alani" style="display:none;">
       <div class="ust-bar">
         <span class="etiket" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
+        
         <div class="sayaclar">
+          <!-- Aktif Çalışma Süresi (10 sn hareketsizlikte duraklar) -->
+          <div class="calisma-sayaci" id="calisma-sayaci-kutusu" title="Aktif Çalışma Süresi">
+            ⏱️ <span id="calisma-sayaci-metin">00:00</span>
+          </div>
           <span id="sayac" style="color: #4ade80;">Kalan: 20</span>
-          <span id="canlar" style="color: #ef4444;">❤️ 5</span>
         </div>
       </div>
 
       <div class="soru-satiri">
+        <!-- EMOJİSİZ TEMİZ SORU METNİ -->
         <div class="soru-baslik" id="soru-basligi">Yükleniyor...</div>
         <div style="display:flex; gap:6px; align-items:center;">
           <button class="ses-btn" id="ses-btn" title="Kelimeyi Dinle" type="button">🔊</button>
@@ -763,7 +780,7 @@
       <span class="ipucu-link" id="ipucu-btn">💡 İpucu ister misin?</span>
       <div class="ipucu-kutu" id="ipucu-kutu"></div>
 
-      <!-- 1. ŞIKSIZ SESLİ GÖREV ALANI (5 Soruda Görünür) -->
+      <!-- 1. ŞIKSIZ SESLİ GÖREV (5 Soruda Görünür) -->
       <div class="sesli-cevap-alani" id="sesli-cevap-alani">
         <button class="dev-mikrofon-btn" id="dev-mikrofon-btn" type="button">🎙️</button>
         <div class="sesli-talimat" id="sesli-talimat">Mikrofona bas ve İngilizce söyle!</div>
@@ -774,7 +791,7 @@
         <button class="pas-gec-btn" type="button" onclick="sesliyiSiklaraDonustur()">Şıkları Göster 🔲</button>
       </div>
 
-      <!-- 2. ŞIKLAR ALANI (15 Soruda Görünür) -->
+      <!-- 2. ŞIKLAR ALANI (15 Soruda Görünür, EMOJİSİZ) -->
       <div class="secenekler-kutusu" id="secenekler-alani"></div>
 
       <div class="mesaj-kutusu" id="mesaj-alani"></div>
@@ -783,26 +800,24 @@
 
     <!-- Başlangıç Butonu -->
     <div class="baslangic-kutu" id="baslangic-kutusu">
-      <div style="font-size: 52px; margin-bottom: 12px;">🏆🎧</div>
-      <h2 style="color:#38bdf8; font-size:22px; margin-bottom: 8px;">Büyük Günler Macerası</h2>
+      <div style="font-size: 52px; margin-bottom: 12px;">🏆⏱️</div>
+      <h2 style="color:#38bdf8; font-size:22px; margin-bottom: 8px;">Odaklı Çalışma Modu</h2>
       <p style="color:#94a3b8; font-size:14px; margin-bottom: 20px; line-height:1.5;">
-        Soruları sesli dinle, mikrofona telaffuz et, konfetileri patlat ve <strong>rozetleri topla!</strong>
+        Can sınırı yok! Tüm soruları tamamlayana kadar pratik yapabilirsin. 
+        Aktif çalışma süreniz yukarıda tutulur.
       </p>
-      <button class="ana-btn" style="display:block;" onclick="testiIlkKezBaslat()">MACERAYA BAŞLA 🚀</button>
+      <button class="ana-btn" style="display:block;" onclick="testiIlkKezBaslat()">TESTE BAŞLA 🚀</button>
     </div>
   </div>
 
-  <!-- HARF BALONLARI OYUNU BÖLÜMÜ -->
+  <!-- HARF BALONLARI -->
   <div class="balon-oyunu-alani" id="balon-bolumu">
     <div class="balon-hedef-kutu">
       <div style="font-size:12px; color:#94a3b8; font-weight:700; margin-bottom:4px;">GÜNÜN HARFLERİNİ PATLAT!</div>
       <div class="balon-turkce-soru" id="balon-soru-turkce">Pazartesi</div>
       <div style="font-size:13px; color:#38bdf8; font-weight:bold;" id="balon-okunus">[Mandey]</div>
 
-      <!-- Doldurulan Kutular -->
       <div class="balon-tamamlanan" id="balon-tamamlanan-kutular"></div>
-
-      <!-- Tıklanacak Karışık Balonlar -->
       <div class="balonlar-havuzu" id="balonlar-havuzu"></div>
 
       <div id="balon-mesaj" style="font-size:14px; font-weight:800; min-height:24px;"></div>
@@ -830,7 +845,6 @@
 </div>
 
 <script>
-  // 7 Gün, Çizgi Emojileri ve Stüdyo Telaffuz Dosyaları
   const sesDosyalari = {
     'Monday': 'https://upload.wikimedia.org/wikipedia/commons/6/63/En-us-Monday.ogg',
     'Tuesday': 'https://upload.wikimedia.org/wikipedia/commons/d/dc/En-us-Tuesday.ogg',
@@ -842,13 +856,13 @@
   };
 
   const gunler = [
-    { en: 'Monday', tr: 'Pazartesi', emoji: '🌙', okunus: 'Mandey', kisa: 'Mon', ipucu: 'Moon-day (Ay Dede günü) - 1. gün', ornek: 'I start work on Monday.' },
-    { en: 'Tuesday', tr: 'Salı', emoji: '✌️', okunus: 'Tyuuzdey', kisa: 'Tue', ipucu: 'Two-sday (İkizler günü) - Salı', ornek: 'See you on Tuesday.' },
-    { en: 'Wednesday', tr: 'Çarşamba', emoji: '🐪', okunus: 'Wenzdey', kisa: 'Wed', ipucu: 'Wed-nes-day (d harfi okunmaz!) - Hafta ortası devesi', ornek: 'Wednesday is mid-week.' },
-    { en: 'Thursday', tr: 'Perşembe', emoji: '⚡', okunus: 'Törzdey', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek tanrısı Thor) - Cuma öncesi', ornek: 'Thursday is almost weekend!' },
-    { en: 'Friday', tr: 'Cuma', emoji: '🍟', okunus: 'Fraydey', kisa: 'Fri', ipucu: 'Fri-day (Patates kızartması ve parti) - Hafta sonu kapısı', ornek: 'Thank God it\'s Friday!' },
-    { en: 'Saturday', tr: 'Cumartesi', emoji: '🪐', okunus: 'Setırdey', kisa: 'Sat', ipucu: 'Saturn-day (Satürn Gezegeni ve macera) - Hafta sonu eğlencesi', ornek: 'Saturday is for relaxing.' },
-    { en: 'Sunday', tr: 'Pazar', emoji: '☀️', okunus: 'Sandey', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme ve aile günü', ornek: 'Sunday is a peaceful day.' }
+    { en: 'Monday', tr: 'Pazartesi', okunus: 'Mandey', kisa: 'Mon', ipucu: 'Moon-day (Ay günü) - 1. gün', ornek: 'I start work on Monday.' },
+    { en: 'Tuesday', tr: 'Salı', okunus: 'Tyuuzdey', kisa: 'Tue', ipucu: 'Two-sday (2. gün) - Salı', ornek: 'See you on Tuesday.' },
+    { en: 'Wednesday', tr: 'Çarşamba', okunus: 'Wenzdey', kisa: 'Wed', ipucu: 'Wed-nes-day (d okunmaz!) - Ortadaki en uzun gün', ornek: 'Wednesday is mid-week.' },
+    { en: 'Thursday', tr: 'Perşembe', okunus: 'Törzdey', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi', ornek: 'Thursday is almost weekend!' },
+    { en: 'Friday', tr: 'Cuma', okunus: 'Fraydey', kisa: 'Fri', ipucu: 'Fri-day (Fries / Cuma coşkusu) - Hafta sonu kapısı', ornek: 'Thank God it\'s Friday!' },
+    { en: 'Saturday', tr: 'Cumartesi', okunus: 'Setırdey', kisa: 'Sat', ipucu: 'Saturn-day - Hafta sonu eğlencesi', ornek: 'Saturday is for relaxing.' },
+    { en: 'Sunday', tr: 'Pazar', okunus: 'Sandey', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü', ornek: 'Sunday is a peaceful day.' }
   ];
 
   function karistir(arr) {
@@ -860,7 +874,41 @@
     return kopya;
   }
 
-  // 1. DAHİLİ KONFETİ MOTORU (Sıfır Dış Bağımlılık)
+  // 1. AKTİF ÇALIŞMA SÜRESİ SAYACI (10 sn hareketsizlikte duraklar)
+  let toplamCalismaSaniyesi = 0;
+  let sonHareketZamani = Date.now();
+  let sayacZamanlayici = null;
+  const sayacKutusuEl = document.getElementById('calisma-sayaci-kutusu');
+  const sayacMetinEl = document.getElementById('calisma-sayaci-metin');
+
+  function kullaniciHareketiOldu() {
+    sonHareketZamani = Date.now();
+    sayacKutusuEl.classList.remove('durakladi');
+  }
+
+  ['click', 'touchstart', 'mousemove', 'keydown', 'scroll'].forEach(evt => {
+    window.addEventListener(evt, kullaniciHareketiOldu, { passive: true });
+  });
+
+  function sayaciBaslat() {
+    if (sayacZamanlayici) clearInterval(sayacZamanlayici);
+    sayacZamanlayici = setInterval(() => {
+      const gecenFark = Date.now() - sonHareketZamani;
+      // 10 saniye boyunca hiç hareket yoksa sayaç ilerlemez!
+      if (gecenFark < 10000) {
+        toplamCalismaSaniyesi++;
+        sayacKutusuEl.classList.remove('durakladi');
+        const dk = Math.floor(toplamCalismaSaniyesi / 60);
+        const sn = toplamCalismaSaniyesi % 60;
+        sayacMetinEl.textContent = `${dk.toString().padStart(2, '0')}:${sn.toString().padStart(2, '0')}`;
+      } else {
+        sayacKutusuEl.classList.add('durakladi');
+        sayacMetinEl.textContent = `⏸️ ${Math.floor(toplamCalismaSaniyesi / 60).toString().padStart(2, '0')}:${(toplamCalismaSaniyesi % 60).toString().padStart(2, '0')}`;
+      }
+    }, 1000);
+  }
+
+  // 2. KONFETİ MOTORU
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
   let confettiParticles = [];
@@ -916,7 +964,7 @@
   }
   renderConfetti();
 
-  // 2. SES MOTORU (Web Audio + Gerçek Stüdyo Kayıtları)
+  // 3. SES MOTORU
   let sesCtx = null;
   function audioMotorunuBaslat() {
     try {
@@ -946,9 +994,9 @@
   }
 
   function dogruSesi() {
-    bip(523.25, 0.08); // C5
-    setTimeout(() => bip(659.25, 0.08), 80); // E5
-    setTimeout(() => bip(783.99, 0.18), 160); // G5
+    bip(523.25, 0.08);
+    setTimeout(() => bip(659.25, 0.08), 80);
+    setTimeout(() => bip(783.99, 0.18), 160);
   }
 
   function yanlisSesi() {
@@ -1009,18 +1057,17 @@
     dogruSesi();
     setTimeout(() => {
       kelimeyiSeslendir('Sunday', () => {
-        maskotKonus('🦉', 'Harika! Ses sistemi mükemmel çalışıyor. 🎵');
+        maskotKonus('🦉', 'Ses sistemi mükemmel çalışıyor! 🎵');
       });
     }, 200);
   }
 
-  // Ritmik Günler Şarkısı
   let sarkiCaliniyor = false;
   function gunlerSarkisiniCal() {
     if (sarkiCaliniyor) return;
     sarkiCaliniyor = true;
     audioMotorunuBaslat();
-    maskotKonus('🎵', 'Şimdi günleri sırayla ritmik dinliyoruz!');
+    maskotKonus('🎵', 'Şimdi günleri sırayla dinliyoruz!');
 
     let idx = 0;
     function siradaki() {
@@ -1031,7 +1078,7 @@
         return;
       }
       const g = gunler[idx];
-      maskotKonus(g.emoji, `<strong>${idx + 1}. ${g.en}</strong> (${g.tr})`);
+      maskotKonus('📅', `<strong>${idx + 1}. ${g.en}</strong> (${g.tr})`);
       bip(440 + (idx * 50), 0.1);
       setTimeout(() => {
         kelimeyiSeslendir(g.en, () => {
@@ -1043,7 +1090,6 @@
     siradaki();
   }
 
-  // 3. MASKOT KONTROLÜ
   function maskotKonus(emoji, mesaj) {
     const avatarEl = document.getElementById('maskot-avatar');
     const mesajEl = document.getElementById('maskot-mesaj');
@@ -1051,7 +1097,7 @@
     mesajEl.innerHTML = mesaj;
   }
 
-  // 4. ROZETLER SİSTEMİ
+  // Rozetler
   const rozetler = {
     ilkDogru: false,
     seri3: false,
@@ -1075,14 +1121,13 @@
     }
   }
 
-  // İstatistikler
+  // İstatistikler (Can sınırı kaldırıldı)
   const TOPLAM_SORU = 20;
   let ilkSeferdeDogru = 0;
   let sonaAtilipOgrenilen = 0;
   let toplamYanlis = 0;
   let sesliGorevBasarisi = 0;
   let seridekiDogru = 0;
-  let can = 5;
   let kilitli = false;
 
   function soruUret(hedef, tip) {
@@ -1095,6 +1140,7 @@
 
   function testiIlkKezBaslat() {
     audioMotorunuBaslat();
+    sayaciBaslat();
     document.getElementById('baslangic-kutusu').style.display = 'none';
     document.getElementById('test-aktif-alani').style.display = 'block';
     testiBaslat();
@@ -1107,7 +1153,6 @@
     toplamYanlis = 0;
     sesliGorevBasarisi = 0;
     seridekiDogru = 0;
-    can = 5;
     kilitli = false;
 
     const soruTipleri = [
@@ -1125,7 +1170,6 @@
   }
 
   const sayacEl = document.getElementById('sayac');
-  const canlarEl = document.getElementById('canlar');
   const turEl = document.getElementById('tur-yazisi');
   const soruEl = document.getElementById('soru-basligi');
   const ipucuBtn = document.getElementById('ipucu-btn');
@@ -1142,6 +1186,7 @@
   const devamBtn = document.getElementById('devam-btn');
 
   sesBtn.onclick = () => {
+    kullaniciHareketiOldu();
     if (kuyruk.length === 0) return;
     const aktif = kuyruk[0];
     if (aktif.tip === 'en_tr' || aktif.tip === 'sesli_gorev' || kilitli) {
@@ -1156,11 +1201,12 @@
   };
 
   yavasSesBtn.onclick = () => {
+    kullaniciHareketiOldu();
     if (kuyruk.length === 0) return;
     ttsKelimeOku(kuyruk[0].hedef.en);
   };
 
-  // Konuşma Tanıma (Speech Recognition)
+  // Konuşma Tanıma
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let tani = null;
   let mikrofonDinliyor = false;
@@ -1172,6 +1218,7 @@
     tani.interimResults = false;
 
     tani.onstart = () => {
+      kullaniciHareketiOldu();
       mikrofonDinliyor = true;
       devMikrofonBtn.classList.add('dinliyor');
       sesliTalimat.textContent = '🎙️ Seni dinliyorum... Hadi söyle!';
@@ -1179,6 +1226,7 @@
     };
 
     tani.onresult = (event) => {
+      kullaniciHareketiOldu();
       mikrofonDinliyor = false;
       devMikrofonBtn.classList.remove('dinliyor');
       const soylenen = event.results[0][0].transcript.trim().toLowerCase();
@@ -1212,6 +1260,7 @@
     };
 
     devMikrofonBtn.onclick = () => {
+      kullaniciHareketiOldu();
       if (kilitli) return;
       mikrofonuBaslat();
     };
@@ -1223,15 +1272,18 @@
   }
 
   function sesliyiSiklaraDonustur() {
+    kullaniciHareketiOldu();
     if (kuyruk.length === 0) return;
     kuyruk[0].tip = 'tr_en';
     soruyuGoster();
   }
 
   ipucuBtn.onclick = () => {
+    kullaniciHareketiOldu();
     ipucuKutu.style.display = (ipucuKutu.style.display === 'block') ? 'none' : 'block';
   };
 
+  // EMOJİSİZ SORU GÖSTERİMİ
   function soruyuGoster() {
     if (kuyruk.length === 0) {
       zaferGoster();
@@ -1246,14 +1298,13 @@
 
     const aktif = kuyruk[0];
     sayacEl.textContent = 'Kalan: ' + kuyruk.length;
-    canlarEl.textContent = '❤️ ' + can;
     ipucuKutu.innerHTML = '<strong>💡 Hatırlatıcı İpucu:</strong><br>' + aktif.hedef.ipucu;
 
-    // Şıksız Sesli Görev
+    // Şıksız Sesli Görev (Emojisiz)
     if (aktif.tip === 'sesli_gorev') {
       turEl.className = 'etiket sesli-gorev';
       turEl.textContent = '🎙️ SESLİ GÖREV (ŞIKSIZ)';
-      soruEl.innerHTML = `${aktif.hedef.emoji} "${aktif.hedef.tr}" nedir?`;
+      soruEl.innerHTML = `"${aktif.hedef.tr}" nedir?`;
 
       seceneklerAlani.style.display = 'none';
       sesliCevapAlani.style.display = 'flex';
@@ -1270,22 +1321,23 @@
       return;
     }
 
-    // Normal Şıklı Soru
+    // Normal Şıklı Soru (Emojisiz)
     turEl.className = 'etiket';
     sesliCevapAlani.style.display = 'none';
     seceneklerAlani.style.display = 'flex';
 
     if (aktif.tip === 'tr_en') {
       turEl.textContent = 'TÜRKÇE ➔ İNGİLİZCE';
-      soruEl.innerHTML = `${aktif.hedef.emoji} "${aktif.hedef.tr}" hangisidir?`;
-      maskotKonus(aktif.hedef.emoji, `Acaba <strong>"${aktif.hedef.tr}"</strong> hangisiydi?`);
+      soruEl.innerHTML = `"${aktif.hedef.tr}" hangisidir?`;
+      maskotKonus('🎯', `Acaba <strong>"${aktif.hedef.tr}"</strong> hangisiydi?`);
     } else {
       turEl.textContent = 'İNGİLİZCE ➔ TÜRKÇE';
-      soruEl.innerHTML = `${aktif.hedef.emoji} "${aktif.hedef.en}" <span class="soru-okunus-etiket">[${aktif.hedef.okunus}]</span> hangisidir?`;
+      soruEl.innerHTML = `"${aktif.hedef.en}" <span class="soru-okunus-etiket">[${aktif.hedef.okunus}]</span> hangisidir?`;
       maskotKonus('🔊', `Kelimeyi dinle: <strong>${aktif.hedef.en}</strong>`);
       setTimeout(() => kelimeyiSeslendir(aktif.hedef.en), 200);
     }
 
+    // 4 Şık Üretimi (EMOJİSİZ - Sadece Harf ve Okunuş)
     seceneklerAlani.innerHTML = '';
     aktif.secenekler.forEach((secenek, idx) => {
       const btn = document.createElement('button');
@@ -1295,7 +1347,7 @@
       if (aktif.tip === 'tr_en') {
         btn.innerHTML = `
           <div class="secenek-sol">
-            <span class="secenek-ana-yazi">${secenek.emoji} ${idx + 1}. ${secenek.en}</span>
+            <span class="secenek-ana-yazi">${idx + 1}. ${secenek.en}</span>
             <span class="secenek-okunus">[${secenek.okunus}]</span>
           </div>
           <span style="color:#94a3b8; font-size:12px;">(${secenek.kisa})</span>
@@ -1303,17 +1355,21 @@
       } else {
         btn.innerHTML = `
           <div class="secenek-sol">
-            <span class="secenek-ana-yazi">${secenek.emoji} ${idx + 1}. ${secenek.tr}</span>
+            <span class="secenek-ana-yazi">${idx + 1}. ${secenek.tr}</span>
           </div>
-          <span style="color:#94a3b8; font-size:12px;">${idx + 1}</span>
+          <span style="color:#94a3b8; font-size:12px;">#${idx + 1}</span>
         `;
       }
 
-      btn.onclick = () => cevapKontrol(secenek, btn);
+      btn.onclick = () => {
+        kullaniciHareketiOldu();
+        cevapKontrol(secenek, btn);
+      };
       seceneklerAlani.appendChild(btn);
     });
   }
 
+  // Cevap Kontrolü (Can Eksilmez, Sona Eklenir)
   function cevapKontrol(secilen, tiklananBtn, mikrofondanGeldi = false) {
     if (kilitli) return;
     kilitli = true;
@@ -1331,7 +1387,7 @@
 
     if (dogruMu) {
       dogruSesi();
-      konfetiPatlat(35); // Doğru cevapta renkli konfeti!
+      konfetiPatlat(35);
       seridekiDogru++;
       rozetKontrol();
 
@@ -1345,7 +1401,7 @@
 
       mesajAlani.className = 'mesaj-kutusu d-ok';
       const tebrikSes = mikrofondanGeldi ? '🎙️ <strong>Harika telaffuz ettin!</strong> ' : '🎉 <strong>Muhteşem, doğru!</strong> ';
-      mesajAlani.innerHTML = tebrikSes + `${aktif.hedef.emoji} ${aktif.hedef.en} [${aktif.hedef.okunus}] = ${aktif.hedef.tr}`;
+      mesajAlani.innerHTML = tebrikSes + `${aktif.hedef.en} [${aktif.hedef.okunus}] = ${aktif.hedef.tr}`;
       mesajAlani.style.display = 'block';
 
       maskotKonus('🥳', `Harikasın! <strong>${aktif.hedef.en}</strong> tam olarak doğruydu! ⭐`);
@@ -1363,32 +1419,24 @@
         if (b.textContent.includes(aranan)) b.classList.add('dogru');
       });
 
-      can--;
-      canlarEl.textContent = '❤️ ' + Math.max(0, can);
       mesajAlani.className = 'mesaj-kutusu d-err';
       mesajAlani.innerHTML = `<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>${aktif.hedef.en}</strong> [${aktif.hedef.okunus}] (${aktif.hedef.tr})`;
       mesajAlani.style.display = 'block';
 
-      maskotKonus('💪', 'Hiç üzülme! Soru testin sonuna eklendi, tekrar deneyeceğiz!');
+      maskotKonus('💪', 'Hiç üzülme! Soru testin sonuna eklendi, öğrene kadar buradayız!');
 
+      // Yanlış soru sona atılır (Can asla bitmez!)
       const yanlisSoru = kuyruk.shift();
       yanlisSoru.dahaOnceYanlisMi = true;
       yanlisSoru.secenekler = karistir(yanlisSoru.secenekler);
       kuyruk.push(yanlisSoru);
 
-      if (can <= 0) {
-        setTimeout(gameOverGoster, 800);
-      } else {
-        devamBtn.style.display = 'block';
-      }
+      devamBtn.style.display = 'block';
     }
   }
 
   function sonrakiSoru() {
-    if (can <= 0) {
-      gameOverGoster();
-      return;
-    }
+    kullaniciHareketiOldu();
     if (kuyruk.length > 0) {
       soruyuGoster();
     } else {
@@ -1396,34 +1444,39 @@
     }
   }
 
-  // 100 Üzerinden Detaylı Başarı Karnesi + Rozetler
+  // TÜM SORULAR BİTİNCE NİHAİ KARNE VE ÇALIŞMA SÜRESİ
   function zaferGoster() {
     rozetler.sampiyon = true;
     konfetiPatlat(100);
+    clearInterval(sayacZamanlayici);
+
+    const toplamDk = Math.floor(toplamCalismaSaniyesi / 60);
+    const toplamSn = toplamCalismaSaniyesi % 60;
+    const sureMetni = `${toplamDk} dakika ${toplamSn} saniye`;
 
     const hamPuan = ((ilkSeferdeDogru * 1.0) + (sonaAtilipOgrenilen * 0.6)) / TOPLAM_SORU * 100;
     const basariPuani = Math.min(100, Math.max(0, Math.round(hamPuan)));
 
     let harfNotu = "A+";
     let durumRengi = "#22c55e";
-    let mesaj = "Muhteşem Başarı! Tüm günleri eksiksiz öğrendin.";
+    let mesaj = "Muhteşem Başarı! Tüm kelimeleri eksiksiz öğrendin.";
 
     if (basariPuani < 60) {
       harfNotu = "C";
       durumRengi = "#facc15";
-      mesaj = "Günleri tamamladın ama biraz daha pratik harika olur!";
+      mesaj = "Tüm kelimeleri tamamladın ama biraz daha tekrar harika olur!";
     } else if (basariPuani < 85) {
       harfNotu = "B+";
       durumRengi = "#38bdf8";
       mesaj = "Çok iyi! Hatalarından öğrenerek testi başarıyla bitirdin.";
     }
 
-    maskotKonus('👑', 'Tebrikler şampiyon! Testi başarıyla tamamladın!');
+    maskotKonus('👑', `Tebrikler şampiyon! <strong>${sureMetni}</strong> aktif çalışarak tüm günleri tamamladın!`);
 
     document.getElementById('test-bolumu').innerHTML = `
       <div style="text-align:center; padding:16px 4px;">
         <div style="font-size:52px; margin-bottom:8px;">🏆</div>
-        <h2 style="color:${durumRengi}; font-size:24px; margin-bottom:4px;">Test Tamamlandı!</h2>
+        <h2 style="color:${durumRengi}; font-size:24px; margin-bottom:4px;">Tüm Kelimeler Öğrenildi!</h2>
         <p style="color:#94a3b8; font-size:13px; margin-bottom:14px;">${mesaj}</p>
 
         <div class="skor-buyuk" style="color:${durumRengi};">${basariPuani} <span style="font-size:22px; color:#94a3b8;">/ 100</span></div>
@@ -1431,8 +1484,6 @@
           Başarı Derecesi: ${harfNotu}
         </div>
 
-        <!-- Rozet Vitrini -->
-        <div style="font-size:12px; font-weight:800; color:#38bdf8; margin-bottom:6px;">KAZANDIĞIN ROZETLER:</div>
         <div class="rozetler-alani" style="margin-bottom:16px;">
           <div class="rozet-karti ${rozetler.ilkDogru ? 'kazanildi' : ''}">🌟 İlk Doğru</div>
           <div class="rozet-karti ${rozetler.seri3 ? 'kazanildi' : ''}">🔥 3'lü Seri</div>
@@ -1442,28 +1493,24 @@
 
         <div class="karne-kutu">
           <div class="karne-satir">
-            <span style="color:#94a3b8;">Toplam Soru:</span>
-            <strong style="color:#ffffff;">${TOPLAM_SORU} Soru (Rastgele Karışık)</strong>
+            <span style="color:#94a3b8;">⏱️ Aktif Çalışma Süresi:</span>
+            <strong style="color:#facc15;">${sureMetni}</strong>
+          </div>
+          <div class="karne-satir">
+            <span style="color:#94a3b8;">🎯 İlk Seferde Bilinen:</span>
+            <strong style="color:#22c55e;">${ilkSeferdeDogru} Soru</strong>
+          </div>
+          <div class="karne-satir">
+            <span style="color:#94a3b8;">🔄 Sona Atılıp Öğrenilen:</span>
+            <strong style="color:#38bdf8;">${sonaAtilipOgrenilen} Soru</strong>
           </div>
           <div class="karne-satir">
             <span style="color:#94a3b8;">🎙️ Sesli Görev Başarısı:</span>
             <strong style="color:#a855f7;">${sesliGorevBasarisi} Soru</strong>
           </div>
           <div class="karne-satir">
-            <span style="color:#94a3b8;">🎯 İlk Seferde Doğru Bilinen:</span>
-            <strong style="color:#22c55e;">${ilkSeferdeDogru}</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">🔄 Sona Atılıp Tekrarında Öğrenilen:</span>
-            <strong style="color:#38bdf8;">${sonaAtilipOgrenilen}</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">❌ Toplam Hata Sayısı:</span>
+            <span style="color:#94a3b8;">❌ Toplam Deneme Hatası:</span>
             <strong style="color:#ef4444;">${toplamYanlis}</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">❤️ Kalan Can:</span>
-            <strong style="color:#f43f5e;">${can} / 5</strong>
           </div>
         </div>
 
@@ -1472,51 +1519,21 @@
     `;
   }
 
-  function gameOverGoster() {
-    maskotKonus('😢', 'Canların bitti ama pes etmek yok! Yeniden deneyelim!');
-    document.getElementById('test-bolumu').innerHTML = `
-      <div style="text-align:center; padding:24px 8px;">
-        <div style="font-size:52px; margin-bottom:10px;">💔</div>
-        <h2 style="color:#ef4444; font-size:24px; margin-bottom:8px;">Canların Tükendi!</h2>
-        <p style="color:#94a3b8; font-size:14px; margin-bottom:20px;">
-          Pes etmek yok! Okunuşlara ve sesli ipuçlarına bakarak tekrar deneyebilirsin.
-        </p>
-
-        <div class="karne-kutu">
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">🎯 İlk Seferde Bilinen:</span>
-            <strong style="color:#22c55e;">${ilkSeferdeDogru}</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">🔄 Tekrarında Bilinen:</span>
-            <strong style="color:#38bdf8;">${sonaAtilipOgrenilen}</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">❌ Hata Sayısı:</span>
-            <strong style="color:#ef4444;">${toplamYanlis}</strong>
-          </div>
-        </div>
-
-        <button class="ana-btn" style="display:block; background:#ef4444; color:#fff;" onclick="location.reload()">TEKRAR DENE 🔄</button>
-      </div>
-    `;
-  }
-
   devamBtn.onclick = sonrakiSoru;
 
-  // 5. YENİ MİNİ OYUN: HARF BALONLARI PATLATMA
+  // HARF BALONLARI
   let balonHedefGun = null;
   let balonYazilan = "";
 
   function yeniBalonOyunu() {
+    kullaniciHareketiOldu();
     balonHedefGun = karistir(gunler)[0];
     balonYazilan = "";
     document.getElementById('balon-mesaj').textContent = '';
 
-    document.getElementById('balon-soru-turkce').textContent = `${balonHedefGun.emoji} ${balonHedefGun.tr}`;
+    document.getElementById('balon-soru-turkce').textContent = balonHedefGun.tr;
     document.getElementById('balon-okunus').textContent = `[${balonHedefGun.okunus}]`;
 
-    // Boş kutuları çiz
     const kutularEl = document.getElementById('balon-tamamlanan-kutular');
     kutularEl.innerHTML = '';
     for (let i = 0; i < balonHedefGun.en.length; i++) {
@@ -1526,7 +1543,6 @@
       kutularEl.appendChild(k);
     }
 
-    // Karışık harf butonlarını üret
     const harfler = karistir(balonHedefGun.en.toUpperCase().split(''));
     const havuzEl = document.getElementById('balonlar-havuzu');
     havuzEl.innerHTML = '';
@@ -1543,6 +1559,7 @@
   }
 
   function harfSec(harf, btnEl) {
+    kullaniciHareketiOldu();
     audioMotorunuBaslat();
     const sira = balonYazilan.length;
     const beklenenHarf = balonHedefGun.en[sira].toUpperCase();
@@ -1583,7 +1600,7 @@
       k.innerHTML = `
         <div class="rehber-ust">
           <div>
-            <span class="rehber-gun-adi">${g.emoji} ${idx + 1}. ${g.en}</span>
+            <span class="rehber-gun-adi">${idx + 1}. ${g.en}</span>
             <span class="rehber-okunus">[${g.okunus}]</span>
             <div class="rehber-turkce">${g.tr}</div>
           </div>
@@ -1610,7 +1627,7 @@
     if (flashcardOn) {
       etiketEl.textContent = 'İNGİLİZCE (DOKUN VE ÇEVİR)';
       etiketEl.style.color = '#38bdf8';
-      kelimeEl.textContent = `${g.emoji} ${g.en}`;
+      kelimeEl.textContent = g.en;
       kelimeEl.style.color = '#ffffff';
       okunusEl.style.display = 'block';
       okunusEl.textContent = `[${g.okunus}]`;
@@ -1618,7 +1635,7 @@
     } else {
       etiketEl.textContent = 'TÜRKÇE & İPUCU';
       etiketEl.style.color = '#22c55e';
-      kelimeEl.textContent = `${g.emoji} ${g.tr}`;
+      kelimeEl.textContent = g.tr;
       kelimeEl.style.color = '#22c55e';
       okunusEl.style.display = 'none';
       altEl.textContent = g.ipucu;
@@ -1626,11 +1643,13 @@
   }
 
   function flashcardCevir() {
+    kullaniciHareketiOldu();
     flashcardOn = !flashcardOn;
     flashcardGuncelle();
   }
 
   function flashcardIleri() {
+    kullaniciHareketiOldu();
     flashcardIdx = (flashcardIdx + 1) % gunler.length;
     flashcardOn = true;
     flashcardGuncelle();
@@ -1638,6 +1657,7 @@
   }
 
   function flashcardGeri() {
+    kullaniciHareketiOldu();
     flashcardIdx = (flashcardIdx - 1 + gunler.length) % gunler.length;
     flashcardOn = true;
     flashcardGuncelle();
@@ -1646,6 +1666,7 @@
 
   // SEKME DEĞİŞTİRME
   function sekmeDegistir(sekme) {
+    kullaniciHareketiOldu();
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('test-bolumu').style.display = 'none';
     document.getElementById('balon-bolumu').style.display = 'none';
@@ -1655,7 +1676,7 @@
     if (sekme === 'test') {
       document.getElementById('tab-test').classList.add('active');
       document.getElementById('test-bolumu').style.display = 'block';
-      maskotKonus('🎯', 'Test modundasın! Bakalım kaç puan alacaksın? 🚀');
+      maskotKonus('🎯', 'Test modundasın! Odaklanarak tüm kelimeleri tamamlayalım! 🚀');
     } else if (sekme === 'balon') {
       document.getElementById('tab-balon').classList.add('active');
       document.getElementById('balon-bolumu').style.display = 'flex';

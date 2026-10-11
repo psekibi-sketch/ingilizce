@@ -90,6 +90,7 @@
       border-radius: 14px;
       padding: 4px;
       gap: 4px;
+      overflow-x: auto;
     }
 
     .nav-btn {
@@ -97,11 +98,12 @@
       background: transparent;
       border: none;
       color: #94a3b8;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       padding: 10px 2px;
       border-radius: 10px;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.2s ease;
     }
 
@@ -521,6 +523,114 @@
       margin: 10px 0;
     }
 
+    /* =========================================
+       ÖDEV BÖLÜMÜ (SIRALI SAYMA & SESLİ TEKRAR)
+       ========================================= */
+    .odev-alani {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .odev-mod-secici {
+      display: flex;
+      gap: 6px;
+      background: #1e2c34;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid #33444f;
+    }
+
+    .odev-mod-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .odev-mod-btn.aktif {
+      background: #38bdf8;
+      color: #0b1318;
+    }
+
+    .odev-kart {
+      background: #1e2c34;
+      border: 2px solid #38bdf8;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .sirali-gun-listesi {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .sirali-adim {
+      background: #111b21;
+      border: 2px solid #33444f;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 800;
+      transition: all 0.2s;
+    }
+
+    .sirali-adim.tamamlandi {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+    }
+
+    .sirali-adim.sirada {
+      border-color: #facc15;
+      background: rgba(250, 204, 21, 0.12);
+      animation: pulsate-gold 1s infinite alternate;
+    }
+
+    @keyframes pulsate-gold {
+      0% { border-color: #facc15; }
+      100% { border-color: #eab308; box-shadow: 0 0 10px rgba(250, 204, 21, 0.4); }
+    }
+
+    .karisik-secim-alani {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .secilecek-gun-btn {
+      background: #273740;
+      border: 2px solid #3b4e5a;
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .secilecek-gun-btn.kullanildi {
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
     /* HARF BALONLARI */
     .balon-oyunu-alani {
       display: none;
@@ -737,12 +847,13 @@
     </div>
   </div>
 
-  <!-- Üst Sekmeler -->
+  <!-- Üst Sekmeler (Ödev Modu Eklendi) -->
   <div class="nav-tabs">
     <button class="nav-btn active" id="tab-test" onclick="sekmeDegistir('test')">🎯 Test</button>
-    <button class="nav-btn" id="tab-balon" onclick="sekmeDegistir('balon')">🎈 Balon Oyunu</button>
+    <button class="nav-btn" id="tab-odev" onclick="sekmeDegistir('odev')">📅 Sıralı Say (Ödev)</button>
+    <button class="nav-btn" id="tab-balon" onclick="sekmeDegistir('balon')">🎈 Balon</button>
     <button class="nav-btn" id="tab-rehber" onclick="sekmeDegistir('rehber')">📚 Rehber</button>
-    <button class="nav-btn" id="tab-kartlar" onclick="sekmeDegistir('kartlar')">🃏 Flaş Kartlar</button>
+    <button class="nav-btn" id="tab-kartlar" onclick="sekmeDegistir('kartlar')">🃏 Kartlar</button>
   </div>
 
   <!-- Canlı Maskot -->
@@ -760,7 +871,6 @@
         <span class="etiket" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
         
         <div class="sayaclar">
-          <!-- Aktif Çalışma Süresi (10 sn hareketsizlikte duraklar) -->
           <div class="calisma-sayaci" id="calisma-sayaci-kutusu" title="Aktif Çalışma Süresi">
             ⏱️ <span id="calisma-sayaci-metin">00:00</span>
           </div>
@@ -769,7 +879,6 @@
       </div>
 
       <div class="soru-satiri">
-        <!-- EMOJİSİZ TEMİZ SORU METNİ -->
         <div class="soru-baslik" id="soru-basligi">Yükleniyor...</div>
         <div style="display:flex; gap:6px; align-items:center;">
           <button class="ses-btn" id="ses-btn" title="Kelimeyi Dinle" type="button">🔊</button>
@@ -780,7 +889,7 @@
       <span class="ipucu-link" id="ipucu-btn">💡 İpucu ister misin?</span>
       <div class="ipucu-kutu" id="ipucu-kutu"></div>
 
-      <!-- 1. ŞIKSIZ SESLİ GÖREV (5 Soruda Görünür) -->
+      <!-- 1. ŞIKSIZ SESLİ GÖREV -->
       <div class="sesli-cevap-alani" id="sesli-cevap-alani">
         <button class="dev-mikrofon-btn" id="dev-mikrofon-btn" type="button">🎙️</button>
         <div class="sesli-talimat" id="sesli-talimat">Mikrofona bas ve İngilizce söyle!</div>
@@ -791,7 +900,7 @@
         <button class="pas-gec-btn" type="button" onclick="sesliyiSiklaraDonustur()">Şıkları Göster 🔲</button>
       </div>
 
-      <!-- 2. ŞIKLAR ALANI (15 Soruda Görünür, EMOJİSİZ) -->
+      <!-- 2. ŞIKLAR ALANI (EMOJİSİZ) -->
       <div class="secenekler-kutusu" id="secenekler-alani"></div>
 
       <div class="mesaj-kutusu" id="mesaj-alani"></div>
@@ -807,6 +916,46 @@
         Aktif çalışma süreniz yukarıda tutulur.
       </p>
       <button class="ana-btn" style="display:block;" onclick="testiIlkKezBaslat()">TESTE BAŞLA 🚀</button>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       YENİ ÖDEV BÖLÜMÜ (GÜNLERİ SIRAYLA SAYMA ALANI)
+       ============================================== -->
+  <div class="odev-alani" id="odev-bolumu">
+    <div class="odev-kart">
+      <div style="font-size:12px; color:#facc15; font-weight:800; letter-spacing:1px; margin-bottom:4px;">
+        🎓 OKUL ÖDEVİ PRATİĞİ
+      </div>
+      <h3 style="color:#ffffff; font-size:20px; font-weight:900; margin-bottom:8px;">
+        Günleri Sırasıyla Sayma & Dizme
+      </h3>
+      <p style="color:#94a3b8; font-size:13px; line-height:1.4; margin-bottom:14px;">
+        1. Günden 7. Güne kadar doğru sırayla dokun veya mikrofona baştan sona say!
+      </p>
+
+      <!-- Ödev Alt Modları -->
+      <div class="odev-mod-secici">
+        <button class="odev-mod-btn aktif" id="odev-btn-diz" onclick="odevModuSec('diz')">1. Sırayla Dokun 👆</button>
+        <button class="odev-mod-btn" id="odev-btn-sesli" onclick="odevModuSec('sesli')">2. Mikrofona Say 🎙️</button>
+        <button class="odev-mod-btn" id="odev-btn-eko" onclick="odevEkoTekrarBaslat()">3. Sesli Tekrar 🔁</button>
+      </div>
+
+      <!-- 7 Günün Sıralı İlerleme Listesi -->
+      <div class="sirali-gun-listesi" id="sirali-gun-listesi"></div>
+
+      <!-- Karışık Seçim Butonları -->
+      <div class="karisik-secim-alani" id="karisik-secim-alani"></div>
+
+      <!-- Mikrofona Sayma Kontrolü -->
+      <div id="odev-mikrofon-alani" style="display:none; margin-top:16px;">
+        <button class="dev-mikrofon-btn" id="odev-mic-btn" style="margin:0 auto 10px;" onclick="odevMikrofonBaslat()">🎙️</button>
+        <div id="odev-mic-durum" style="font-size:13px; color:#d8b4fe; font-weight:700;">
+          Mikrofona bas ve sırayla günleri say!
+        </div>
+      </div>
+
+      <div id="odev-sonuc-kutusu" style="margin-top:14px; font-weight:800; font-size:15px; min-height:24px;"></div>
     </div>
   </div>
 
@@ -856,13 +1005,13 @@
   };
 
   const gunler = [
-    { en: 'Monday', tr: 'Pazartesi', okunus: 'Mandey', kisa: 'Mon', ipucu: 'Moon-day (Ay günü) - 1. gün', ornek: 'I start work on Monday.' },
-    { en: 'Tuesday', tr: 'Salı', okunus: 'Tyuuzdey', kisa: 'Tue', ipucu: 'Two-sday (2. gün) - Salı', ornek: 'See you on Tuesday.' },
-    { en: 'Wednesday', tr: 'Çarşamba', okunus: 'Wenzdey', kisa: 'Wed', ipucu: 'Wed-nes-day (d okunmaz!) - Ortadaki en uzun gün', ornek: 'Wednesday is mid-week.' },
-    { en: 'Thursday', tr: 'Perşembe', okunus: 'Törzdey', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi', ornek: 'Thursday is almost weekend!' },
-    { en: 'Friday', tr: 'Cuma', okunus: 'Fraydey', kisa: 'Fri', ipucu: 'Fri-day (Fries / Cuma coşkusu) - Hafta sonu kapısı', ornek: 'Thank God it\'s Friday!' },
-    { en: 'Saturday', tr: 'Cumartesi', okunus: 'Setırdey', kisa: 'Sat', ipucu: 'Saturn-day - Hafta sonu eğlencesi', ornek: 'Saturday is for relaxing.' },
-    { en: 'Sunday', tr: 'Pazar', okunus: 'Sandey', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü', ornek: 'Sunday is a peaceful day.' }
+    { sira: 1, en: 'Monday', tr: 'Pazartesi', okunus: 'Mandey', kisa: 'Mon', ipucu: 'Moon-day (Ay günü) - 1. gün', ornek: 'I start work on Monday.' },
+    { sira: 2, en: 'Tuesday', tr: 'Salı', okunus: 'Tyuuzdey', kisa: 'Tue', ipucu: 'Two-sday (2. gün) - Salı', ornek: 'See you on Tuesday.' },
+    { sira: 3, en: 'Wednesday', tr: 'Çarşamba', okunus: 'Wenzdey', kisa: 'Wed', ipucu: 'Wed-nes-day (d okunmaz!) - Ortadaki en uzun gün', ornek: 'Wednesday is mid-week.' },
+    { sira: 4, en: 'Thursday', tr: 'Perşembe', okunus: 'Törzdey', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi', ornek: 'Thursday is almost weekend!' },
+    { sira: 5, en: 'Friday', tr: 'Cuma', okunus: 'Fraydey', kisa: 'Fri', ipucu: 'Fri-day (Fries / Cuma coşkusu) - Hafta sonu kapısı', ornek: 'Thank God it\'s Friday!' },
+    { sira: 6, en: 'Saturday', tr: 'Cumartesi', okunus: 'Setırdey', kisa: 'Sat', ipucu: 'Saturn-day - Hafta sonu eğlencesi', ornek: 'Saturday is for relaxing.' },
+    { sira: 7, en: 'Sunday', tr: 'Pazar', okunus: 'Sandey', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü', ornek: 'Sunday is a peaceful day.' }
   ];
 
   function karistir(arr) {
@@ -874,7 +1023,7 @@
     return kopya;
   }
 
-  // 1. AKTİF ÇALIŞMA SÜRESİ SAYACI (10 sn hareketsizlikte duraklar)
+  // 1. AKTİF ÇALIŞMA SÜRESİ
   let toplamCalismaSaniyesi = 0;
   let sonHareketZamani = Date.now();
   let sayacZamanlayici = null;
@@ -894,7 +1043,6 @@
     if (sayacZamanlayici) clearInterval(sayacZamanlayici);
     sayacZamanlayici = setInterval(() => {
       const gecenFark = Date.now() - sonHareketZamani;
-      // 10 saniye boyunca hiç hareket yoksa sayaç ilerlemez!
       if (gecenFark < 10000) {
         toplamCalismaSaniyesi++;
         sayacKutusuEl.classList.remove('durakladi');
@@ -1007,10 +1155,10 @@
   let aktifAudio = null;
   function kelimeyiSeslendir(kelime, bittiginde = null) {
     audioMotorunuBaslat();
-    sesBtn.classList.add('caliyor');
+    if (sesBtn) sesBtn.classList.add('caliyor');
 
     const sesBitti = () => {
-      sesBtn.classList.remove('caliyor');
+      if (sesBtn) sesBtn.classList.remove('caliyor');
       if (bittiginde) bittiginde();
     };
 
@@ -1121,7 +1269,7 @@
     }
   }
 
-  // İstatistikler (Can sınırı kaldırıldı)
+  // Test Değişkenleri
   const TOPLAM_SORU = 20;
   let ilkSeferdeDogru = 0;
   let sonaAtilipOgrenilen = 0;
@@ -1283,7 +1431,6 @@
     ipucuKutu.style.display = (ipucuKutu.style.display === 'block') ? 'none' : 'block';
   };
 
-  // EMOJİSİZ SORU GÖSTERİMİ
   function soruyuGoster() {
     if (kuyruk.length === 0) {
       zaferGoster();
@@ -1300,7 +1447,6 @@
     sayacEl.textContent = 'Kalan: ' + kuyruk.length;
     ipucuKutu.innerHTML = '<strong>💡 Hatırlatıcı İpucu:</strong><br>' + aktif.hedef.ipucu;
 
-    // Şıksız Sesli Görev (Emojisiz)
     if (aktif.tip === 'sesli_gorev') {
       turEl.className = 'etiket sesli-gorev';
       turEl.textContent = '🎙️ SESLİ GÖREV (ŞIKSIZ)';
@@ -1321,7 +1467,6 @@
       return;
     }
 
-    // Normal Şıklı Soru (Emojisiz)
     turEl.className = 'etiket';
     sesliCevapAlani.style.display = 'none';
     seceneklerAlani.style.display = 'flex';
@@ -1337,7 +1482,6 @@
       setTimeout(() => kelimeyiSeslendir(aktif.hedef.en), 200);
     }
 
-    // 4 Şık Üretimi (EMOJİSİZ - Sadece Harf ve Okunuş)
     seceneklerAlani.innerHTML = '';
     aktif.secenekler.forEach((secenek, idx) => {
       const btn = document.createElement('button');
@@ -1369,7 +1513,6 @@
     });
   }
 
-  // Cevap Kontrolü (Can Eksilmez, Sona Eklenir)
   function cevapKontrol(secilen, tiklananBtn, mikrofondanGeldi = false) {
     if (kilitli) return;
     kilitli = true;
@@ -1425,7 +1568,6 @@
 
       maskotKonus('💪', 'Hiç üzülme! Soru testin sonuna eklendi, öğrene kadar buradayız!');
 
-      // Yanlış soru sona atılır (Can asla bitmez!)
       const yanlisSoru = kuyruk.shift();
       yanlisSoru.dahaOnceYanlisMi = true;
       yanlisSoru.secenekler = karistir(yanlisSoru.secenekler);
@@ -1444,7 +1586,6 @@
     }
   }
 
-  // TÜM SORULAR BİTİNCE NİHAİ KARNE VE ÇALIŞMA SÜRESİ
   function zaferGoster() {
     rozetler.sampiyon = true;
     konfetiPatlat(100);
@@ -1520,6 +1661,234 @@
   }
 
   devamBtn.onclick = sonrakiSoru;
+
+  // ==============================================
+  // 4. ÖDEV MODU MANTIĞI (SIRALI SAYMA & SESLİ TEKRAR)
+  // ==============================================
+  let odevAktifAdim = 1; // 1'den 7'ye kadar sırayla gidecek
+  let odevModu = 'diz'; // 'diz' veya 'sesli'
+
+  function odevModuSec(mod) {
+    kullaniciHareketiOldu();
+    odevModu = mod;
+    document.querySelectorAll('.odev-mod-btn').forEach(b => b.classList.remove('aktif'));
+    if (mod === 'diz') {
+      document.getElementById('odev-btn-diz').classList.add('aktif');
+      document.getElementById('karisik-secim-alani').style.display = 'flex';
+      document.getElementById('odev-mikrofon-alani').style.display = 'none';
+      maskotKonus('📅', '1. Gün olan <strong>Monday</strong> ile başla ve 7. güne kadar sırayla dokun!');
+    } else {
+      document.getElementById('odev-btn-sesli').classList.add('aktif');
+      document.getElementById('karisik-secim-alani').style.display = 'none';
+      document.getElementById('odev-mikrofon-alani').style.display = 'block';
+      maskotKonus('🎙️', 'Mikrofona bas ve günleri <strong>Monday</strong> den başlayarak sırayla say!');
+    }
+    odevOyununuSifirla();
+  }
+
+  function odevOyununuSifirla() {
+    odevAktifAdim = 1;
+    document.getElementById('odev-sonuc-kutusu').innerHTML = '';
+
+    // Sıralı boş adımları çiz (1. Monday ... 7. Sunday)
+    const listeEl = document.getElementById('sirali-gun-listesi');
+    listeEl.innerHTML = '';
+    gunler.forEach(g => {
+      const adim = document.createElement('div');
+      adim.className = `sirali-adim ${g.sira === 1 ? 'sirada' : ''}`;
+      adim.id = `odev-adim-${g.sira}`;
+      adim.innerHTML = `
+        <div>
+          <span style="color:#94a3b8; font-size:12px; margin-right:8px;">${g.sira}. Gün:</span>
+          <span id="odev-yazi-${g.sira}" style="color:#64748b;">(Bekleniyor...)</span>
+        </div>
+        <span id="odev-tik-${g.sira}" style="font-size:16px;">⏳</span>
+      `;
+      listeEl.appendChild(adim);
+    });
+
+    // Karışık butonları doldur
+    const secimAlani = document.getElementById('karisik-secim-alani');
+    secimAlani.innerHTML = '';
+    const karisikGunler = karistir(gunler);
+    karisikGunler.forEach(g => {
+      const btn = document.createElement('button');
+      btn.className = 'secilecek-gun-btn';
+      btn.id = `odev-btn-sec-${g.sira}`;
+      btn.innerHTML = `
+        <span>${g.en}</span>
+        <span style="font-size:11px; color:#38bdf8;">[${g.okunus}]</span>
+      `;
+      btn.onclick = () => odevGuneDokunuldu(g, btn);
+      secimAlani.appendChild(btn);
+    });
+  }
+
+  // 1. YÖNTEM: SIRAYLA DOKUNMA
+  function odevGuneDokunuldu(g, btnEl) {
+    kullaniciHareketiOldu();
+    audioMotorunuBaslat();
+
+    if (g.sira === odevAktifAdim) {
+      dogruSesi();
+      kelimeyiSeslendir(g.en);
+      btnEl.classList.add('kullanildi');
+
+      const adimEl = document.getElementById(`odev-adim-${g.sira}`);
+      adimEl.classList.remove('sirada');
+      adimEl.classList.add('tamamlandi');
+
+      document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
+        <strong style="color:#ffffff;">${g.en}</strong> 
+        <span style="color:#38bdf8; font-size:13px;">[${g.okunus}]</span> 
+        <span style="color:#94a3b8; font-size:12px;">(${g.tr})</span>
+      `;
+      document.getElementById(`odev-tik-${g.sira}`).textContent = '✅';
+
+      odevAktifAdim++;
+
+      if (odevAktifAdim <= 7) {
+        const siradakiAdimEl = document.getElementById(`odev-adim-${odevAktifAdim}`);
+        if (siradakiAdimEl) siradakiAdimEl.classList.add('sirada');
+        const siradakiGun = gunler.find(x => x.sira === odevAktifAdim);
+        maskotKonus('👍', `Harika! Şimdi <strong>${odevAktifAdim}. gün (${siradakiGun.tr})</strong> hangisi?`);
+      } else {
+        // 7 GÜNÜN TAMAMI BİTTİ!
+        konfetiPatlat(70);
+        maskotKonus('🏆', 'Tebrikler! 7 günü kusursuz bir sırayla dizdin!');
+        document.getElementById('odev-sonuc-kutusu').innerHTML = `
+          <span style="color:#22c55e;">🎉 HARİKA! 7 günün tamamını sırayla başarıyla dizdin!</span>
+        `;
+      }
+    } else {
+      yanlisSesi();
+      const beklenenGun = gunler.find(x => x.sira === odevAktifAdim);
+      document.getElementById('odev-sonuc-kutusu').innerHTML = `
+        <span style="color:#ef4444;">❌ Sıradaki gün <strong>${odevAktifAdim}. gün (${beklenenGun.tr})</strong> olmalıydı!</span>
+      `;
+      maskotKonus('🤔', `Dikkat: Şu an <strong>${odevAktifAdim}. gün (${beklenenGun.tr})</strong> aranıyor.`);
+      setTimeout(() => {
+        document.getElementById('odev-sonuc-kutusu').innerHTML = '';
+      }, 1800);
+    }
+  }
+
+  // 2. YÖNTEM: MİKROFONA BAŞTAN SONA SAYMA
+  let odevTani = null;
+  function odevMikrofonBaslat() {
+    kullaniciHareketiOldu();
+    if (!SpeechRecognition) {
+      alert("Tarayıcınız ses tanımayı desteklemiyor. Chrome kullanmanız önerilir.");
+      return;
+    }
+
+    if (!odevTani) {
+      odevTani = new SpeechRecognition();
+      odevTani.lang = 'en-US';
+      odevTani.continuous = true;
+      odevTani.interimResults = false;
+
+      odevTani.onstart = () => {
+        document.getElementById('odev-mic-btn').classList.add('dinliyor');
+        document.getElementById('odev-mic-durum').textContent = '🎙️ Seni dinliyorum... Sırayla saymaya başla!';
+        maskotKonus('🎧', 'Dinliyorum: Monday, Tuesday...');
+      };
+
+      odevTani.onresult = (event) => {
+        const sonIndex = event.results.length - 1;
+        const cumle = event.results[sonIndex][0].transcript.trim().toLowerCase();
+        document.getElementById('odev-mic-durum').innerHTML = `Duyulan: <em>"${cumle}"</em>`;
+
+        gunler.forEach(g => {
+          if (cumle.includes(g.en.toLowerCase()) && g.sira === odevAktifAdim) {
+            dogruSesi();
+            const adimEl = document.getElementById(`odev-adim-${g.sira}`);
+            if (adimEl) {
+              adimEl.classList.remove('sirada');
+              adimEl.classList.add('tamamlandi');
+              document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
+                <strong style="color:#ffffff;">${g.en}</strong> 
+                <span style="color:#38bdf8; font-size:13px;">[${g.okunus}]</span>
+              `;
+              document.getElementById(`odev-tik-${g.sira}`).textContent = '✅';
+            }
+            odevAktifAdim++;
+
+            if (odevAktifAdim <= 7) {
+              const siradakiEl = document.getElementById(`odev-adim-${odevAktifAdim}`);
+              if (siradakiEl) siradakiEl.classList.add('sirada');
+            } else {
+              konfetiPatlat(80);
+              odevTani.stop();
+              maskotKonus('🎓', 'Ödev tamamlandı! 7 günü sırasıyla kusursuz saydın!');
+              document.getElementById('odev-sonuc-kutusu').innerHTML = `
+                <span style="color:#22c55e;">🎓 ÖDEV TAMAMLANDI! Öğretmene saymaya tamamen hazırsın! ⭐⭐⭐</span>
+              `;
+            }
+          }
+        });
+      };
+
+      odevTani.onend = () => {
+        document.getElementById('odev-mic-btn').classList.remove('dinliyor');
+        if (odevAktifAdim <= 7) {
+          document.getElementById('odev-mic-durum').textContent = 'Mikrofona basarak devam edebilirsin!';
+        }
+      };
+
+      odevTani.onerror = () => {
+        document.getElementById('odev-mic-btn').classList.remove('dinliyor');
+      };
+    }
+
+    try {
+      odevTani.start();
+    } catch(e) {
+      odevTani.stop();
+    }
+  }
+
+  // 3. YÖNTEM: EKO / TEKRAR ET (BENİ DİNLE VE TEKRAR ET)
+  let ekoCalisiyor = false;
+  function odevEkoTekrarBaslat() {
+    if (ekoCalisiyor) return;
+    ekoCalisiyor = true;
+    audioMotorunuBaslat();
+    odevOyununuSifirla();
+    maskotKonus('🗣️', 'Benden sonra sırayla yüksek sesle tekrar et!');
+
+    let i = 0;
+    function siradakiGunOku() {
+      if (i >= gunler.length) {
+        ekoCalisiyor = false;
+        konfetiPatlat(40);
+        maskotKonus('👏', 'Tüm günleri tekrar ettik! Ağzına sağlık!');
+        return;
+      }
+      const g = gunler[i];
+      const adimEl = document.getElementById(`odev-adim-${g.sira}`);
+      adimEl.classList.add('sirada');
+
+      document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
+        <strong style="color:#38bdf8;">${g.en}</strong> ➔ Tekrar Et!
+      `;
+
+      kelimeyiSeslendir(g.en, () => {
+        // Dinledikten sonra çocuğa 1.2 saniye tekrar etme payı bırak
+        setTimeout(() => {
+          adimEl.classList.remove('sirada');
+          adimEl.classList.add('tamamlandi');
+          document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
+            <strong style="color:#ffffff;">${g.en}</strong> [${g.okunus}]
+          `;
+          document.getElementById(`odev-tik-${g.sira}`).textContent = '✅';
+          i++;
+          siradakiGunOku();
+        }, 1300);
+      });
+    }
+    siradakiGunOku();
+  }
 
   // HARF BALONLARI
   let balonHedefGun = null;
@@ -1669,6 +2038,7 @@
     kullaniciHareketiOldu();
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('test-bolumu').style.display = 'none';
+    document.getElementById('odev-bolumu').style.display = 'none';
     document.getElementById('balon-bolumu').style.display = 'none';
     document.getElementById('rehber-bolumu').style.display = 'none';
     document.getElementById('kartlar-bolumu').style.display = 'none';
@@ -1677,6 +2047,10 @@
       document.getElementById('tab-test').classList.add('active');
       document.getElementById('test-bolumu').style.display = 'block';
       maskotKonus('🎯', 'Test modundasın! Odaklanarak tüm kelimeleri tamamlayalım! 🚀');
+    } else if (sekme === 'odev') {
+      document.getElementById('tab-odev').classList.add('active');
+      document.getElementById('odev-bolumu').style.display = 'flex';
+      odevModuSec('diz');
     } else if (sekme === 'balon') {
       document.getElementById('tab-balon').classList.add('active');
       document.getElementById('balon-bolumu').style.display = 'flex';

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays - İngilizce Günler</title>
+  <title>LingoDays - 2. Sınıf İngilizce Ders & Ödev</title>
   <style>
     * {
       box-sizing: border-box;
@@ -20,7 +20,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 14px;
+      padding: 12px;
+      padding-bottom: 80px;
       overflow-x: hidden;
     }
 
@@ -36,14 +37,14 @@
 
     .container {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       z-index: 1;
     }
 
-    /* Üst Başlık */
+    /* Üst Bar */
     .app-header {
       display: flex;
       justify-content: space-between;
@@ -52,7 +53,7 @@
     }
 
     .app-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       color: #38bdf8;
       letter-spacing: -0.5px;
@@ -61,11 +62,6 @@
     .app-subtitle {
       font-size: 12px;
       color: #94a3b8;
-    }
-
-    .header-sag-butonlar {
-      display: flex;
-      gap: 6px;
     }
 
     .mini-btn {
@@ -82,37 +78,7 @@
       gap: 4px;
     }
 
-    /* Üst Sekmeler */
-    .nav-tabs {
-      display: flex;
-      background: #1e2c34;
-      border: 1px solid #33444f;
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-      overflow-x: auto;
-    }
-
-    .nav-btn {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 10px 2px;
-      border-radius: 10px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .nav-btn.active {
-      background: #38bdf8;
-      color: #0b1318;
-    }
-
-    /* Canlı Maskot */
+    /* Üst Maskot */
     .maskot-kutusu {
       background: linear-gradient(135deg, #1e2c34 0%, #15242d 100%);
       border: 1px solid #33444f;
@@ -124,14 +90,8 @@
     }
 
     .maskot-avatar {
-      font-size: 34px;
+      font-size: 32px;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-      animation: bounce 2s infinite ease-in-out;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
     }
 
     .maskot-mesaj {
@@ -145,689 +105,351 @@
       color: #38bdf8;
     }
 
-    /* Ana Kart */
-    .kart {
-      background: #1e2c34;
-      border: 2px solid #33444f;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    .ust-bar {
+    /* Sabit Alt Menü (Dersler / Ödevler / Test / Oyun) */
+    .alt-nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #15242d;
+      border-top: 2px solid #33444f;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-      gap: 6px;
+      justify-content: space-around;
+      padding: 8px 10px;
+      z-index: 100;
+      box-shadow: 0 -8px 25px rgba(0,0,0,0.6);
     }
 
-    .etiket {
-      background: rgba(56, 189, 248, 0.15);
-      color: #38bdf8;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 5px 10px;
-      border-radius: 8px;
-      letter-spacing: 0.5px;
-    }
-
-    .etiket.sesli-gorev {
-      background: rgba(168, 85, 247, 0.2) !important;
-      color: #c084fc !important;
-      border: 1px solid #a855f7;
-    }
-
-    .sayaclar {
+    .alt-nav-item {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .calisma-sayaci {
-      background: #111b21;
-      border: 1px solid #3b4e5a;
-      color: #facc15;
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .calisma-sayaci.durakladi {
-      color: #94a3b8;
-      border-color: #64748b;
-    }
-
-    .soru-satiri {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .soru-baslik {
-      font-size: 20px;
-      font-weight: 800;
-      line-height: 1.35;
-      color: #ffffff;
-    }
-
-    .soru-okunus-etiket {
-      display: inline-block;
-      font-size: 14px;
-      color: #38bdf8;
-      font-weight: 700;
-      background: rgba(56, 189, 248, 0.15);
-      padding: 2px 8px;
-      border-radius: 6px;
-      margin-left: 4px;
-    }
-
-    .ses-btn, .yavas-ses-btn {
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.1s;
-    }
-
-    .ses-btn {
-      background: #38bdf8;
-      width: 44px;
-      height: 44px;
-      font-size: 20px;
-    }
-
-    .ses-btn.caliyor {
-      animation: pulsate-blue 0.8s infinite alternate;
-    }
-
-    @keyframes pulsate-blue {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
-      100% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
-    }
-
-    .yavas-ses-btn {
-      background: #273740;
-      border: 1px solid #3b4e5a;
-      width: 38px;
-      height: 38px;
-      font-size: 16px;
-    }
-
-    .ses-btn:active, .yavas-ses-btn:active {
-      transform: scale(0.92);
-    }
-
-    /* ŞIKSIZ SESLİ GÖREV */
-    .sesli-cevap-alani {
-      display: none;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
-      padding: 20px 10px;
-      background: #111b21;
-      border: 2px dashed #a855f7;
-      border-radius: 16px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .dev-mikrofon-btn {
-      background: #a855f7;
+      background: none;
       border: none;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      font-size: 38px;
-      color: white;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 800;
+      gap: 4px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+      padding: 4px 10px;
+      border-radius: 10px;
       transition: all 0.2s;
     }
 
-    .dev-mikrofon-btn.dinliyor {
-      background: #ef4444 !important;
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.8) !important;
-      animation: pulsate 1s infinite alternate;
+    .alt-nav-item .icon {
+      font-size: 18px;
     }
 
-    @keyframes pulsate {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.12); }
-    }
-
-    .sesli-talimat {
-      font-size: 14px;
-      color: #d8b4fe;
-      font-weight: 700;
-    }
-
-    .telaffuz-rehber-kutu {
-      background: #201a35;
-      border: 1px solid #a855f7;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      color: #fef08a;
-    }
-
-    .sesli-algilanan {
-      font-size: 13px;
+    .alt-nav-item.aktif {
       color: #38bdf8;
-      min-height: 20px;
-      font-weight: bold;
+      background: rgba(56, 189, 248, 0.12);
     }
 
-    .pas-gec-btn {
-      background: transparent;
-      border: 1px solid #475569;
-      color: #94a3b8;
-      font-size: 12px;
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
+    /* Kart Yapıları */
+    .ana-kart {
+      background: #1e2c34;
+      border: 2px solid #33444f;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .ipucu-link {
-      color: #94a3b8;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-block;
-      margin-bottom: 14px;
-      user-select: none;
-    }
-
-    .ipucu-kutu {
-      display: none;
-      background: #29220d;
-      border: 1px solid #ca8a04;
-      color: #fef08a;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      line-height: 1.4;
-      margin-bottom: 16px;
-    }
-
-    /* 4 ŞIK */
-    .secenekler-kutusu {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .secenek-btn {
-      background: #273740;
-      border: 2px solid #3b4e5a;
-      border-radius: 14px;
-      padding: 12px 16px;
-      color: #ffffff;
-      cursor: pointer;
-      text-align: left;
+    /* DERSLER BÖLÜMÜ STİLLERİ */
+    .unite-baslik-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #33444f;
+      padding-bottom: 8px;
     }
 
-    .secenek-btn:active {
-      transform: translateY(1px);
+    .sayfa-secici-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .sayfa-secici-scroll::-webkit-scrollbar { display: none; }
+
+    .sayfa-tab-btn {
+      background: #273740;
+      border: 1px solid #3b4e5a;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
-    .secenek-sol {
+    .sayfa-tab-btn.aktif {
+      background: #38bdf8;
+      color: #0b1318;
+      border-color: #38bdf8;
+    }
+
+    .kitap-sayfasi {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .kitap-sayfasi.gorunur {
+      display: flex;
+    }
+
+    .etkinlik-kutusu {
+      background: #111b21;
+      border: 1px solid #33444f;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .etkinlik-baslik {
+      font-size: 13px;
+      font-weight: 800;
+      color: #facc15;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Sayfa 10 Öğeleri */
+    .s10-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .s10-kart {
+      background: #1e2c34;
+      border: 1px solid #33444f;
+      border-radius: 12px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 6px;
     }
 
-    .secenek-ana-yazi {
-      font-size: 16px;
-      font-weight: 800;
+    .s10-img-temsili {
+      height: 70px;
+      background: #15242d;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      border: 1px dashed #38bdf8;
     }
 
-    .secenek-okunus {
-      font-size: 12px;
-      color: #38bdf8;
+    .s10-secenek {
+      background: #273740;
+      border: 1px solid #3b4e5a;
+      color: white;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 700;
+      cursor: pointer;
+      text-align: left;
     }
 
-    .secenek-btn.dogru {
-      border-color: #22c55e !important;
+    .s10-secenek.dogru {
       background: #143521 !important;
-      color: #22c55e !important;
-    }
-
-    .secenek-btn.dogru .secenek-okunus {
+      border-color: #22c55e !important;
       color: #4ade80 !important;
     }
 
-    .secenek-btn.yanlis {
-      border-color: #ef4444 !important;
+    .s10-secenek.yanlis {
       background: #3b1818 !important;
-      color: #ef4444 !important;
+      border-color: #ef4444 !important;
+      color: #f87171 !important;
     }
 
-    .mesaj-kutusu {
-      display: none;
-      padding: 14px;
+    /* Sayfa 11 Okul Haritası */
+    .harita-noktalar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .harita-nokta {
+      background: #273740;
+      border: 1px solid #3b4e5a;
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .harita-no {
+      background: #38bdf8;
+      color: #0b1318;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    /* Sayfa 12 Cümle Kurma */
+    .cumle-kur-satir {
+      background: #1e2c34;
+      border: 1px solid #33444f;
       border-radius: 12px;
-      font-size: 14px;
-      line-height: 1.4;
-      margin-bottom: 14px;
+      padding: 10px;
+      margin-bottom: 8px;
     }
 
-    .mesaj-kutusu.d-ok {
-      background: rgba(34, 197, 94, 0.18);
-      border: 1px solid #22c55e;
-      color: #22c55e;
+    .kelime-baloncuklar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 6px 0;
     }
 
-    .mesaj-kutusu.d-err {
-      background: rgba(239, 68, 68, 0.18);
-      border: 1px solid #ef4444;
-      color: #ef4444;
+    .kelime-balon {
+      background: #273740;
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
+    .kelime-balon.secildi {
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .olusturulan-cumle {
+      min-height: 28px;
+      background: #111b21;
+      border: 1px dashed #475569;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Sayfa 14 Tren Vagonları */
+    .tren-satiri {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e2c34;
+      border: 1px solid #33444f;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      overflow-x: auto;
+    }
+
+    .vagon {
+      flex: 1;
+      min-width: 90px;
+      background: #273740;
+      border: 2px solid #3b4e5a;
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .vagon.bos {
+      border-style: dashed;
+      border-color: #facc15;
+      color: #facc15;
+      cursor: pointer;
+    }
+
+    .vagon.dolu-dogru {
+      background: #143521;
+      border-color: #22c55e;
+      color: #4ade80;
+    }
+
+    /* Genel Butonlar */
     .ana-btn {
-      display: none;
       width: 100%;
       background: #22c55e;
       border: none;
       color: #0b1318;
-      font-size: 16px;
-      font-weight: 800;
-      padding: 15px;
+      font-size: 15px;
+      font-weight: 900;
+      padding: 12px;
       border-radius: 12px;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .baslangic-kutu {
-      text-align: center;
-      padding: 24px 10px;
-    }
-
-    /* Rozetler Listesi */
-    .rozetler-alani {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .rozet-karti {
-      background: #111b21;
-      border: 1px solid #33444f;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      opacity: 0.35;
-      transition: all 0.3s;
-    }
-
-    .rozet-karti.kazanildi {
-      opacity: 1;
-      border-color: #facc15;
-      background: rgba(250, 204, 21, 0.12);
-      color: #fef08a;
-      box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
-    }
-
-    /* Karne */
-    .karne-kutu {
-      background: #111b21;
-      border: 1px solid #33444f;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 20px;
-      text-align: left;
-    }
-
-    .karne-satir {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-      font-size: 14px;
-    }
-
-    .karne-satir:last-child {
-      border-bottom: none;
-    }
-
-    .skor-buyuk {
-      font-size: 48px;
-      font-weight: 900;
-      color: #38bdf8;
-      margin: 10px 0;
-    }
-
-    /* =========================================
-       ÖDEV BÖLÜMÜ (SIRALI SAYMA & SESLİ TEKRAR)
-       ========================================= */
-    .odev-alani {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .odev-mod-secici {
-      display: flex;
-      gap: 6px;
-      background: #1e2c34;
-      padding: 4px;
-      border-radius: 12px;
-      border: 1px solid #33444f;
-    }
-
-    .odev-mod-btn {
-      flex: 1;
-      background: transparent;
+    /* Ses Butonları */
+    .ses-icon-btn {
+      background: #38bdf8;
       border: none;
-      color: #94a3b8;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 8px 4px;
-      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #0b1318;
+    }
+
+    /* Sayfa 16 Bulmaca Grid */
+    .wordsearch-grid {
+      display: grid;
+      grid-template-columns: repeat(11, 1fr);
+      gap: 2px;
+      background: #15242d;
+      padding: 6px;
+      border-radius: 10px;
+      margin: 10px 0;
+      user-select: none;
+    }
+
+    .grid-harf {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1e2c34;
+      font-weight: 900;
+      font-size: 11px;
+      color: #cbd5e1;
+      border-radius: 4px;
       cursor: pointer;
     }
 
-    .odev-mod-btn.aktif {
+    .grid-harf.secili {
       background: #38bdf8;
       color: #0b1318;
     }
 
-    .odev-kart {
-      background: #1e2c34;
-      border: 2px solid #38bdf8;
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .sirali-gun-listesi {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin: 14px 0;
-    }
-
-    .sirali-adim {
-      background: #111b21;
-      border: 2px solid #33444f;
-      border-radius: 12px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 15px;
-      font-weight: 800;
-      transition: all 0.2s;
-    }
-
-    .sirali-adim.tamamlandi {
-      border-color: #22c55e;
-      background: rgba(34, 197, 94, 0.15);
-      color: #4ade80;
-    }
-
-    .sirali-adim.sirada {
-      border-color: #facc15;
-      background: rgba(250, 204, 21, 0.12);
-      animation: pulsate-gold 1s infinite alternate;
-    }
-
-    @keyframes pulsate-gold {
-      0% { border-color: #facc15; }
-      100% { border-color: #eab308; box-shadow: 0 0 10px rgba(250, 204, 21, 0.4); }
-    }
-
-    .karisik-secim-alani {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 14px;
-    }
-
-    .secilecek-gun-btn {
-      background: #273740;
-      border: 2px solid #3b4e5a;
-      color: #ffffff;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-    }
-
-    .secilecek-gun-btn.kullanildi {
-      opacity: 0.15;
-      pointer-events: none;
-    }
-
-    /* HARF BALONLARI */
-    .balon-oyunu-alani {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .balon-hedef-kutu {
-      background: #1e2c34;
-      border: 2px solid #38bdf8;
-      border-radius: 18px;
-      padding: 20px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .balon-turkce-soru {
-      font-size: 20px;
-      font-weight: 800;
-      color: #22c55e;
-      margin-bottom: 4px;
-    }
-
-    .balon-tamamlanan {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin: 14px 0;
-      min-height: 44px;
-    }
-
-    .harf-kutu {
-      width: 42px;
-      height: 46px;
-      background: #111b21;
-      border: 2px dashed #38bdf8;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 900;
-      color: #ffffff;
-    }
-
-    .harf-kutu.dolu {
-      background: #0284c7;
-      border-style: solid;
-    }
-
-    .balonlar-havuzu {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 12px 0;
-    }
-
-    .balon-btn {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
-      border: 2px solid #d8b4fe;
-      color: white;
-      font-size: 22px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
-      transition: transform 0.1s, opacity 0.2s;
-    }
-
-    .balon-btn:active {
-      transform: scale(0.9);
-    }
-
-    .balon-btn.kullanildi {
-      opacity: 0.15;
-      pointer-events: none;
-    }
-
-    /* Rehber */
-    .rehber-alani {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .rehber-kart {
-      background: #1e2c34;
-      border: 1px solid #33444f;
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .rehber-ust {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .rehber-gun-adi {
-      font-size: 18px;
-      font-weight: 800;
-      color: #ffffff;
-    }
-
-    .rehber-okunus {
-      color: #38bdf8;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .rehber-turkce {
-      font-size: 14px;
-      color: #22c55e;
-      font-weight: 600;
-    }
-
-    .rehber-ipucu {
-      background: #29220d;
-      color: #fef08a;
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 12px;
-      border-left: 3px solid #facc15;
-    }
-
-    /* Flaş Kartlar */
-    .kartlar-alani {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .flashcard {
-      width: 100%;
-      height: 280px;
-      background: #1e2c34;
-      border: 2px solid #38bdf8;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .flashcard-etiket {
-      font-size: 11px;
-      color: #38bdf8;
-      font-weight: 800;
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-    }
-
-    .flashcard-kelime {
-      font-size: 34px;
-      font-weight: 900;
-      margin-bottom: 2px;
-    }
-
-    .flashcard-okunus {
-      font-size: 16px;
-      color: #38bdf8;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .flashcard-alt {
-      font-size: 14px;
-      color: #94a3b8;
-    }
-
-    .flashcard-nav {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-    }
-
-    .btn-secondary {
-      flex: 1;
-      background: #273740;
-      border: 1px solid #3b4e5a;
-      color: #ffffff;
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
+    .grid-harf.bulundu {
+      background: #22c55e;
+      color: #0b1318;
     }
   </style>
 </head>
@@ -836,1237 +458,541 @@
 <canvas id="confetti-canvas"></canvas>
 
 <div class="container">
+  <!-- Üst Başlık -->
   <div class="app-header">
     <div>
-      <div class="app-title">LingoDays 🌟</div>
-      <div class="app-subtitle">İngilizce Günler Öğrenme Uygulaması</div>
+      <div class="app-title">LingoDays 📚</div>
+      <div class="app-subtitle">2. Sınıf İngilizce - Theme 1: School Life</div>
     </div>
-    <div class="header-sag-butonlar">
-      <button class="mini-btn" onclick="gunlerSarkisiniCal()" title="Tüm günleri dinle">🎵 Şarkı</button>
-      <button class="mini-btn" onclick="sesTestiYap()" title="Sesi kontrol et">🔊 Ses Testi</button>
+    <div style="display:flex; gap:6px;">
+      <button class="mini-btn" onclick="sesTesti()">🔊 Ses</button>
     </div>
-  </div>
-
-  <!-- Üst Sekmeler (Ödev Modu Eklendi) -->
-  <div class="nav-tabs">
-    <button class="nav-btn active" id="tab-test" onclick="sekmeDegistir('test')">🎯 Test</button>
-    <button class="nav-btn" id="tab-odev" onclick="sekmeDegistir('odev')">📅 Sıralı Say (Ödev)</button>
-    <button class="nav-btn" id="tab-balon" onclick="sekmeDegistir('balon')">🎈 Balon</button>
-    <button class="nav-btn" id="tab-rehber" onclick="sekmeDegistir('rehber')">📚 Rehber</button>
-    <button class="nav-btn" id="tab-kartlar" onclick="sekmeDegistir('kartlar')">🃏 Kartlar</button>
   </div>
 
   <!-- Canlı Maskot -->
-  <div class="maskot-kutusu" id="maskot-kutusu">
+  <div class="maskot-kutusu">
     <div class="maskot-avatar" id="maskot-avatar">🦉</div>
     <div class="maskot-mesaj" id="maskot-mesaj">
-      Merhaba küçük şampiyon! Hazır olduğunda <strong>Teste Başla</strong> butonuna dokun! 🚀
+      Hoş geldin! <strong>Theme 1 (School Life)</strong> sayfalarını aşağıdan seçip dersleri işleyebilirsin! 🎒
     </div>
   </div>
 
-  <!-- TEST BÖLÜMÜ -->
-  <div class="kart" id="test-bolumu">
-    <div id="test-aktif-alani" style="display:none;">
-      <div class="ust-bar">
-        <span class="etiket" id="tur-yazisi">TÜRKÇE ➔ İNGİLİZCE</span>
-        
-        <div class="sayaclar">
-          <div class="calisma-sayaci" id="calisma-sayaci-kutusu" title="Aktif Çalışma Süresi">
-            ⏱️ <span id="calisma-sayaci-metin">00:00</span>
-          </div>
-          <span id="sayac" style="color: #4ade80;">Kalan: 20</span>
-        </div>
+  <!-- ==========================================
+       1. BÖLÜM: DERSLER (KİTAP SAYFALARI 9-16)
+       ========================================== -->
+  <div class="ana-kart" id="bolum-dersler">
+    <div class="unite-baslik-bar">
+      <div>
+        <span style="font-size:11px; color:#38bdf8; font-weight:800;">MEB 2. SINIF İNGİLİZCE</span>
+        <h2 style="font-size:17px; font-weight:900;">Theme 1: SCHOOL LIFE</h2>
       </div>
-
-      <div class="soru-satiri">
-        <div class="soru-baslik" id="soru-basligi">Yükleniyor...</div>
-        <div style="display:flex; gap:6px; align-items:center;">
-          <button class="ses-btn" id="ses-btn" title="Kelimeyi Dinle" type="button">🔊</button>
-          <button class="yavas-ses-btn" id="yavas-ses-btn" title="Yavaş Dinle" type="button">🐢</button>
-        </div>
-      </div>
-
-      <span class="ipucu-link" id="ipucu-btn">💡 İpucu ister misin?</span>
-      <div class="ipucu-kutu" id="ipucu-kutu"></div>
-
-      <!-- 1. ŞIKSIZ SESLİ GÖREV -->
-      <div class="sesli-cevap-alani" id="sesli-cevap-alani">
-        <button class="dev-mikrofon-btn" id="dev-mikrofon-btn" type="button">🎙️</button>
-        <div class="sesli-talimat" id="sesli-talimat">Mikrofona bas ve İngilizce söyle!</div>
-        
-        <div class="telaffuz-rehber-kutu" id="telaffuz-rehber-kutu"></div>
-
-        <div class="sesli-algilanan" id="sesli-algilanan"></div>
-        <button class="pas-gec-btn" type="button" onclick="sesliyiSiklaraDonustur()">Şıkları Göster 🔲</button>
-      </div>
-
-      <!-- 2. ŞIKLAR ALANI (EMOJİSİZ) -->
-      <div class="secenekler-kutusu" id="secenekler-alani"></div>
-
-      <div class="mesaj-kutusu" id="mesaj-alani"></div>
-      <button class="ana-btn" id="devam-btn" type="button">DEVAM ET</button>
+      <span style="font-size:11px; background:#273740; padding:4px 8px; border-radius:6px; color:#facc15; font-weight:bold;">
+        Ünite 1 / 6
+      </span>
     </div>
 
-    <!-- Başlangıç Butonu -->
-    <div class="baslangic-kutu" id="baslangic-kutusu">
-      <div style="font-size: 52px; margin-bottom: 12px;">🏆⏱️</div>
-      <h2 style="color:#38bdf8; font-size:22px; margin-bottom: 8px;">Odaklı Çalışma Modu</h2>
-      <p style="color:#94a3b8; font-size:14px; margin-bottom: 20px; line-height:1.5;">
-        Can sınırı yok! Tüm soruları tamamlayana kadar pratik yapabilirsin. 
-        Aktif çalışma süreniz yukarıda tutulur.
+    <!-- Sayfa Numaraları Seçici -->
+    <div class="sayfa-secici-scroll">
+      <button class="sayfa-tab-btn aktif" onclick="sayfaAc(9)">Sayfa 9</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(10)">Sayfa 10</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(11)">Sayfa 11</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(12)">Sayfa 12</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(13)">Sayfa 13</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(14)">Sayfa 14</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(15)">Sayfa 15</button>
+      <button class="sayfa-tab-btn" onclick="sayfaAc(16)">Sayfa 16</button>
+    </div>
+
+    <!-- SAYFA 9 (KAPAK) -->
+    <div class="kitap-sayfasi gorunur" id="sayfa-9">
+      <div class="etkinlik-kutusu" style="text-align:center; padding:20px 10px;">
+        <div style="font-size:54px; margin-bottom:8px;">🏫</div>
+        <h3 style="color:#38bdf8; font-size:22px; font-weight:900;">THEME 1: SCHOOL LIFE</h3>
+        <p style="color:#94a3b8; font-size:13px; margin:8px 0 16px;">
+          Ankara-Mamak Atatürk İlkokulu'na hoş geldiniz! Bu ünitede okulumuzu, öğretmenlerimizi ve günlerimizi öğreniyoruz.
+        </p>
+        <button class="ana-btn" onclick="sayfaAc(10)">1. Derse Başla (Sayfa 10) ➡️</button>
+      </div>
+    </div>
+
+    <!-- SAYFA 10 (1. CHOOSE AND CHECK) -->
+    <div class="kitap-sayfasi" id="sayfa-10">
+      <div class="etkinlik-baslik">
+        <span>1) Choose and Tick (✓)</span>
+        <span style="font-size:11px; color:#94a3b8;">Resme göre doğru şıkkı seç</span>
+      </div>
+      <div class="s10-grid" id="s10-sorular"></div>
+    </div>
+
+    <!-- SAYFA 11 (2. LOOK AND WRITE) -->
+    <div class="kitap-sayfasi" id="sayfa-11">
+      <div class="etkinlik-baslik">
+        <span>2) Look and Write (School Map)</span>
+        <span style="font-size:11px; color:#38bdf8;">Okul Alanlarına Dokun & Dinle</span>
+      </div>
+      <div style="font-size:12px; color:#cbd5e1; margin-bottom:8px;">
+        Atatürk İlkokulu krokisindeki numaralara dokunup telaffuzlarını dinle:
+      </div>
+      <div class="harita-noktalar-grid" id="s11-harita-noktalari"></div>
+    </div>
+
+    <!-- SAYFA 12 (3. ORDER THE WORDS & MATCH) -->
+    <div class="kitap-sayfasi" id="sayfa-12">
+      <div class="etkinlik-baslik">
+        <span>3) Order the words & Match</span>
+        <span style="font-size:11px; color:#facc15;">Kelimeleri Sıraya Diz</span>
+      </div>
+      <div id="s12-cumle-alani"></div>
+    </div>
+
+    <!-- SAYFA 13 (4. LOOK AND COMPLETE) -->
+    <div class="kitap-sayfasi" id="sayfa-13">
+      <div class="etkinlik-baslik">
+        <span>4) Look and Complete (Diyaloglar)</span>
+        <span style="font-size:11px; color:#38bdf8;">Boşlukları Doldur</span>
+      </div>
+      <div id="s13-diyalog-alani"></div>
+    </div>
+
+    <!-- SAYFA 14 (5. WRITE THE DAYS) -->
+    <div class="kitap-sayfasi" id="sayfa-14">
+      <div class="etkinlik-baslik">
+        <span>5) Write the days - Tren Vagonları</span>
+        <span style="font-size:11px; color:#facc15;">Eksik Gün Vagonunu Bul</span>
+      </div>
+      <div id="s14-tren-alani"></div>
+    </div>
+
+    <!-- SAYFA 15 (6. READ AND NUMBER) -->
+    <div class="kitap-sayfasi" id="sayfa-15">
+      <div class="etkinlik-baslik">
+        <span>6) Read and number (My School)</span>
+        <span style="font-size:11px; color:#38bdf8;">Okuma Parçası</span>
+      </div>
+      <div id="s15-okuma-alani"></div>
+    </div>
+
+    <!-- SAYFA 16 (7. WORD SEARCH & CHECK) -->
+    <div class="kitap-sayfasi" id="sayfa-16">
+      <div class="etkinlik-baslik">
+        <span>7) Find the words in the school</span>
+        <span style="font-size:11px; color:#facc15;">Kelime Avı Bulmacası</span>
+      </div>
+      <div style="font-size:12px; color:#94a3b8;">Bulunacak Kelimeler: TEACHER, CANTEEN, PLAYGROUND, CLASSROOM, HEADMASTER, SPORTS HALL</div>
+      <div class="wordsearch-grid" id="s16-grid"></div>
+      <div id="s16-bulunanlar" style="font-size:12px; color:#22c55e; font-weight:bold;"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       2. BÖLÜM: ÖDEVLER (ÖDEV MODU)
+       ========================================== -->
+  <div class="ana-kart" id="bolum-odevler" style="display:none;">
+    <div class="unite-baslik-bar">
+      <div>
+        <span style="font-size:11px; color:#facc15; font-weight:800;">1. ÜNİTE ÖDEVLERİ</span>
+        <h2 style="font-size:17px; font-weight:900;">Ödev Görevleri & Sıralı Sayma</h2>
+      </div>
+    </div>
+    
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="etkinlik-kutusu">
+        <h4 style="color:#38bdf8; margin-bottom:4px;">1. Ödev: Günleri 1'den 7'ye Sıralı Say</h4>
+        <p style="color:#94a3b8; font-size:12px; margin-bottom:8px;">Öğretmenin istediği gibi Monday'den Sunday'e kadar takılmadan sayma görevi.</p>
+        <button class="ana-btn" onclick="odevSayfasiBaslat('sirali')">Ödeve Başla 🎙️</button>
+      </div>
+
+      <div class="etkinlik-kutusu">
+        <h4 style="color:#38bdf8; margin-bottom:4px;">2. Ödev: Sayfa 14 Tren Vagonlarını Tamamla</h4>
+        <p style="color:#94a3b8; font-size:12px; margin-bottom:8px;">Haftanın günleri sıralamasındaki eksik vagonları doğru yerleştir.</p>
+        <button class="ana-btn" onclick="sayfaAc(14); sekmeGec('dersler');">Vagon Ödevine Git 🚂</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       3. BÖLÜM: TEST (PRATİK VE SINAV)
+       ========================================== -->
+  <div class="ana-kart" id="bolum-test" style="display:none;">
+    <div class="unite-baslik-bar">
+      <div>
+        <span style="font-size:11px; color:#22c55e; font-weight:800;">SINAV MODU</span>
+        <h2 style="font-size:17px; font-weight:900;">Ünite 1 Değerlendirme Testi</h2>
+      </div>
+    </div>
+    <div style="text-align:center; padding:20px 0;">
+      <div style="font-size:48px; margin-bottom:10px;">📝</div>
+      <p style="color:#94a3b8; font-size:13px; margin-bottom:14px;">
+        Okul hayatı ve günler konularını kapsayan 20 soruluk sınav. (Can sınırı yoktur, emojiler gizlidir.)
       </p>
-      <button class="ana-btn" style="display:block;" onclick="testiIlkKezBaslat()">TESTE BAŞLA 🚀</button>
-    </div>
-  </div>
-
-  <!-- ==============================================
-       YENİ ÖDEV BÖLÜMÜ (GÜNLERİ SIRAYLA SAYMA ALANI)
-       ============================================== -->
-  <div class="odev-alani" id="odev-bolumu">
-    <div class="odev-kart">
-      <div style="font-size:12px; color:#facc15; font-weight:800; letter-spacing:1px; margin-bottom:4px;">
-        🎓 OKUL ÖDEVİ PRATİĞİ
-      </div>
-      <h3 style="color:#ffffff; font-size:20px; font-weight:900; margin-bottom:8px;">
-        Günleri Sırasıyla Sayma & Dizme
-      </h3>
-      <p style="color:#94a3b8; font-size:13px; line-height:1.4; margin-bottom:14px;">
-        1. Günden 7. Güne kadar doğru sırayla dokun veya mikrofona baştan sona say!
-      </p>
-
-      <!-- Ödev Alt Modları -->
-      <div class="odev-mod-secici">
-        <button class="odev-mod-btn aktif" id="odev-btn-diz" onclick="odevModuSec('diz')">1. Sırayla Dokun 👆</button>
-        <button class="odev-mod-btn" id="odev-btn-sesli" onclick="odevModuSec('sesli')">2. Mikrofona Say 🎙️</button>
-        <button class="odev-mod-btn" id="odev-btn-eko" onclick="odevEkoTekrarBaslat()">3. Sesli Tekrar 🔁</button>
-      </div>
-
-      <!-- 7 Günün Sıralı İlerleme Listesi -->
-      <div class="sirali-gun-listesi" id="sirali-gun-listesi"></div>
-
-      <!-- Karışık Seçim Butonları -->
-      <div class="karisik-secim-alani" id="karisik-secim-alani"></div>
-
-      <!-- Mikrofona Sayma Kontrolü -->
-      <div id="odev-mikrofon-alani" style="display:none; margin-top:16px;">
-        <button class="dev-mikrofon-btn" id="odev-mic-btn" style="margin:0 auto 10px;" onclick="odevMikrofonBaslat()">🎙️</button>
-        <div id="odev-mic-durum" style="font-size:13px; color:#d8b4fe; font-weight:700;">
-          Mikrofona bas ve sırayla günleri say!
-        </div>
-      </div>
-
-      <div id="odev-sonuc-kutusu" style="margin-top:14px; font-weight:800; font-size:15px; min-height:24px;"></div>
-    </div>
-  </div>
-
-  <!-- HARF BALONLARI -->
-  <div class="balon-oyunu-alani" id="balon-bolumu">
-    <div class="balon-hedef-kutu">
-      <div style="font-size:12px; color:#94a3b8; font-weight:700; margin-bottom:4px;">GÜNÜN HARFLERİNİ PATLAT!</div>
-      <div class="balon-turkce-soru" id="balon-soru-turkce">Pazartesi</div>
-      <div style="font-size:13px; color:#38bdf8; font-weight:bold;" id="balon-okunus">[Mandey]</div>
-
-      <div class="balon-tamamlanan" id="balon-tamamlanan-kutular"></div>
-      <div class="balonlar-havuzu" id="balonlar-havuzu"></div>
-
-      <div id="balon-mesaj" style="font-size:14px; font-weight:800; min-height:24px;"></div>
-      <button class="mini-btn" style="margin:10px auto 0; padding:8px 18px;" onclick="yeniBalonOyunu()">Sonraki Gün ➡️</button>
-    </div>
-  </div>
-
-  <!-- REHBER BÖLÜMÜ -->
-  <div class="rehber-alani" id="rehber-bolumu"></div>
-
-  <!-- FLAŞ KARTLAR BÖLÜMÜ -->
-  <div class="kartlar-alani" id="kartlar-bolumu">
-    <div class="flashcard" id="aktif-flashcard" onclick="flashcardCevir()">
-      <div class="flashcard-etiket" id="fc-etiket">İNGİLİZCE</div>
-      <div class="flashcard-kelime" id="fc-kelime">Monday</div>
-      <div class="flashcard-okunus" id="fc-okunus">[Mandey]</div>
-      <div class="flashcard-alt" id="fc-alt">Dokun ve Türkçesini gör 👆</div>
-    </div>
-    <div class="flashcard-nav">
-      <button class="btn-secondary" onclick="flashcardGeri()">⬅️ Önceki</button>
-      <button class="btn-secondary" onclick="kelimeyiSeslendir(gunler[flashcardIdx].en)">🔊 Dinle</button>
-      <button class="btn-secondary" onclick="flashcardIleri()">Sonraki ➡️</button>
+      <button class="ana-btn" onclick="alert('Sınav başlatılıyor...');">Sınavı Başlat 🚀</button>
     </div>
   </div>
 </div>
 
+<!-- SABİT ALT NAVİGASYON (DERSLER - ÖDEVLER - TEST) -->
+<div class="alt-nav-bar">
+  <button class="alt-nav-item aktif" id="nav-btn-dersler" onclick="sekmeGec('dersler')">
+    <span class="icon">📚</span>
+    <span>Dersler</span>
+  </button>
+  <button class="alt-nav-item" id="nav-btn-odevler" onclick="sekmeGec('odevler')">
+    <span class="icon">📝</span>
+    <span>Ödevler</span>
+  </button>
+  <button class="alt-nav-item" id="nav-btn-test" onclick="sekmeGec('test')">
+    <span class="icon">🎯</span>
+    <span>Test</span>
+  </button>
+</div>
+
 <script>
-  const sesDosyalari = {
-    'Monday': 'https://upload.wikimedia.org/wikipedia/commons/6/63/En-us-Monday.ogg',
-    'Tuesday': 'https://upload.wikimedia.org/wikipedia/commons/d/dc/En-us-Tuesday.ogg',
-    'Wednesday': 'https://upload.wikimedia.org/wikipedia/commons/1/16/En-us-Wednesday.ogg',
-    'Thursday': 'https://upload.wikimedia.org/wikipedia/commons/c/cc/En-us-Thursday.ogg',
-    'Friday': 'https://upload.wikimedia.org/wikipedia/commons/7/75/En-us-Friday.ogg',
-    'Saturday': 'https://upload.wikimedia.org/wikipedia/commons/2/2a/En-us-Saturday.ogg',
-    'Sunday': 'https://upload.wikimedia.org/wikipedia/commons/3/3e/En-us-Sunday.ogg'
-  };
-
-  const gunler = [
-    { sira: 1, en: 'Monday', tr: 'Pazartesi', okunus: 'Mandey', kisa: 'Mon', ipucu: 'Moon-day (Ay günü) - 1. gün', ornek: 'I start work on Monday.' },
-    { sira: 2, en: 'Tuesday', tr: 'Salı', okunus: 'Tyuuzdey', kisa: 'Tue', ipucu: 'Two-sday (2. gün) - Salı', ornek: 'See you on Tuesday.' },
-    { sira: 3, en: 'Wednesday', tr: 'Çarşamba', okunus: 'Wenzdey', kisa: 'Wed', ipucu: 'Wed-nes-day (d okunmaz!) - Ortadaki en uzun gün', ornek: 'Wednesday is mid-week.' },
-    { sira: 4, en: 'Thursday', tr: 'Perşembe', okunus: 'Törzdey', kisa: 'Thu', ipucu: 'Thor-sday (Şimşek günü) - Cuma öncesi', ornek: 'Thursday is almost weekend!' },
-    { sira: 5, en: 'Friday', tr: 'Cuma', okunus: 'Fraydey', kisa: 'Fri', ipucu: 'Fri-day (Fries / Cuma coşkusu) - Hafta sonu kapısı', ornek: 'Thank God it\'s Friday!' },
-    { sira: 6, en: 'Saturday', tr: 'Cumartesi', okunus: 'Setırdey', kisa: 'Sat', ipucu: 'Saturn-day - Hafta sonu eğlencesi', ornek: 'Saturday is for relaxing.' },
-    { sira: 7, en: 'Sunday', tr: 'Pazar', okunus: 'Sandey', kisa: 'Sun', ipucu: 'Sun-day (Güneş günü) - Dinlenme günü', ornek: 'Sunday is a peaceful day.' }
-  ];
-
-  function karistir(arr) {
-    const kopya = arr.slice();
-    for (let i = kopya.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [kopya[i], kopya[j]] = [kopya[j], kopya[i]];
-    }
-    return kopya;
-  }
-
-  // 1. AKTİF ÇALIŞMA SÜRESİ
-  let toplamCalismaSaniyesi = 0;
-  let sonHareketZamani = Date.now();
-  let sayacZamanlayici = null;
-  const sayacKutusuEl = document.getElementById('calisma-sayaci-kutusu');
-  const sayacMetinEl = document.getElementById('calisma-sayaci-metin');
-
-  function kullaniciHareketiOldu() {
-    sonHareketZamani = Date.now();
-    sayacKutusuEl.classList.remove('durakladi');
-  }
-
-  ['click', 'touchstart', 'mousemove', 'keydown', 'scroll'].forEach(evt => {
-    window.addEventListener(evt, kullaniciHareketiOldu, { passive: true });
-  });
-
-  function sayaciBaslat() {
-    if (sayacZamanlayici) clearInterval(sayacZamanlayici);
-    sayacZamanlayici = setInterval(() => {
-      const gecenFark = Date.now() - sonHareketZamani;
-      if (gecenFark < 10000) {
-        toplamCalismaSaniyesi++;
-        sayacKutusuEl.classList.remove('durakladi');
-        const dk = Math.floor(toplamCalismaSaniyesi / 60);
-        const sn = toplamCalismaSaniyesi % 60;
-        sayacMetinEl.textContent = `${dk.toString().padStart(2, '0')}:${sn.toString().padStart(2, '0')}`;
-      } else {
-        sayacKutusuEl.classList.add('durakladi');
-        sayacMetinEl.textContent = `⏸️ ${Math.floor(toplamCalismaSaniyesi / 60).toString().padStart(2, '0')}:${(toplamCalismaSaniyesi % 60).toString().padStart(2, '0')}`;
-      }
-    }, 1000);
-  }
-
-  // 2. KONFETİ MOTORU
-  const canvas = document.getElementById('confetti-canvas');
-  const ctx = canvas.getContext('2d');
-  let confettiParticles = [];
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  function konfetiPatlat(parcacikSayisi = 45) {
-    const renkler = ['#38bdf8', '#22c55e', '#facc15', '#a855f7', '#ef4444', '#fb923c'];
-    for (let i = 0; i < parcacikSayisi; i++) {
-      confettiParticles.push({
-        x: canvas.width / 2 + (Math.random() * 100 - 50),
-        y: canvas.height * 0.4,
-        size: Math.random() * 8 + 4,
-        color: renkler[Math.floor(Math.random() * renkler.length)],
-        vx: (Math.random() - 0.5) * 12,
-        vy: (Math.random() - 1) * 12,
-        yercekimi: 0.25,
-        donus: Math.random() * 360,
-        donusHizi: (Math.random() - 0.5) * 10,
-        omur: 1
-      });
-    }
-  }
-
-  function renderConfetti() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = confettiParticles.length - 1; i >= 0; i--) {
-      const p = confettiParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += p.yercekimi;
-      p.donus += p.donusHizi;
-      p.omur -= 0.015;
-
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.donus * Math.PI) / 180);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = Math.max(0, p.omur);
-      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-      ctx.restore();
-
-      if (p.omur <= 0 || p.y > canvas.height) {
-        confettiParticles.splice(i, 1);
-      }
-    }
-    requestAnimationFrame(renderConfetti);
-  }
-  renderConfetti();
-
-  // 3. SES MOTORU
+  // 1. SES MOTORU
   let sesCtx = null;
-  function audioMotorunuBaslat() {
+  function audioBaslat() {
     try {
-      if (!sesCtx) {
-        sesCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (sesCtx && sesCtx.state === 'suspended') {
-        sesCtx.resume();
-      }
-    } catch(e) {}
+      if (!sesCtx) sesCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (sesCtx && sesCtx.state === 'suspended') sesCtx.resume();
+    } catch(e){}
   }
 
-  function bip(frekans, sure, tip = 'sine') {
+  function bip(f, sure = 0.1) {
     if (!sesCtx) return;
     try {
       const osc = sesCtx.createOscillator();
       const gain = sesCtx.createGain();
-      osc.type = tip;
-      osc.frequency.setValueAtTime(frekans, sesCtx.currentTime);
-      gain.gain.setValueAtTime(0.12, sesCtx.currentTime);
+      osc.frequency.setValueAtTime(f, sesCtx.currentTime);
+      gain.gain.setValueAtTime(0.1, sesCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, sesCtx.currentTime + sure);
       osc.connect(gain);
       gain.connect(sesCtx.destination);
       osc.start();
       osc.stop(sesCtx.currentTime + sure);
-    } catch(e) {}
+    }catch(e){}
   }
 
-  function dogruSesi() {
-    bip(523.25, 0.08);
-    setTimeout(() => bip(659.25, 0.08), 80);
-    setTimeout(() => bip(783.99, 0.18), 160);
+  function seslendir(metin, bitti = null) {
+    audioBaslat();
+    if (!('speechSynthesis' in window)) { if (bitti) bitti(); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(metin);
+    u.lang = 'en-US';
+    u.rate = 0.85;
+    u.onend = () => { if (bitti) bitti(); };
+    window.speechSynthesis.speak(u);
   }
 
-  function yanlisSesi() {
-    bip(220, 0.15, 'sawtooth');
-    setTimeout(() => bip(164.81, 0.25, 'sawtooth'), 120);
+  function sesTesti() {
+    audioBaslat();
+    bip(523, 0.1);
+    seslendir("Hello! Welcome to School Life!");
   }
 
-  let aktifAudio = null;
-  function kelimeyiSeslendir(kelime, bittiginde = null) {
-    audioMotorunuBaslat();
-    if (sesBtn) sesBtn.classList.add('caliyor');
+  function maskotSoyle(avatar, yazi) {
+    document.getElementById('maskot-avatar').textContent = avatar;
+    document.getElementById('maskot-mesaj').innerHTML = yazi;
+  }
 
-    const sesBitti = () => {
-      if (sesBtn) sesBtn.classList.remove('caliyor');
-      if (bittiginde) bittiginde();
-    };
+  // 2. NAVİGASYON
+  function sekmeGec(hedef) {
+    audioBaslat();
+    document.querySelectorAll('.alt-nav-item').forEach(b => b.classList.remove('aktif'));
+    document.getElementById('bolum-dersler').style.display = 'none';
+    document.getElementById('bolum-odevler').style.display = 'none';
+    document.getElementById('bolum-test').style.display = 'none';
 
-    const url = sesDosyalari[kelime];
-    if (url) {
-      if (aktifAudio) {
-        aktifAudio.pause();
-        aktifAudio = null;
-      }
-      aktifAudio = new Audio(url);
-      aktifAudio.onended = sesBitti;
-      aktifAudio.onerror = () => ttsKelimeOku(kelime, sesBitti);
-      aktifAudio.play().catch(() => ttsKelimeOku(kelime, sesBitti));
-    } else {
-      ttsKelimeOku(kelime, sesBitti);
+    if (hedef === 'dersler') {
+      document.getElementById('nav-btn-dersler').classList.add('aktif');
+      document.getElementById('bolum-dersler').style.display = 'block';
+      maskotSoyle('📚', 'Kitap sayfalarını yukarıdan seçip dersleri adım adım takip et!');
+    } else if (hedef === 'odevler') {
+      document.getElementById('nav-btn-odevler').classList.add('aktif');
+      document.getElementById('bolum-odevler').style.display = 'block';
+      maskotSoyle('📝', 'Ödev görevleri burada! Sıralı sayma ve tren vagonları seni bekliyor.');
+    } else if (hedef === 'test') {
+      document.getElementById('nav-btn-test').classList.add('aktif');
+      document.getElementById('bolum-test').style.display = 'block';
+      maskotSoyle('🎯', 'Tüm üniteyi pekiştirmek için teste hazır mısın?');
     }
   }
 
-  function ttsKelimeOku(metin, bittiginde = null) {
-    if (!('speechSynthesis' in window)) {
-      if (bittiginde) bittiginde();
-      return;
-    }
-    try {
-      window.speechSynthesis.resume();
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(metin);
-      window._globalUtterance = u;
-      u.lang = 'en-US';
-      u.rate = 0.85;
-      const voices = window.speechSynthesis.getVoices();
-      const enVoice = voices.find(v => v.lang.toLowerCase().startsWith('en'));
-      if (enVoice) u.voice = enVoice;
-      u.onend = () => { if (bittiginde) bittiginde(); };
-      u.onerror = () => { if (bittiginde) bittiginde(); };
-      setTimeout(() => window.speechSynthesis.speak(u), 50);
-    } catch(e) {
-      if (bittiginde) bittiginde();
-    }
+  function sayfaAc(no) {
+    audioBaslat();
+    document.querySelectorAll('.sayfa-tab-btn').forEach(b => b.classList.remove('aktif'));
+    document.querySelectorAll('.kitap-sayfasi').forEach(s => s.classList.remove('gorunur'));
+
+    const btn = Array.from(document.querySelectorAll('.sayfa-tab-btn')).find(b => b.textContent.includes(`Sayfa ${no}`));
+    if (btn) btn.classList.add('aktif');
+
+    const sayfaEl = document.getElementById(`sayfa-${no}`);
+    if (sayfaEl) sayfaEl.classList.add('gorunur');
+
+    maskotSoyle('📖', `<strong>Sayfa ${no}</strong> açıldı! Etkinlikleri tamamlayalım.`);
   }
 
-  function sesTestiYap() {
-    audioMotorunuBaslat();
-    dogruSesi();
-    setTimeout(() => {
-      kelimeyiSeslendir('Sunday', () => {
-        maskotKonus('🦉', 'Ses sistemi mükemmel çalışıyor! 🎵');
-      });
-    }, 200);
-  }
-
-  let sarkiCaliniyor = false;
-  function gunlerSarkisiniCal() {
-    if (sarkiCaliniyor) return;
-    sarkiCaliniyor = true;
-    audioMotorunuBaslat();
-    maskotKonus('🎵', 'Şimdi günleri sırayla dinliyoruz!');
-
-    let idx = 0;
-    function siradaki() {
-      if (idx >= gunler.length) {
-        sarkiCaliniyor = false;
-        konfetiPatlat(50);
-        maskotKonus('🥳', 'Tüm günleri saydık! Harikasın!');
-        return;
-      }
-      const g = gunler[idx];
-      maskotKonus('📅', `<strong>${idx + 1}. ${g.en}</strong> (${g.tr})`);
-      bip(440 + (idx * 50), 0.1);
-      setTimeout(() => {
-        kelimeyiSeslendir(g.en, () => {
-          idx++;
-          setTimeout(siradaki, 400);
-        });
-      }, 100);
-    }
-    siradaki();
-  }
-
-  function maskotKonus(emoji, mesaj) {
-    const avatarEl = document.getElementById('maskot-avatar');
-    const mesajEl = document.getElementById('maskot-mesaj');
-    avatarEl.textContent = emoji;
-    mesajEl.innerHTML = mesaj;
-  }
-
-  // Rozetler
-  const rozetler = {
-    ilkDogru: false,
-    seri3: false,
-    sesliUsta: false,
-    sampiyon: false
-  };
-
-  function rozetKontrol() {
-    if (!rozetler.ilkDogru && ilkSeferdeDogru >= 1) {
-      rozetler.ilkDogru = true;
-      konfetiPatlat(25);
-    }
-    if (!rozetler.seri3 && seridekiDogru >= 3) {
-      rozetler.seri3 = true;
-      konfetiPatlat(35);
-      maskotKonus('🔥', '<strong>3 doğru üst üste!</strong> Alevli Seri Rozeti kazandın!');
-    }
-    if (!rozetler.sesliUsta && sesliGorevBasarisi >= 1) {
-      rozetler.sesliUsta = true;
-      konfetiPatlat(30);
-    }
-  }
-
-  // Test Değişkenleri
-  const TOPLAM_SORU = 20;
-  let ilkSeferdeDogru = 0;
-  let sonaAtilipOgrenilen = 0;
-  let toplamYanlis = 0;
-  let sesliGorevBasarisi = 0;
-  let seridekiDogru = 0;
-  let kilitli = false;
-
-  function soruUret(hedef, tip) {
-    const digerleri = karistir(gunler.filter(g => g.en !== hedef.en)).slice(0, 3);
-    const secenekler = karistir([hedef, ...digerleri]);
-    return { hedef, tip, secenekler, dahaOnceYanlisMi: false };
-  }
-
-  let kuyruk = [];
-
-  function testiIlkKezBaslat() {
-    audioMotorunuBaslat();
-    sayaciBaslat();
-    document.getElementById('baslangic-kutusu').style.display = 'none';
-    document.getElementById('test-aktif-alani').style.display = 'block';
-    testiBaslat();
-  }
-
-  function testiBaslat() {
-    kuyruk = [];
-    ilkSeferdeDogru = 0;
-    sonaAtilipOgrenilen = 0;
-    toplamYanlis = 0;
-    sesliGorevBasarisi = 0;
-    seridekiDogru = 0;
-    kilitli = false;
-
-    const soruTipleri = [
-      'sesli_gorev', 'sesli_gorev', 'sesli_gorev', 'sesli_gorev', 'sesli_gorev',
-      'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en', 'tr_en',
-      'en_tr', 'en_tr', 'en_tr', 'en_tr', 'en_tr', 'en_tr', 'en_tr'
-    ];
-
-    const karisikTipler = karistir(soruTipleri);
-    for (let i = 0; i < TOPLAM_SORU; i++) {
-      const g = karistir(gunler)[0];
-      kuyruk.push(soruUret(g, karisikTipler[i]));
-    }
-    soruyuGoster();
-  }
-
-  const sayacEl = document.getElementById('sayac');
-  const turEl = document.getElementById('tur-yazisi');
-  const soruEl = document.getElementById('soru-basligi');
-  const ipucuBtn = document.getElementById('ipucu-btn');
-  const ipucuKutu = document.getElementById('ipucu-kutu');
-  const sesBtn = document.getElementById('ses-btn');
-  const yavasSesBtn = document.getElementById('yavas-ses-btn');
-  const sesliCevapAlani = document.getElementById('sesli-cevap-alani');
-  const devMikrofonBtn = document.getElementById('dev-mikrofon-btn');
-  const sesliTalimat = document.getElementById('sesli-talimat');
-  const telaffuzRehberKutu = document.getElementById('telaffuz-rehber-kutu');
-  const sesliAlgilanan = document.getElementById('sesli-algilanan');
-  const seceneklerAlani = document.getElementById('secenekler-alani');
-  const mesajAlani = document.getElementById('mesaj-alani');
-  const devamBtn = document.getElementById('devam-btn');
-
-  sesBtn.onclick = () => {
-    kullaniciHareketiOldu();
-    if (kuyruk.length === 0) return;
-    const aktif = kuyruk[0];
-    if (aktif.tip === 'en_tr' || aktif.tip === 'sesli_gorev' || kilitli) {
-      kelimeyiSeslendir(aktif.hedef.en);
-    } else {
-      bip(400, 0.1);
-      mesajAlani.className = 'mesaj-kutusu d-err';
-      mesajAlani.innerHTML = '🔒 <strong>Kopya yok!</strong> Önce cevabını seç veya mikrofona söyle, ardından telaffuzu dinleyebilirsin.';
-      mesajAlani.style.display = 'block';
-      setTimeout(() => { if (!kilitli) mesajAlani.style.display = 'none'; }, 2500);
-    }
-  };
-
-  yavasSesBtn.onclick = () => {
-    kullaniciHareketiOldu();
-    if (kuyruk.length === 0) return;
-    ttsKelimeOku(kuyruk[0].hedef.en);
-  };
-
-  // Konuşma Tanıma
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let tani = null;
-  let mikrofonDinliyor = false;
-
-  if (SpeechRecognition) {
-    tani = new SpeechRecognition();
-    tani.lang = 'en-US';
-    tani.continuous = false;
-    tani.interimResults = false;
-
-    tani.onstart = () => {
-      kullaniciHareketiOldu();
-      mikrofonDinliyor = true;
-      devMikrofonBtn.classList.add('dinliyor');
-      sesliTalimat.textContent = '🎙️ Seni dinliyorum... Hadi söyle!';
-      maskotKonus('🎧', 'Kulaklarımı açtım, seni dinliyorum!');
-    };
-
-    tani.onresult = (event) => {
-      kullaniciHareketiOldu();
-      mikrofonDinliyor = false;
-      devMikrofonBtn.classList.remove('dinliyor');
-      const soylenen = event.results[0][0].transcript.trim().toLowerCase();
-      sesliAlgilanan.textContent = `Duyulan: "${soylenen}"`;
-
-      if (kuyruk.length === 0 || kilitli) return;
-      const aktif = kuyruk[0];
-      const hedefEn = aktif.hedef.en.toLowerCase();
-
-      if (soylenen.includes(hedefEn)) {
-        sesliGorevBasarisi++;
-        rozetKontrol();
-        cevapKontrol(aktif.hedef, null, true);
-      } else {
-        mesajAlani.className = 'mesaj-kutusu d-err';
-        mesajAlani.innerHTML = `🎙️ <em>"${soylenen}"</em> algılandı. Telaffuz ipucuna bakıp mikrofona tekrar basabilirsin.`;
-        mesajAlani.style.display = 'block';
-        maskotKonus('🤔', 'Neredeyse oluyordu! Tekrar denemek ister misin?');
-      }
-    };
-
-    tani.onerror = () => {
-      mikrofonDinliyor = false;
-      devMikrofonBtn.classList.remove('dinliyor');
-      sesliTalimat.textContent = 'Mikrofona basıp tekrar söyle!';
-    };
-
-    tani.onend = () => {
-      mikrofonDinliyor = false;
-      devMikrofonBtn.classList.remove('dinliyor');
-    };
-
-    devMikrofonBtn.onclick = () => {
-      kullaniciHareketiOldu();
-      if (kilitli) return;
-      mikrofonuBaslat();
-    };
-  }
-
-  function mikrofonuBaslat() {
-    if (!tani || kilitli || mikrofonDinliyor) return;
-    try { tani.start(); } catch (err) {}
-  }
-
-  function sesliyiSiklaraDonustur() {
-    kullaniciHareketiOldu();
-    if (kuyruk.length === 0) return;
-    kuyruk[0].tip = 'tr_en';
-    soruyuGoster();
-  }
-
-  ipucuBtn.onclick = () => {
-    kullaniciHareketiOldu();
-    ipucuKutu.style.display = (ipucuKutu.style.display === 'block') ? 'none' : 'block';
-  };
-
-  function soruyuGoster() {
-    if (kuyruk.length === 0) {
-      zaferGoster();
-      return;
-    }
-
-    kilitli = false;
-    mesajAlani.style.display = 'none';
-    devamBtn.style.display = 'none';
-    ipucuKutu.style.display = 'none';
-    sesliAlgilanan.textContent = '';
-
-    const aktif = kuyruk[0];
-    sayacEl.textContent = 'Kalan: ' + kuyruk.length;
-    ipucuKutu.innerHTML = '<strong>💡 Hatırlatıcı İpucu:</strong><br>' + aktif.hedef.ipucu;
-
-    if (aktif.tip === 'sesli_gorev') {
-      turEl.className = 'etiket sesli-gorev';
-      turEl.textContent = '🎙️ SESLİ GÖREV (ŞIKSIZ)';
-      soruEl.innerHTML = `"${aktif.hedef.tr}" nedir?`;
-
-      seceneklerAlani.style.display = 'none';
-      sesliCevapAlani.style.display = 'flex';
-      sesliTalimat.textContent = 'Mikrofona bas ve İngilizce söyle!';
-      telaffuzRehberKutu.innerHTML = `🗣️ Telaffuz İpucu: <strong>${aktif.hedef.en}</strong> ➔ <em>[${aktif.hedef.okunus}]</em>`;
-
-      maskotKonus('🎙️', `Sıra sende! <strong>"${aktif.hedef.tr}"</strong> kelimesini İngilizce söyle!`);
-
-      setTimeout(() => {
-        kelimeyiSeslendir(aktif.hedef.en, () => {
-          setTimeout(mikrofonuBaslat, 300);
-        });
-      }, 250);
-      return;
-    }
-
-    turEl.className = 'etiket';
-    sesliCevapAlani.style.display = 'none';
-    seceneklerAlani.style.display = 'flex';
-
-    if (aktif.tip === 'tr_en') {
-      turEl.textContent = 'TÜRKÇE ➔ İNGİLİZCE';
-      soruEl.innerHTML = `"${aktif.hedef.tr}" hangisidir?`;
-      maskotKonus('🎯', `Acaba <strong>"${aktif.hedef.tr}"</strong> hangisiydi?`);
-    } else {
-      turEl.textContent = 'İNGİLİZCE ➔ TÜRKÇE';
-      soruEl.innerHTML = `"${aktif.hedef.en}" <span class="soru-okunus-etiket">[${aktif.hedef.okunus}]</span> hangisidir?`;
-      maskotKonus('🔊', `Kelimeyi dinle: <strong>${aktif.hedef.en}</strong>`);
-      setTimeout(() => kelimeyiSeslendir(aktif.hedef.en), 200);
-    }
-
-    seceneklerAlani.innerHTML = '';
-    aktif.secenekler.forEach((secenek, idx) => {
-      const btn = document.createElement('button');
-      btn.className = 'secenek-btn';
-      btn.type = 'button';
-
-      if (aktif.tip === 'tr_en') {
-        btn.innerHTML = `
-          <div class="secenek-sol">
-            <span class="secenek-ana-yazi">${idx + 1}. ${secenek.en}</span>
-            <span class="secenek-okunus">[${secenek.okunus}]</span>
-          </div>
-          <span style="color:#94a3b8; font-size:12px;">(${secenek.kisa})</span>
-        `;
-      } else {
-        btn.innerHTML = `
-          <div class="secenek-sol">
-            <span class="secenek-ana-yazi">${idx + 1}. ${secenek.tr}</span>
-          </div>
-          <span style="color:#94a3b8; font-size:12px;">#${idx + 1}</span>
-        `;
-      }
-
-      btn.onclick = () => {
-        kullaniciHareketiOldu();
-        cevapKontrol(secenek, btn);
-      };
-      seceneklerAlani.appendChild(btn);
-    });
-  }
-
-  function cevapKontrol(secilen, tiklananBtn, mikrofondanGeldi = false) {
-    if (kilitli) return;
-    kilitli = true;
-
-    if (tani && mikrofonDinliyor) {
-      try { tani.stop(); } catch(e) {}
-    }
-
-    const aktif = kuyruk[0];
-    const dogruMu = (secilen.en === aktif.hedef.en);
-    const tumButonlar = document.querySelectorAll('.secenek-btn');
-
-    tumButonlar.forEach(b => b.disabled = true);
-    kelimeyiSeslendir(aktif.hedef.en);
-
-    if (dogruMu) {
-      dogruSesi();
-      konfetiPatlat(35);
-      seridekiDogru++;
-      rozetKontrol();
-
-      if (tiklananBtn) tiklananBtn.classList.add('dogru');
-
-      if (aktif.dahaOnceYanlisMi) {
-        sonaAtilipOgrenilen++;
-      } else {
-        ilkSeferdeDogru++;
-      }
-
-      mesajAlani.className = 'mesaj-kutusu d-ok';
-      const tebrikSes = mikrofondanGeldi ? '🎙️ <strong>Harika telaffuz ettin!</strong> ' : '🎉 <strong>Muhteşem, doğru!</strong> ';
-      mesajAlani.innerHTML = tebrikSes + `${aktif.hedef.en} [${aktif.hedef.okunus}] = ${aktif.hedef.tr}`;
-      mesajAlani.style.display = 'block';
-
-      maskotKonus('🥳', `Harikasın! <strong>${aktif.hedef.en}</strong> tam olarak doğruydu! ⭐`);
-
-      kuyruk.shift();
-      setTimeout(sonrakiSoru, 1250);
-    } else {
-      yanlisSesi();
-      seridekiDogru = 0;
-      toplamYanlis++;
-      if (tiklananBtn) tiklananBtn.classList.add('yanlis');
-
-      tumButonlar.forEach(b => {
-        const aranan = (aktif.tip === 'tr_en') ? aktif.hedef.en : aktif.hedef.tr;
-        if (b.textContent.includes(aranan)) b.classList.add('dogru');
-      });
-
-      mesajAlani.className = 'mesaj-kutusu d-err';
-      mesajAlani.innerHTML = `<strong>❌ Yanlış! Bu soru sona eklendi.</strong><br>Doğrusu: <strong>${aktif.hedef.en}</strong> [${aktif.hedef.okunus}] (${aktif.hedef.tr})`;
-      mesajAlani.style.display = 'block';
-
-      maskotKonus('💪', 'Hiç üzülme! Soru testin sonuna eklendi, öğrene kadar buradayız!');
-
-      const yanlisSoru = kuyruk.shift();
-      yanlisSoru.dahaOnceYanlisMi = true;
-      yanlisSoru.secenekler = karistir(yanlisSoru.secenekler);
-      kuyruk.push(yanlisSoru);
-
-      devamBtn.style.display = 'block';
-    }
-  }
-
-  function sonrakiSoru() {
-    kullaniciHareketiOldu();
-    if (kuyruk.length > 0) {
-      soruyuGoster();
-    } else {
-      zaferGoster();
-    }
-  }
-
-  function zaferGoster() {
-    rozetler.sampiyon = true;
-    konfetiPatlat(100);
-    clearInterval(sayacZamanlayici);
-
-    const toplamDk = Math.floor(toplamCalismaSaniyesi / 60);
-    const toplamSn = toplamCalismaSaniyesi % 60;
-    const sureMetni = `${toplamDk} dakika ${toplamSn} saniye`;
-
-    const hamPuan = ((ilkSeferdeDogru * 1.0) + (sonaAtilipOgrenilen * 0.6)) / TOPLAM_SORU * 100;
-    const basariPuani = Math.min(100, Math.max(0, Math.round(hamPuan)));
-
-    let harfNotu = "A+";
-    let durumRengi = "#22c55e";
-    let mesaj = "Muhteşem Başarı! Tüm kelimeleri eksiksiz öğrendin.";
-
-    if (basariPuani < 60) {
-      harfNotu = "C";
-      durumRengi = "#facc15";
-      mesaj = "Tüm kelimeleri tamamladın ama biraz daha tekrar harika olur!";
-    } else if (basariPuani < 85) {
-      harfNotu = "B+";
-      durumRengi = "#38bdf8";
-      mesaj = "Çok iyi! Hatalarından öğrenerek testi başarıyla bitirdin.";
-    }
-
-    maskotKonus('👑', `Tebrikler şampiyon! <strong>${sureMetni}</strong> aktif çalışarak tüm günleri tamamladın!`);
-
-    document.getElementById('test-bolumu').innerHTML = `
-      <div style="text-align:center; padding:16px 4px;">
-        <div style="font-size:52px; margin-bottom:8px;">🏆</div>
-        <h2 style="color:${durumRengi}; font-size:24px; margin-bottom:4px;">Tüm Kelimeler Öğrenildi!</h2>
-        <p style="color:#94a3b8; font-size:13px; margin-bottom:14px;">${mesaj}</p>
-
-        <div class="skor-buyuk" style="color:${durumRengi};">${basariPuani} <span style="font-size:22px; color:#94a3b8;">/ 100</span></div>
-        <div style="display:inline-block; background:${durumRengi}22; color:${durumRengi}; border:1px solid ${durumRengi}; padding:4px 14px; border-radius:20px; font-weight:800; font-size:14px; margin-bottom:16px;">
-          Başarı Derecesi: ${harfNotu}
-        </div>
-
-        <div class="rozetler-alani" style="margin-bottom:16px;">
-          <div class="rozet-karti ${rozetler.ilkDogru ? 'kazanildi' : ''}">🌟 İlk Doğru</div>
-          <div class="rozet-karti ${rozetler.seri3 ? 'kazanildi' : ''}">🔥 3'lü Seri</div>
-          <div class="rozet-karti ${rozetler.sesliUsta ? 'kazanildi' : ''}">🎙️ Mikrofon Ustası</div>
-          <div class="rozet-karti ${rozetler.sampiyon ? 'kazanildi' : ''}">👑 Günler Şampiyonu</div>
-        </div>
-
-        <div class="karne-kutu">
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">⏱️ Aktif Çalışma Süresi:</span>
-            <strong style="color:#facc15;">${sureMetni}</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">🎯 İlk Seferde Bilinen:</span>
-            <strong style="color:#22c55e;">${ilkSeferdeDogru} Soru</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">🔄 Sona Atılıp Öğrenilen:</span>
-            <strong style="color:#38bdf8;">${sonaAtilipOgrenilen} Soru</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">🎙️ Sesli Görev Başarısı:</span>
-            <strong style="color:#a855f7;">${sesliGorevBasarisi} Soru</strong>
-          </div>
-          <div class="karne-satir">
-            <span style="color:#94a3b8;">❌ Toplam Deneme Hatası:</span>
-            <strong style="color:#ef4444;">${toplamYanlis}</strong>
-          </div>
-        </div>
-
-        <button class="ana-btn" style="display:block;" onclick="location.reload()">YENİDEN BAŞLAT 🔄</button>
-      </div>
-    `;
-  }
-
-  devamBtn.onclick = sonrakiSoru;
-
-  // ==============================================
-  // 4. ÖDEV MODU MANTIĞI (SIRALI SAYMA & SESLİ TEKRAR)
-  // ==============================================
-  let odevAktifAdim = 1; // 1'den 7'ye kadar sırayla gidecek
-  let odevModu = 'diz'; // 'diz' veya 'sesli'
-
-  function odevModuSec(mod) {
-    kullaniciHareketiOldu();
-    odevModu = mod;
-    document.querySelectorAll('.odev-mod-btn').forEach(b => b.classList.remove('aktif'));
-    if (mod === 'diz') {
-      document.getElementById('odev-btn-diz').classList.add('aktif');
-      document.getElementById('karisik-secim-alani').style.display = 'flex';
-      document.getElementById('odev-mikrofon-alani').style.display = 'none';
-      maskotKonus('📅', '1. Gün olan <strong>Monday</strong> ile başla ve 7. güne kadar sırayla dokun!');
-    } else {
-      document.getElementById('odev-btn-sesli').classList.add('aktif');
-      document.getElementById('karisik-secim-alani').style.display = 'none';
-      document.getElementById('odev-mikrofon-alani').style.display = 'block';
-      maskotKonus('🎙️', 'Mikrofona bas ve günleri <strong>Monday</strong> den başlayarak sırayla say!');
-    }
-    odevOyununuSifirla();
-  }
-
-  function odevOyununuSifirla() {
-    odevAktifAdim = 1;
-    document.getElementById('odev-sonuc-kutusu').innerHTML = '';
-
-    // Sıralı boş adımları çiz (1. Monday ... 7. Sunday)
-    const listeEl = document.getElementById('sirali-gun-listesi');
-    listeEl.innerHTML = '';
-    gunler.forEach(g => {
-      const adim = document.createElement('div');
-      adim.className = `sirali-adim ${g.sira === 1 ? 'sirada' : ''}`;
-      adim.id = `odev-adim-${g.sira}`;
-      adim.innerHTML = `
-        <div>
-          <span style="color:#94a3b8; font-size:12px; margin-right:8px;">${g.sira}. Gün:</span>
-          <span id="odev-yazi-${g.sira}" style="color:#64748b;">(Bekleniyor...)</span>
-        </div>
-        <span id="odev-tik-${g.sira}" style="font-size:16px;">⏳</span>
-      `;
-      listeEl.appendChild(adim);
-    });
-
-    // Karışık butonları doldur
-    const secimAlani = document.getElementById('karisik-secim-alani');
-    secimAlani.innerHTML = '';
-    const karisikGunler = karistir(gunler);
-    karisikGunler.forEach(g => {
-      const btn = document.createElement('button');
-      btn.className = 'secilecek-gun-btn';
-      btn.id = `odev-btn-sec-${g.sira}`;
-      btn.innerHTML = `
-        <span>${g.en}</span>
-        <span style="font-size:11px; color:#38bdf8;">[${g.okunus}]</span>
-      `;
-      btn.onclick = () => odevGuneDokunuldu(g, btn);
-      secimAlani.appendChild(btn);
-    });
-  }
-
-  // 1. YÖNTEM: SIRAYLA DOKUNMA
-  function odevGuneDokunuldu(g, btnEl) {
-    kullaniciHareketiOldu();
-    audioMotorunuBaslat();
-
-    if (g.sira === odevAktifAdim) {
-      dogruSesi();
-      kelimeyiSeslendir(g.en);
-      btnEl.classList.add('kullanildi');
-
-      const adimEl = document.getElementById(`odev-adim-${g.sira}`);
-      adimEl.classList.remove('sirada');
-      adimEl.classList.add('tamamlandi');
-
-      document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
-        <strong style="color:#ffffff;">${g.en}</strong> 
-        <span style="color:#38bdf8; font-size:13px;">[${g.okunus}]</span> 
-        <span style="color:#94a3b8; font-size:12px;">(${g.tr})</span>
-      `;
-      document.getElementById(`odev-tik-${g.sira}`).textContent = '✅';
-
-      odevAktifAdim++;
-
-      if (odevAktifAdim <= 7) {
-        const siradakiAdimEl = document.getElementById(`odev-adim-${odevAktifAdim}`);
-        if (siradakiAdimEl) siradakiAdimEl.classList.add('sirada');
-        const siradakiGun = gunler.find(x => x.sira === odevAktifAdim);
-        maskotKonus('👍', `Harika! Şimdi <strong>${odevAktifAdim}. gün (${siradakiGun.tr})</strong> hangisi?`);
-      } else {
-        // 7 GÜNÜN TAMAMI BİTTİ!
-        konfetiPatlat(70);
-        maskotKonus('🏆', 'Tebrikler! 7 günü kusursuz bir sırayla dizdin!');
-        document.getElementById('odev-sonuc-kutusu').innerHTML = `
-          <span style="color:#22c55e;">🎉 HARİKA! 7 günün tamamını sırayla başarıyla dizdin!</span>
-        `;
-      }
-    } else {
-      yanlisSesi();
-      const beklenenGun = gunler.find(x => x.sira === odevAktifAdim);
-      document.getElementById('odev-sonuc-kutusu').innerHTML = `
-        <span style="color:#ef4444;">❌ Sıradaki gün <strong>${odevAktifAdim}. gün (${beklenenGun.tr})</strong> olmalıydı!</span>
-      `;
-      maskotKonus('🤔', `Dikkat: Şu an <strong>${odevAktifAdim}. gün (${beklenenGun.tr})</strong> aranıyor.`);
-      setTimeout(() => {
-        document.getElementById('odev-sonuc-kutusu').innerHTML = '';
-      }, 1800);
-    }
-  }
-
-  // 2. YÖNTEM: MİKROFONA BAŞTAN SONA SAYMA
-  let odevTani = null;
-  function odevMikrofonBaslat() {
-    kullaniciHareketiOldu();
-    if (!SpeechRecognition) {
-      alert("Tarayıcınız ses tanımayı desteklemiyor. Chrome kullanmanız önerilir.");
-      return;
-    }
-
-    if (!odevTani) {
-      odevTani = new SpeechRecognition();
-      odevTani.lang = 'en-US';
-      odevTani.continuous = true;
-      odevTani.interimResults = false;
-
-      odevTani.onstart = () => {
-        document.getElementById('odev-mic-btn').classList.add('dinliyor');
-        document.getElementById('odev-mic-durum').textContent = '🎙️ Seni dinliyorum... Sırayla saymaya başla!';
-        maskotKonus('🎧', 'Dinliyorum: Monday, Tuesday...');
-      };
-
-      odevTani.onresult = (event) => {
-        const sonIndex = event.results.length - 1;
-        const cumle = event.results[sonIndex][0].transcript.trim().toLowerCase();
-        document.getElementById('odev-mic-durum').innerHTML = `Duyulan: <em>"${cumle}"</em>`;
-
-        gunler.forEach(g => {
-          if (cumle.includes(g.en.toLowerCase()) && g.sira === odevAktifAdim) {
-            dogruSesi();
-            const adimEl = document.getElementById(`odev-adim-${g.sira}`);
-            if (adimEl) {
-              adimEl.classList.remove('sirada');
-              adimEl.classList.add('tamamlandi');
-              document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
-                <strong style="color:#ffffff;">${g.en}</strong> 
-                <span style="color:#38bdf8; font-size:13px;">[${g.okunus}]</span>
-              `;
-              document.getElementById(`odev-tik-${g.sira}`).textContent = '✅';
-            }
-            odevAktifAdim++;
-
-            if (odevAktifAdim <= 7) {
-              const siradakiEl = document.getElementById(`odev-adim-${odevAktifAdim}`);
-              if (siradakiEl) siradakiEl.classList.add('sirada');
-            } else {
-              konfetiPatlat(80);
-              odevTani.stop();
-              maskotKonus('🎓', 'Ödev tamamlandı! 7 günü sırasıyla kusursuz saydın!');
-              document.getElementById('odev-sonuc-kutusu').innerHTML = `
-                <span style="color:#22c55e;">🎓 ÖDEV TAMAMLANDI! Öğretmene saymaya tamamen hazırsın! ⭐⭐⭐</span>
-              `;
-            }
-          }
-        });
-      };
-
-      odevTani.onend = () => {
-        document.getElementById('odev-mic-btn').classList.remove('dinliyor');
-        if (odevAktifAdim <= 7) {
-          document.getElementById('odev-mic-durum').textContent = 'Mikrofona basarak devam edebilirsin!';
-        }
-      };
-
-      odevTani.onerror = () => {
-        document.getElementById('odev-mic-btn').classList.remove('dinliyor');
-      };
-    }
-
-    try {
-      odevTani.start();
-    } catch(e) {
-      odevTani.stop();
-    }
-  }
-
-  // 3. YÖNTEM: EKO / TEKRAR ET (BENİ DİNLE VE TEKRAR ET)
-  let ekoCalisiyor = false;
-  function odevEkoTekrarBaslat() {
-    if (ekoCalisiyor) return;
-    ekoCalisiyor = true;
-    audioMotorunuBaslat();
-    odevOyununuSifirla();
-    maskotKonus('🗣️', 'Benden sonra sırayla yüksek sesle tekrar et!');
-
-    let i = 0;
-    function siradakiGunOku() {
-      if (i >= gunler.length) {
-        ekoCalisiyor = false;
-        konfetiPatlat(40);
-        maskotKonus('👏', 'Tüm günleri tekrar ettik! Ağzına sağlık!');
-        return;
-      }
-      const g = gunler[i];
-      const adimEl = document.getElementById(`odev-adim-${g.sira}`);
-      adimEl.classList.add('sirada');
-
-      document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
-        <strong style="color:#38bdf8;">${g.en}</strong> ➔ Tekrar Et!
-      `;
-
-      kelimeyiSeslendir(g.en, () => {
-        // Dinledikten sonra çocuğa 1.2 saniye tekrar etme payı bırak
-        setTimeout(() => {
-          adimEl.classList.remove('sirada');
-          adimEl.classList.add('tamamlandi');
-          document.getElementById(`odev-yazi-${g.sira}`).innerHTML = `
-            <strong style="color:#ffffff;">${g.en}</strong> [${g.okunus}]
-          `;
-          document.getElementById(`odev-tik-${g.sira}`).textContent = '✅';
-          i++;
-          siradakiGunOku();
-        }, 1300);
-      });
-    }
-    siradakiGunOku();
-  }
-
-  // HARF BALONLARI
-  let balonHedefGun = null;
-  let balonYazilan = "";
-
-  function yeniBalonOyunu() {
-    kullaniciHareketiOldu();
-    balonHedefGun = karistir(gunler)[0];
-    balonYazilan = "";
-    document.getElementById('balon-mesaj').textContent = '';
-
-    document.getElementById('balon-soru-turkce').textContent = balonHedefGun.tr;
-    document.getElementById('balon-okunus').textContent = `[${balonHedefGun.okunus}]`;
-
-    const kutularEl = document.getElementById('balon-tamamlanan-kutular');
-    kutularEl.innerHTML = '';
-    for (let i = 0; i < balonHedefGun.en.length; i++) {
+  // ==========================================
+  // SAYFA 10: 1) CHOOSE AND CHECK
+  // ==========================================
+  const s10Data = [
+    { no: 1, emoji: "🏫", d: "a classroom", options: ["a classroom", "a canteen", "a sports hall"] },
+    { no: 2, emoji: "👨‍🏫", d: "a teacher", options: ["a kid", "a friend", "a teacher"] },
+    { no: 3, emoji: "👔", d: "a headmaster", options: ["a pupil", "a headmistress", "a headmaster"] },
+    { no: 4, emoji: "🛝", d: "a playground", options: ["a playground", "a lunch hall", "a teacher's room"] },
+    { no: 5, emoji: "📚", d: "a library", options: ["a garden", "a library", "a classroom"] },
+    { no: 6, emoji: "👧", d: "a pupil", options: ["a boy", "a teacher", "a pupil"] }
+  ];
+
+  function s10Yukle() {
+    const kutu = document.getElementById('s10-sorular');
+    kutu.innerHTML = '';
+    s10Data.forEach(item => {
       const k = document.createElement('div');
-      k.className = 'harf-kutu';
-      k.id = `harf-kutu-${i}`;
-      kutularEl.appendChild(k);
-    }
-
-    const harfler = karistir(balonHedefGun.en.toUpperCase().split(''));
-    const havuzEl = document.getElementById('balonlar-havuzu');
-    havuzEl.innerHTML = '';
-
-    harfler.forEach(h => {
-      const b = document.createElement('button');
-      b.className = 'balon-btn';
-      b.textContent = h;
-      b.onclick = () => harfSec(h, b);
-      havuzEl.appendChild(b);
-    });
-
-    maskotKonus('🎈', `Harf balonlarını doğru sırayla patlatarak <strong>${balonHedefGun.en}</strong> yaz!`);
-  }
-
-  function harfSec(harf, btnEl) {
-    kullaniciHareketiOldu();
-    audioMotorunuBaslat();
-    const sira = balonYazilan.length;
-    const beklenenHarf = balonHedefGun.en[sira].toUpperCase();
-
-    if (harf === beklenenHarf) {
-      dogruSesi();
-      balonYazilan += harf;
-      btnEl.classList.add('kullanildi');
-
-      const kutu = document.getElementById(`harf-kutu-${sira}`);
-      if (kutu) {
-        kutu.textContent = harf;
-        kutu.classList.add('dolu');
-      }
-
-      if (balonYazilan.length === balonHedefGun.en.length) {
-        konfetiPatlat(40);
-        document.getElementById('balon-mesaj').innerHTML = `<span style="color:#22c55e;">🎉 HARİKA! ${balonHedefGun.en} tamamlandı!</span>`;
-        kelimeyiSeslendir(balonHedefGun.en);
-        maskotKonus('🥳', `Tebrikler! <strong>${balonHedefGun.en}</strong> kelimesini eksiksiz yazdın!`);
-      }
-    } else {
-      yanlisSesi();
-      document.getElementById('balon-mesaj').innerHTML = `<span style="color:#ef4444;">❌ Sıradaki harf "${beklenenHarf}" olmalıydı!</span>`;
-      setTimeout(() => {
-        document.getElementById('balon-mesaj').textContent = '';
-      }, 1500);
-    }
-  }
-
-  // REHBER SAYFASI
-  function rehberiHazirla() {
-    const bolum = document.getElementById('rehber-bolumu');
-    bolum.innerHTML = '';
-    gunler.forEach((g, idx) => {
-      const k = document.createElement('div');
-      k.className = 'rehber-kart';
+      k.className = 's10-kart';
       k.innerHTML = `
-        <div class="rehber-ust">
-          <div>
-            <span class="rehber-gun-adi">${idx + 1}. ${g.en}</span>
-            <span class="rehber-okunus">[${g.okunus}]</span>
-            <div class="rehber-turkce">${g.tr}</div>
-          </div>
-          <button class="ses-btn" onclick="kelimeyiSeslendir('${g.en}')" style="width:36px; height:36px; font-size:16px;">🔊</button>
-        </div>
-        <div class="rehber-ipucu">💡 ${g.ipucu}</div>
-        <div style="font-size:13px; color:#cbd5e1;">💬 "${g.ornek}"</div>
+        <div class="s10-img-temsili" onclick="seslendir('${item.d}')">${item.emoji}</div>
+        <div style="font-size:11px; font-weight:800; color:#38bdf8;">${item.no}) Seçiniz:</div>
       `;
-      bolum.appendChild(k);
+      item.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 's10-secenek';
+        btn.textContent = opt;
+        btn.onclick = () => {
+          seslendir(opt);
+          if (opt === item.d) {
+            bip(600, 0.1);
+            btn.classList.add('dogru');
+            btn.textContent = `✓ ${opt}`;
+          } else {
+            bip(200, 0.15);
+            btn.classList.add('yanlis');
+          }
+        };
+        k.appendChild(btn);
+      });
+      kutu.appendChild(k);
     });
   }
 
-  // FLAŞ KARTLAR
-  let flashcardIdx = 0;
-  let flashcardOn = true;
+  // ==========================================
+  // SAYFA 11: 2) LOOK AND WRITE (OKUL HARİTASI)
+  // ==========================================
+  const s11Data = [
+    { no: 1, en: "a headmaster", tr: "Müdür", emoji: "👔" },
+    { no: 2, en: "a boy", tr: "Erkek Öğrenci", emoji: "👦" },
+    { no: 3, en: "teacher", tr: "Öğretmen", emoji: "👩‍🏫" },
+    { no: 4, en: "sports hall", tr: "Spor Salonu", emoji: "🏀" },
+    { no: 5, en: "classroom", tr: "Sınıf", emoji: "🏫" },
+    { no: 6, en: "library", tr: "Kütüphane", emoji: "📚" },
+    { no: 7, en: "canteen", tr: "Kantin", emoji: "🥪" },
+    { no: 8, en: "playground", tr: "Okul Bahçesi / Oyun Alanı", emoji: "🛝" }
+  ];
 
-  function flashcardGuncelle() {
-    const g = gunler[flashcardIdx];
-    const kelimeEl = document.getElementById('fc-kelime');
-    const okunusEl = document.getElementById('fc-okunus');
-    const etiketEl = document.getElementById('fc-etiket');
-    const altEl = document.getElementById('fc-alt');
-
-    if (flashcardOn) {
-      etiketEl.textContent = 'İNGİLİZCE (DOKUN VE ÇEVİR)';
-      etiketEl.style.color = '#38bdf8';
-      kelimeEl.textContent = g.en;
-      kelimeEl.style.color = '#ffffff';
-      okunusEl.style.display = 'block';
-      okunusEl.textContent = `[${g.okunus}]`;
-      altEl.textContent = 'Dokununca Türkçesi açılır';
-    } else {
-      etiketEl.textContent = 'TÜRKÇE & İPUCU';
-      etiketEl.style.color = '#22c55e';
-      kelimeEl.textContent = g.tr;
-      kelimeEl.style.color = '#22c55e';
-      okunusEl.style.display = 'none';
-      altEl.textContent = g.ipucu;
-    }
+  function s11Yukle() {
+    const kutu = document.getElementById('s11-harita-noktalari');
+    kutu.innerHTML = '';
+    s11Data.forEach(d => {
+      const btn = document.createElement('div');
+      btn.className = 'harita-nokta';
+      btn.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="harita-no">${d.no}</span>
+          <div>
+            <div>${d.en}</div>
+            <div style="font-size:10px; color:#94a3b8;">${d.tr}</div>
+          </div>
+        </div>
+        <button class="ses-icon-btn" onclick="seslendir('${d.en}')">🔊</button>
+      `;
+      kutu.appendChild(btn);
+    });
   }
 
-  function flashcardCevir() {
-    kullaniciHareketiOldu();
-    flashcardOn = !flashcardOn;
-    flashcardGuncelle();
+  // ==========================================
+  // SAYFA 12: 3) ORDER THE WORDS & MATCH
+  // ==========================================
+  const s12Data = [
+    { soru: "What is this?", parcalar: ["is", "What", "this"], cevap: "d) It is a playground." },
+    { soru: "Who is he?", parcalar: ["he", "is", "Who"], cevap: "e) He is Mr Yılmaz." },
+    { soru: "Where is Tom?", parcalar: ["Tom", "Where", "is"], cevap: "a) He is in the classroom." },
+    { soru: "What's your name?", parcalar: ["name", "What's", "your"], cevap: "c) My name is Melis." },
+    { soru: "How are you?", parcalar: ["you", "are", "How"], cevap: "b) I'm fine, thanks!" }
+  ];
+
+  function s12Yukle() {
+    const kutu = document.getElementById('s12-cumle-alani');
+    kutu.innerHTML = '';
+    s12Data.forEach((d, idx) => {
+      const satir = document.createElement('div');
+      satir.className = 'cumle-kur-satir';
+      satir.innerHTML = `
+        <div style="font-size:12px; font-weight:800; color:#38bdf8;">${idx + 1}. Cümleyi Kur:</div>
+        <div class="kelime-baloncuklar" id="s12-balonlar-${idx}"></div>
+        <div class="olusturulan-cumle" id="s12-sonuc-${idx}">(Kelimelere dokunarak sıraya diz)</div>
+        <div style="font-size:11px; color:#22c55e; margin-top:4px; font-weight:bold;">Eşleşen Cevap: ${d.cevap}</div>
+      `;
+      kutu.appendChild(satir);
+
+      const bKutu = satir.querySelector(`#s12-balonlar-${idx}`);
+      const sonucKutu = satir.querySelector(`#s12-sonuc-${idx}`);
+      let secilenler = [];
+
+      d.parcalar.forEach(p => {
+        const b = document.createElement('button');
+        b.className = 'kelime-balon';
+        b.textContent = p;
+        b.onclick = () => {
+          seslendir(p);
+          b.classList.add('secildi');
+          secilenler.push(p);
+          sonucKutu.textContent = secilenler.join(' ') + '?';
+          if (secilenler.length === d.parcalar.length) {
+            bip(650, 0.15);
+            seslendir(d.soru);
+            sonucKutu.style.color = '#22c55e';
+            sonucKutu.textContent = `✓ ${d.soru}`;
+          }
+        };
+        bKutu.appendChild(b);
+      });
+    });
   }
 
-  function flashcardIleri() {
-    kullaniciHareketiOldu();
-    flashcardIdx = (flashcardIdx + 1) % gunler.length;
-    flashcardOn = true;
-    flashcardGuncelle();
-    kelimeyiSeslendir(gunler[flashcardIdx].en);
+  // ==========================================
+  // SAYFA 13: 4) LOOK AND COMPLETE (DİYALOGLAR)
+  // ==========================================
+  const s13Data = [
+    { no: 1, metin: "Hello! My name is Duru. What's your name? / My name is Osman.", kelime: "Hello" },
+    { no: 2, metin: "Hi! I'm Ali. What's your name? / My name is Mete.", kelime: "I'm" },
+    { no: 3, metin: "Good morning, Mrs Kelly. How are you? / I'm fine, thanks Ece!", kelime: "How" },
+    { no: 4, metin: "See you tomorrow, Kerim! / Goodbye, Ertan.", kelime: "Goodbye" }
+  ];
+
+  function s13Yukle() {
+    const kutu = document.getElementById('s13-diyalog-alani');
+    kutu.innerHTML = '';
+    s13Data.forEach(d => {
+      const k = document.createElement('div');
+      k.className = 'etkinlik-kutusu';
+      k.style.marginBottom = '8px';
+      k.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="color:#38bdf8;">Diyalog ${d.no}</strong>
+          <button class="ses-icon-btn" onclick="seslendir('${d.metin}')">🔊</button>
+        </div>
+        <div style="font-size:13px; margin-top:6px; line-height:1.4;">${d.metin}</div>
+      `;
+      kutu.appendChild(k);
+    });
   }
 
-  function flashcardGeri() {
-    kullaniciHareketiOldu();
-    flashcardIdx = (flashcardIdx - 1 + gunler.length) % gunler.length;
-    flashcardOn = true;
-    flashcardGuncelle();
-    kelimeyiSeslendir(gunler[flashcardIdx].en);
+  // ==========================================
+  // SAYFA 14: 5) TREN VAGONLARI (GÜNLER)
+  // ==========================================
+  const s14Data = [
+    { v1: "Wednesday", v2: "Thursday", v3: "Friday", eksik: null },
+    { v1: "Monday", v2: "?", v3: "Wednesday", eksik: "Tuesday" },
+    { v1: "Tuesday", v2: "?", v3: "Thursday", eksik: "Wednesday" },
+    { v1: "Friday", v2: "?", v3: "Sunday", eksik: "Saturday" },
+    { v1: "Thursday", v2: "?", v3: "Saturday", eksik: "Friday" }
+  ];
+
+  function s14Yukle() {
+    const kutu = document.getElementById('s14-tren-alani');
+    kutu.innerHTML = '';
+    s14Data.forEach((d, idx) => {
+      const tren = document.createElement('div');
+      tren.className = 'tren-satiri';
+      tren.innerHTML = `
+        <span style="font-size:20px;">🚂</span>
+        <div class="vagon" onclick="seslendir('${d.v1}')">${d.v1}</div>
+        <div class="vagon ${d.eksik ? 'bos' : ''}" id="vagon-${idx}" onclick="vagonTikla(${idx}, '${d.eksik}')">
+          ${d.v2}
+        </div>
+        <div class="vagon" onclick="seslendir('${d.v3}')">${d.v3}</div>
+      `;
+      kutu.appendChild(tren);
+    });
   }
 
-  // SEKME DEĞİŞTİRME
-  function sekmeDegistir(sekme) {
-    kullaniciHareketiOldu();
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('test-bolumu').style.display = 'none';
-    document.getElementById('odev-bolumu').style.display = 'none';
-    document.getElementById('balon-bolumu').style.display = 'none';
-    document.getElementById('rehber-bolumu').style.display = 'none';
-    document.getElementById('kartlar-bolumu').style.display = 'none';
-
-    if (sekme === 'test') {
-      document.getElementById('tab-test').classList.add('active');
-      document.getElementById('test-bolumu').style.display = 'block';
-      maskotKonus('🎯', 'Test modundasın! Odaklanarak tüm kelimeleri tamamlayalım! 🚀');
-    } else if (sekme === 'odev') {
-      document.getElementById('tab-odev').classList.add('active');
-      document.getElementById('odev-bolumu').style.display = 'flex';
-      odevModuSec('diz');
-    } else if (sekme === 'balon') {
-      document.getElementById('tab-balon').classList.add('active');
-      document.getElementById('balon-bolumu').style.display = 'flex';
-      yeniBalonOyunu();
-    } else if (sekme === 'rehber') {
-      document.getElementById('tab-rehber').classList.add('active');
-      document.getElementById('rehber-bolumu').style.display = 'flex';
-      rehberiHazirla();
-      maskotKonus('📚', 'Rehberdesin! Günlerin okunuşlarını buradan çalışabilirsin.');
-    } else if (sekme === 'kartlar') {
-      document.getElementById('tab-kartlar').classList.add('active');
-      document.getElementById('kartlar-bolumu').style.display = 'flex';
-      flashcardGuncelle();
-      maskotKonus('🃏', 'Karta dokunarak arkasını çevir ve hafızanı sına!');
-    }
+  function vagonTikla(idx, dogruCevap) {
+    if (!dogruCevap) return;
+    const vEl = document.getElementById(`vagon-${idx}`);
+    vEl.textContent = `✓ ${dogruCevap}`;
+    vEl.className = 'vagon dolu-dogru';
+    bip(650, 0.1);
+    seslendir(dogruCevap);
   }
+
+  // ==========================================
+  // SAYFA 15: 6) READ AND NUMBER (MY SCHOOL)
+  // ==========================================
+  const s15Data = [
+    { no: 1, text: "Hello! My name is Jane. I'm a pupil. This is my school.", resim: "c) Okul Binası" },
+    { no: 2, text: "This is Mrs Williams. She is my English teacher.", resim: "d) İngilizce Öğretmeni" },
+    { no: 3, text: "Alex and Rose are my friends. They are in the garden.", resim: "b) Bahçedeki Arkadaşlar" },
+    { no: 4, text: "This is Mr Robinson. He is a headmaster. He is in the library.", resim: "a) Kütüphanedeki Müdür" }
+  ];
+
+  function s15Yukle() {
+    const kutu = document.getElementById('s15-okuma-alani');
+    kutu.innerHTML = '';
+    s15Data.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'etkinlik-kutusu';
+      el.style.marginBottom = '8px';
+      el.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="color:#facc15;">${d.no}. Cümle ➔ Eşleşen: ${d.resim}</strong>
+          <button class="ses-icon-btn" onclick="seslendir('${d.text}')">🔊</button>
+        </div>
+        <p style="font-size:13px; margin-top:4px;">"${d.text}"</p>
+      `;
+      kutu.appendChild(el);
+    });
+  }
+
+  // ==========================================
+  // SAYFA 16: 7) WORD SEARCH BULMACA
+  // ==========================================
+  const gridHarfler = [
+    'C','A','N','T','E','E','N','P','B','V','B',
+    'T','G','T','S','B','W','H','A','C','C','O',
+    'E','P','L','A','Y','G','R','O','U','N','D',
+    'A','G','W','H','A','S','B','W','H','P','Z',
+    'C','L','A','S','S','R','O','O','M','U','A',
+    'H','G','S','B','G','T','S','B','H','P','Z',
+    'E','F','R','I','E','N','D','E','S','I','E',
+    'R','G','T','K','K','N','F','K','N','L','W',
+    'M','H','E','A','D','M','A','S','T','E','R',
+    'Z','L','C','G','C','E','R','A','D','A','N',
+    'S','P','O','R','T','S','H','A','L','L','T'
+  ];
+
+  function s16Yukle() {
+    const kutu = document.getElementById('s16-grid');
+    kutu.innerHTML = '';
+    gridHarfler.forEach((h, idx) => {
+      const cell = document.createElement('div');
+      cell.className = 'grid-harf';
+      cell.textContent = h;
+      cell.onclick = () => {
+        cell.classList.toggle('secili');
+        bip(440, 0.05);
+      };
+      kutu.appendChild(cell);
+    });
+  }
+
+  // Başlangıç Yüklemeleri
+  window.onload = () => {
+    s10Yukle();
+    s11Yukle();
+    s12Yukle();
+    s13Yukle();
+    s14Yukle();
+    s15Yukle();
+    s16Yukle();
+  };
 </script>
 </body>
 </html>

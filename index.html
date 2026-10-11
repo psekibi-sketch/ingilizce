@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>LingoDays - 2. Sınıf İngilizce (1, 2, 3, 4, 5, 6. Üniteler & 20 Sorulu Puanlı Sınav)</title>
+  <title>LingoDays - 2. Sınıf İngilizce (1-6. Üniteler & Konu Testleri: Günler, Okul Araçları, 20 Soruluk Sınav)</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -458,27 +458,39 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(10px);
       border-top: 1px solid var(--border);
       display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding: 6px 8px;
+      gap: 4px;
       z-index: 100;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .bottom-nav::-webkit-scrollbar {
+      display: none;
     }
 
     .b-nav-item {
-      display: flex;
+      display: inline-flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      flex: 0 0 auto;
+      min-width: 58px;
+      padding: 4px 6px;
       color: var(--muted);
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 4px 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
 
     .b-nav-item.active {
@@ -525,7 +537,7 @@
       <button class="nav-tab" onclick="switchMainTab('unit4')" id="tab_unit4">👨‍👩‍👧‍👦 4. Ünite (33-40)</button>
       <button class="nav-tab" onclick="switchMainTab('unit5')" id="tab_unit5">🏡 5. Ünite (41-48)</button>
       <button class="nav-tab" onclick="switchMainTab('unit6')" id="tab_unit6">🌆 6. Ünite (49-56)</button>
-      <button class="nav-tab" onclick="switchMainTab('quiz')" id="tab_quiz" style="border-color:#f59e0b;color:#fde047;background:rgba(245,158,11,0.15);">🏆 20 Sorulu Sınav</button>
+      <button class="nav-tab" onclick="switchMainTab('quiz')" id="tab_quiz" style="border-color:#f59e0b;color:#fde047;background:rgba(245,158,11,0.15);">📝 Konu Testleri & Sınav</button>
       <button class="nav-tab" onclick="switchMainTab('days_sort')" id="tab_days_sort">📅 Gün Sıralama</button>
       <button class="nav-tab" onclick="switchMainTab('flashcards')" id="tab_flashcards">🃏 Kelime Kartları</button>
       <button class="nav-tab" onclick="switchMainTab('guide')" id="tab_guide">📖 Günler Rehberi</button>
@@ -566,8 +578,8 @@
       <span>6. Ünite</span>
     </button>
     <button class="b-nav-item" onclick="switchMainTab('quiz')" id="bnav_quiz">
-      <span class="b-icon">🏆</span>
-      <span>20 Sınav</span>
+      <span class="b-icon">📝</span>
+      <span>Testler</span>
     </button>
     <button class="b-nav-item" onclick="switchMainTab('days_sort')" id="bnav_days_sort">
       <span class="b-icon">📅</span>
@@ -741,8 +753,8 @@
         document.getElementById('subHeaderTitle').textContent = 'Haftanın Günleri Sıralama Ödevi';
         renderDaysSort();
       } else if (tabId === 'quiz') {
-        document.getElementById('subHeaderTitle').textContent = '🏆 20 Sorulu Puanlı Büyük Sınav (Puan & Seri)';
-        renderQuiz();
+        document.getElementById('subHeaderTitle').textContent = '📝 Konu Testleri & Sınavlar (Günler, Okul Araçları, 20 Soru)';
+        renderQuizHub();
       } else if (tabId === 'flashcards') {
         document.getElementById('subHeaderTitle').textContent = 'Kelimeler & Flaş Kartlar';
         renderFlashcards();
@@ -1202,6 +1214,11 @@
                 🔊 İngilizce Kendini Tanıt & Dinle!
               </button>
             </div>
+          </div>
+          <div style="margin-top:16px;text-align:center;">
+            <button class="action-btn" onclick="switchMainTab('unit2')" style="background:#10b981;padding:10px 20px;">
+              🏫 2. Üniteye Geç (Sayfa 17-24) ➔
+            </button>
           </div>
         `;
       }
@@ -4029,191 +4046,919 @@
     }
 
     /* ========================================================
-       7. 20 SORULU PUANLI BÜYÜK SINAV (SKORLU, SERİLİ VE TEKRAR HAKLI)
+       7. KONULARA GÖRE AYRILMIŞ TESTLER VE 20 SORULUK BÜYÜK SINAV
+       (GÜNLER KESİNLİKLE AYRI TEST, OKUL ARAÇLARI AYRI TEST, VS.)
     ======================================================== */
-    const quizQuestions = [
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'Pazartesi' demektir?",
-        word: "Pazartesi",
-        correct: "Monday",
-        options: ["Monday", "Tuesday", "Sunday", "Friday"],
-        audioText: "Monday"
+    const quizTopicBanks = {
+      days: {
+        id: 'days',
+        title: 'Sadece Günler Testi',
+        icon: '📅',
+        badge: 'GÜNLER AYRI TEST',
+        description: 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Gün sıralamaları, Türkçe karşılıkları ve sesli dinleme soruları (Sadece günlere özeldir).',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'PAZARTESİ' gününün İngilizcesi hangisidir?",
+            word: 'Pazartesi',
+            correct: 'Monday',
+            options: ['Monday', 'Tuesday', 'Sunday', 'Friday'],
+            audioText: 'Monday'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'FRIDAY' hangi gündür?",
+            word: 'Friday',
+            correct: 'Cuma',
+            options: ['Cuma', 'Cumartesi', 'Perşembe', 'Salı'],
+            audioText: 'Friday'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ DOĞRU GÜNÜ SEÇ',
+            prompt: 'Ses kaydını dinleyin ve okunan günü işaretleyin:',
+            word: 'Wednesday',
+            correct: 'Wednesday',
+            options: ['Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            audioText: 'Wednesday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'SALI' gününün İngilizce karşılığı hangisidir?",
+            word: 'Salı',
+            correct: 'Tuesday',
+            options: ['Monday', 'Tuesday', 'Thursday', 'Saturday'],
+            audioText: 'Tuesday'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SUNDAY' kelimesi Türkçe hangi gündür?",
+            word: 'Sunday',
+            correct: 'Pazar',
+            options: ['Cumartesi', 'Pazar', 'Cuma', 'Çarşamba'],
+            audioText: 'Sunday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'PERŞEMBE' gününün İngilizce yazılışı hangisidir?",
+            word: 'Perşembe',
+            correct: 'Thursday',
+            options: ['Tuesday', 'Thursday', 'Saturday', 'Wednesday'],
+            audioText: 'Thursday'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SATURDAY' hangi gündür?",
+            word: 'Saturday',
+            correct: 'Cumartesi',
+            options: ['Pazar', 'Cuma', 'Cumartesi', 'Pazartesi'],
+            audioText: 'Saturday'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ DOĞRU GÜNÜ SEÇ',
+            prompt: 'Ses kaydını dinleyin ve okunan günü seçin:',
+            word: 'Sunday',
+            correct: 'Sunday',
+            options: ['Monday', 'Sunday', 'Saturday', 'Friday'],
+            audioText: 'Sunday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Hafta sonu' günleri hangileridir?",
+            word: 'Hafta Sonu',
+            correct: 'Saturday and Sunday',
+            options: ['Saturday and Sunday', 'Monday and Tuesday', 'Thursday and Friday', 'Wednesday and Thursday'],
+            audioText: 'Saturday and Sunday'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ GÜN SIRALAMASI',
+            prompt: 'Cuma gününden sonra hangi gün gelir? (Listen: Saturday)',
+            word: 'Saturday',
+            correct: 'Saturday',
+            options: ['Thursday', 'Friday', 'Saturday', 'Sunday'],
+            audioText: 'Saturday'
+          }
+        ]
       },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'PENCIL CASE' kelimesinin Türkçe karşılığı nedir?",
-        word: "Pencil case",
-        correct: "Kalem Kutusu",
-        options: ["Kalem Kutusu", "Defter", "Masa", "Silgi"],
-        audioText: "Pencil case"
-      },
-      {
-        direction: "LISTENING",
-        directionLabel: "🎧 DİNLE ➔ DOĞRU GÜNÜ SEÇ",
-        prompt: "Hoparlörden okunan kelimeyi dinleyin ve doğru olanı seçin:",
-        word: "Wednesday",
-        correct: "Wednesday",
-        options: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-        audioText: "Wednesday"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'YATAK ODASI' demektir?",
-        word: "Yatak Odası",
-        correct: "Bedroom",
-        options: ["Bedroom", "Kitchen", "Bathroom", "Living Room"],
-        audioText: "Bedroom"
-      },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'OPEN THE DOOR, PLEASE!' cümlesi ne anlama gelir?",
-        word: "Open the door, please!",
-        correct: "Kapıyı aç, lütfen!",
-        options: ["Kapıyı aç, lütfen!", "Pencereyi kapat, lütfen!", "Ayağa kalk!", "Sessiz ol!"],
-        audioText: "Open the door, please!"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'BÜYÜKBABA / DEDE' demektir?",
-        word: "Dede",
-        correct: "Grandfather",
-        options: ["Father", "Grandfather", "Brother", "Uncle"],
-        audioText: "Grandfather"
-      },
-      {
-        direction: "LISTENING",
-        directionLabel: "🎧 DİNLE ➔ DOĞRU AİLE BİREYİNİ SEÇ",
-        prompt: "Hoparlörden okunan aile bireyini dinleyin ve seçin:",
-        word: "Mother",
-        correct: "Mother (Anne)",
-        options: ["Mother (Anne)", "Father (Baba)", "Sister (Kız kardeş)", "Baby (Bebek)"],
-        audioText: "Mother"
-      },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'WHERE IS THE DOG?' sorusunun anlamı nedir?",
-        word: "Where is the dog?",
-        correct: "Köpek nerede?",
-        options: ["Kedi nerede?", "Köpek nerede?", "Kuş nerede?", "Tavşan nerede?"],
-        audioText: "Where is the dog?"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'BURUN' demektir?",
-        word: "Burun",
-        correct: "Nose",
-        options: ["Eye", "Nose", "Ear", "Mouth"],
-        audioText: "Nose"
-      },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'SHOES' kelimesinin Türkçe karşılığı nedir?",
-        word: "Shoes",
-        correct: "Ayakkabı",
-        options: ["Şapka", "Gözlük", "Ayakkabı", "Pantolon"],
-        audioText: "Shoes"
-      },
-      {
-        direction: "LISTENING",
-        directionLabel: "🎧 DİNLE ➔ DOĞRU ŞEHİR MEKANINI SEÇ",
-        prompt: "Hoparlörden okunan mekanı dinleyin ve seçin:",
-        word: "Hospital",
-        correct: "Hospital (Hastane)",
-        options: ["Hospital (Hastane)", "School (Okul)", "Park (Park)", "Zoo (Hayvanat Bahçesi)"],
-        audioText: "Hospital"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'CUMA' demektir?",
-        word: "Cuma",
-        correct: "Friday",
-        options: ["Monday", "Thursday", "Friday", "Saturday"],
-        audioText: "Friday"
-      },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'CLOSE THE WINDOW, PLEASE!' ne anlama gelir?",
-        word: "Close the window, please!",
-        correct: "Pencereyi kapat, lütfen!",
-        options: ["Kapıyı aç, lütfen!", "Pencereyi kapat, lütfen!", "Tahtaya gel!", "Defteri aç!"],
-        audioText: "Close the window, please!"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'MUTFAK' demektir?",
-        word: "Mutfak",
-        correct: "Kitchen",
-        options: ["Kitchen", "Bedroom", "Balcony", "Garden"],
-        audioText: "Kitchen"
-      },
-      {
-        direction: "LISTENING",
-        directionLabel: "🎧 DİNLE ➔ DOĞRU GÜNÜ SEÇ",
-        prompt: "Hoparlörden okunan günü dinleyin ve seçin:",
-        word: "Sunday",
-        correct: "Sunday (Pazar)",
-        options: ["Saturday (Cumartesi)", "Sunday (Pazar)", "Monday (Pazartesi)", "Tuesday (Salı)"],
-        audioText: "Sunday"
-      },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'A RULER' kelimesinin Türkçe anlamı nedir?",
-        word: "A ruler",
-        correct: "Cetvel",
-        options: ["Kalemtıraş", "Makas", "Cetvel", "Boya kalemi"],
-        audioText: "A ruler"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Aşağıdakilerden hangisi 'KEDİ' demektir?",
-        word: "Kedi",
-        correct: "Cat",
-        options: ["Dog", "Cat", "Rabbit", "Bird"],
-        audioText: "Cat"
-      },
-      {
-        direction: "EN_TO_TR",
-        directionLabel: "🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE",
-        prompt: "'MUSEUM' kelimesinin Türkçe karşılığı nedir?",
-        word: "Museum",
-        correct: "Müze",
-        options: ["Kütüphane", "Müze", "Sinema", "Banka"],
-        audioText: "Museum"
-      },
-      {
-        direction: "LISTENING",
-        directionLabel: "🎧 DİNLE ➔ DOĞRU VÜCUT BÖLÜMÜNÜ SEÇ",
-        prompt: "Hoparlörden okunan vücut bölümünü dinleyin ve seçin:",
-        word: "Head",
-        correct: "Head (Baş / Kafa)",
-        options: ["Head (Baş / Kafa)", "Hand (El)", "Leg (Bacak)", "Arm (Kol)"],
-        audioText: "Head"
-      },
-      {
-        direction: "TR_TO_EN",
-        directionLabel: "🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE",
-        prompt: "Haftanın 6. günü olan 'CUMARTESİ' hangisidir?",
-        word: "Cumartesi",
-        correct: "Saturday",
-        options: ["Sunday", "Friday", "Saturday", "Wednesday"],
-        audioText: "Saturday"
-      }
-    ];
 
+      school: {
+        id: 'school',
+        title: 'Sadece Okul & Sınıf Araçları Testi',
+        icon: '✏️',
+        badge: 'SINIF EŞYALARI & KOMUTLAR',
+        description: 'Pencil case, ruler, eraser, sharpener, scissors, desk, chair, whiteboard, school bag ve sınıf komutları (Sadece okul araçlarına özeldir).',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'PENCIL CASE' kelimesinin Türkçe karşılığı nedir?",
+            word: 'Pencil case',
+            correct: 'Kalem kutusu / Kalemlik',
+            options: ['Kalem kutusu / Kalemlik', 'Okul çantası', 'Sıra', 'Silgi'],
+            audioText: 'Pencil case'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Cetvel' kelimesinin İngilizcesi hangisidir?",
+            word: 'Cetvel',
+            correct: 'a ruler',
+            options: ['a ruler', 'scissors', 'a crayon', 'a sharpener'],
+            audioText: 'a ruler'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ OKUL ARACINI SEÇ',
+            prompt: 'Okunan okul eşyasını dinleyin ve seçin:',
+            word: 'Eraser',
+            correct: 'Eraser',
+            options: ['Ruler', 'Eraser', 'Desk', 'Pencil'],
+            audioText: 'Eraser'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Makas' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Makas',
+            correct: 'Scissors',
+            options: ['Scissors', 'Sharpener', 'Book', 'Pencil case'],
+            audioText: 'Scissors'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SHARPENER' ne demektir?",
+            word: 'Sharpener',
+            correct: 'Kalemtıraş',
+            options: ['Kalemlik', 'Kalemtıraş', 'Yazı tahtası', 'Sandalye'],
+            audioText: 'Sharpener'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ DOĞRU EŞYAYI SEÇ',
+            prompt: 'Okunan sınıf eşyasını dinleyin ve seçin:',
+            word: 'Whiteboard',
+            correct: 'Whiteboard',
+            options: ['Whiteboard', 'Window', 'Door', 'Desk'],
+            audioText: 'Whiteboard'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Kapıyı aç lütfen' sınıf yönergesi hangisidir?",
+            word: 'Kapıyı aç lütfen',
+            correct: 'Open the door please',
+            options: ['Open the door please', 'Close the window', 'Sit down please', 'Stand up'],
+            audioText: 'Open the door please'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SCHOOL BAG' ne anlama gelir?",
+            word: 'School bag',
+            correct: 'Okul Çantası',
+            options: ['Okul Çantası', 'Kalem Kutusu', 'Defter', 'Kitaplık'],
+            audioText: 'School bag'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Öğrenci sırası / Çalışma masası' ne demektir?",
+            word: 'Öğrenci Sırası',
+            correct: 'a desk',
+            options: ['a desk', 'a chair', 'a board', 'a bag'],
+            audioText: 'a desk'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ YÖNERGEYİ SEÇ',
+            prompt: 'Okunan sınıf komutunu dinleyin ve seçin:',
+            word: 'Close the window please',
+            correct: 'Close the window please',
+            options: ['Open the door please', 'Close the window please', 'Stand up please', 'Draw and say'],
+            audioText: 'Close the window please'
+          }
+        ]
+      },
+
+      greetings: {
+        id: 'greetings',
+        title: 'Sadece Selamlaşma & Sayılar Testi',
+        icon: '👋',
+        badge: '1. ÜNİTE TESTİ',
+        description: 'Hello, Goodbye, How are you?, I am fine/happy/tired, 1-10 arası sayılar ve renkler.',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Günaydın' İngilizcede nasıl denir?",
+            word: 'Günaydın',
+            correct: 'Good morning',
+            options: ['Good morning', 'Good afternoon', 'Good night', 'Goodbye'],
+            audioText: 'Good morning'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'HOW ARE YOU?' sorusunun anlamı nedir?",
+            word: 'How are you?',
+            correct: 'Nasılsın?',
+            options: ['Adın ne?', 'Nasılsın?', 'Kaç yaşındasın?', 'Nerelisin?'],
+            audioText: 'How are you?'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ DUYGUYU SEÇ',
+            prompt: 'Okunan duyguyu dinleyin ve seçin:',
+            word: 'I am tired',
+            correct: 'I am tired (Yorgunum)',
+            options: ['I am fine (İyiyim)', 'I am happy (Mutluyum)', 'I am tired (Yorgunum)', 'I am sad (Üzgünüm)'],
+            audioText: 'I am tired'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Sekiz' (8) sayısının İngilizce yazılışı hangisidir?",
+            word: '8 (Sekiz)',
+            correct: 'Eight',
+            options: ['Six', 'Seven', 'Eight', 'Nine'],
+            audioText: 'Eight'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'PURPLE' hangi renktir?",
+            word: 'Purple',
+            correct: 'Mor',
+            options: ['Mavi', 'Pembe', 'Mor', 'Yeşil'],
+            audioText: 'Purple'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Tanıştığıma memnun oldum' ifadesi hangisidir?",
+            word: 'Tanıştığıma memnun oldum',
+            correct: 'Nice to meet you',
+            options: ['Nice to meet you', 'See you later', 'Have a nice day', 'Good night'],
+            audioText: 'Nice to meet you'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ SAYIYI SEÇ',
+            prompt: 'Okunan sayıyı dinleyin ve seçin:',
+            word: 'Seven',
+            correct: '7 (Seven)',
+            options: ['5 (Five)', '6 (Six)', '7 (Seven)', '9 (Nine)'],
+            audioText: 'Seven'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Ben yedi yaşındayım' nasıl denir?",
+            word: '7 Yaşındayım',
+            correct: 'I am seven years old',
+            options: ['I am seven years old', 'I am six years old', 'I am eight years old', 'My name is Seven'],
+            audioText: 'I am seven years old'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'GOODBYE' ne demektir?",
+            word: 'Goodbye',
+            correct: 'Hoşça kal',
+            options: ['Merhaba', 'Hoşça kal', 'Lütfen', 'Teşekkürler'],
+            audioText: 'Goodbye'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ RENK SEÇ',
+            prompt: 'Okunan rengi dinleyin ve seçin:',
+            word: 'Yellow',
+            correct: 'Sarı (Yellow)',
+            options: ['Kırmızı (Red)', 'Sarı (Yellow)', 'Mavi (Blue)', 'Yeşil (Green)'],
+            audioText: 'Yellow'
+          }
+        ]
+      },
+
+      body: {
+        id: 'body',
+        title: 'Sadece Vücudumuz & Giysiler Testi',
+        icon: '👤',
+        badge: '3. ÜNİTE TESTİ',
+        description: 'Head, eye, nose, ear, mouth, hand, arm, leg, foot, t-shirt, dress, shoes (Kişisel Yaşam).',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Burun' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Burun',
+            correct: 'Nose',
+            options: ['Eye', 'Nose', 'Ear', 'Mouth'],
+            audioText: 'Nose'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SHOULDERS' vücudumuzun neresidir?",
+            word: 'Shoulders',
+            correct: 'Omuzlar',
+            options: ['Gözler', 'Omuzlar', 'Dizler', 'Parmaklar'],
+            audioText: 'Shoulders'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ VÜCUT BÖLÜMÜNÜ SEÇ',
+            prompt: 'Okunan organı dinleyin ve seçin:',
+            word: 'Hand',
+            correct: 'El (Hand)',
+            options: ['Ayak (Foot)', 'El (Hand)', 'Kol (Arm)', 'Bacak (Leg)'],
+            audioText: 'Hand'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Göz' kelimesinin İngilizcesi nedir?",
+            word: 'Göz',
+            correct: 'Eye',
+            options: ['Ear', 'Eye', 'Mouth', 'Head'],
+            audioText: 'Eye'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'T-SHIRT' ne anlama gelir?",
+            word: 'T-shirt',
+            correct: 'Tişört',
+            options: ['Tişört', 'Pantolon', 'Ayakkabı', 'Şapka'],
+            audioText: 'T-shirt'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Ayakkabılar' kelimesinin İngilizcesi hangisidir?",
+            word: 'Ayakkabılar',
+            correct: 'Shoes',
+            options: ['Socks', 'Shoes', 'Dress', 'Hat'],
+            audioText: 'Shoes'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ VÜCUT BÖLÜMÜNÜ SEÇ',
+            prompt: 'Okunan organı dinleyin ve seçin:',
+            word: 'Mouth',
+            correct: 'Ağız (Mouth)',
+            options: ['Burun (Nose)', 'Ağız (Mouth)', 'Kulak (Ear)', 'Baş (Head)'],
+            audioText: 'Mouth'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Burnuna dokun!' İngilizce nasıl söylenir?",
+            word: 'Burnuna dokun',
+            correct: 'Touch your nose',
+            options: ['Touch your nose', 'Touch your eye', 'Touch your ear', 'Clap your hands'],
+            audioText: 'Touch your nose'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'DRESS' hangi giysidir?",
+            word: 'Dress',
+            correct: 'Elbise',
+            options: ['Etek', 'Elbise', 'Gömlek', 'Pantolon'],
+            audioText: 'Dress'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ KOMUTU SEÇ',
+            prompt: 'Okunan komutu dinleyin ve seçin:',
+            word: 'Clap your hands',
+            correct: 'Ellerini çırp (Clap your hands)',
+            options: ['Ellerini çırp (Clap your hands)', 'Ayağa kalk', 'Burnuna dokun', 'Gözlerini kapat'],
+            audioText: 'Clap your hands'
+          }
+        ]
+      },
+
+      family: {
+        id: 'family',
+        title: 'Sadece Aile Bireyleri Testi',
+        icon: '👨‍👩‍👧‍👦',
+        badge: '4. ÜNİTE TESTİ',
+        description: 'Mother, father, brother, sister, grandfather, grandmother, baby, family (Aile Yaşamı).',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Anne' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Anne',
+            correct: 'Mother',
+            options: ['Father', 'Mother', 'Sister', 'Brother'],
+            audioText: 'Mother'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'FATHER' ailede kimdir?",
+            word: 'Father',
+            correct: 'Baba',
+            options: ['Dede', 'Baba', 'Erkek Kardeş', 'Amca'],
+            audioText: 'Father'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ AİLE BİREYİNİ SEÇ',
+            prompt: 'Okunan aile ferdini dinleyin ve seçin:',
+            word: 'Grandmother',
+            correct: 'Büyükanne / Nine (Grandmother)',
+            options: ['Anne (Mother)', 'Büyükanne / Nine (Grandmother)', 'Kız Kardeş (Sister)', 'Bebek (Baby)'],
+            audioText: 'Grandmother'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Erkek kardeş' kelimesinin İngilizcesi nedir?",
+            word: 'Erkek Kardeş',
+            correct: 'Brother',
+            options: ['Sister', 'Brother', 'Father', 'Grandfather'],
+            audioText: 'Brother'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SISTER' kim demektir?",
+            word: 'Sister',
+            correct: 'Kız kardeş / Abla',
+            options: ['Kız kardeş / Abla', 'Anne', 'Büyükanne', 'Teyze'],
+            audioText: 'Sister'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Büyükbaba / Dede' kelimesi hangisidir?",
+            word: 'Büyükbaba / Dede',
+            correct: 'Grandfather',
+            options: ['Father', 'Grandfather', 'Brother', 'Uncle'],
+            audioText: 'Grandfather'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ AİLE BİREYİNİ SEÇ',
+            prompt: 'Okunan kelimeyi dinleyin ve seçin:',
+            word: 'Baby',
+            correct: 'Bebek (Baby)',
+            options: ['Çocuk', 'Bebek (Baby)', 'Kardeş', 'Anne'],
+            audioText: 'Baby'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Bu benim ailem' İngilizcede nasıl söylenir?",
+            word: 'Bu benim ailem',
+            correct: 'This is my family',
+            options: ['This is my family', 'This is my school', 'This is my friend', 'This is my book'],
+            audioText: 'This is my family'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'WHO IS THIS?' sorusu ne anlama gelir?",
+            word: 'Who is this?',
+            correct: 'Bu kim?',
+            options: ['Bu ne?', 'Bu kim?', 'Nerede?', 'Kaç tane?'],
+            audioText: 'Who is this?'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ CÜMLEYİ ANLA',
+            prompt: 'Ses kaydını dinleyin ve seçin:',
+            word: 'This is my father',
+            correct: 'Bu benim babam',
+            options: ['Bu benim babam', 'Bu benim kardeşim', 'Bu benim dedem', 'Bu benim annem'],
+            audioText: 'This is my father'
+          }
+        ]
+      },
+
+      house: {
+        id: 'house',
+        title: 'Sadece Ev, Odalar & Eşyalar Testi',
+        icon: '🏡',
+        badge: '5. ÜNİTE TESTİ',
+        description: 'House, bedroom, kitchen, living room, bathroom, table, sofa, bed, door, window (Evimiz & Odalar).',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Mutfak' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Mutfak',
+            correct: 'Kitchen',
+            options: ['Bedroom', 'Kitchen', 'Bathroom', 'Living room'],
+            audioText: 'Kitchen'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'BEDROOM' evin hangi odasıdır?",
+            word: 'Bedroom',
+            correct: 'Yatak odası',
+            options: ['Salon', 'Yatak odası', 'Banyo', 'Balkon'],
+            audioText: 'Bedroom'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ ODANIN ADINI SEÇ',
+            prompt: 'Okunan odayı dinleyin ve seçin:',
+            word: 'Living room',
+            correct: 'Oturma odası / Salon (Living room)',
+            options: ['Mutfak', 'Oturma odası / Salon (Living room)', 'Banyo', 'Yatak odası'],
+            audioText: 'Living room'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Banyo' odası İngilizcede ne demektir?",
+            word: 'Banyo',
+            correct: 'Bathroom',
+            options: ['Bedroom', 'Bathroom', 'Kitchen', 'Garden'],
+            audioText: 'Bathroom'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SOFA' hangi ev eşyasıdır?",
+            word: 'Sofa',
+            correct: 'Koltuk / Kanepe',
+            options: ['Masa', 'Sandalye', 'Koltuk / Kanepe', 'Yatak'],
+            audioText: 'Sofa'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Yatak' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Yatak',
+            correct: 'Bed',
+            options: ['Bed', 'Door', 'Window', 'Chair'],
+            audioText: 'Bed'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ EŞYAYI SEÇ',
+            prompt: 'Okunan ev eşyasını dinleyin ve seçin:',
+            word: 'Table',
+            correct: 'Masa (Table)',
+            options: ['Sandalye (Chair)', 'Masa (Table)', 'Kapı (Door)', 'Pencere (Window)'],
+            audioText: 'Table'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Köpek nerede?' sorusu İngilizce nasıl sorulur?",
+            word: 'Köpek nerede?',
+            correct: 'Where is the dog?',
+            options: ['Where is the dog?', 'What is the dog?', 'Who is the dog?', 'Is it a dog?'],
+            audioText: 'Where is the dog?'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'IN THE KITCHEN' ne demektir?",
+            word: 'In the kitchen',
+            correct: 'Mutfakta',
+            options: ['Bahçede', 'Salonda', 'Mutfakta', 'Yatak odasında'],
+            audioText: 'In the kitchen'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ CÜMLEYİ SEÇ',
+            prompt: 'Ses kaydını dinleyin ve seçin:',
+            word: 'He is in the living room',
+            correct: 'O oturma odasında / salonda',
+            options: ['O mutfakta', 'O oturma odasında / salonda', 'O banyoda', 'O bahçede'],
+            audioText: 'He is in the living room'
+          }
+        ]
+      },
+
+      city: {
+        id: 'city',
+        title: 'Sadece Şehir ve Mekanlar Testi',
+        icon: '🏙️',
+        badge: '6. ÜNİTE TESTİ',
+        description: 'School, park, hospital, zoo, cinema, museum, library, bus, street (Şehirde Yaşam & Dünya).',
+        totalQuestions: 10,
+        maxScore: 100,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Hastane' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Hastane',
+            correct: 'Hospital',
+            options: ['School', 'Hospital', 'Museum', 'Cinema'],
+            audioText: 'Hospital'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'ZOO' hangi yerdir?",
+            word: 'Zoo',
+            correct: 'Hayvanat Bahçesi',
+            options: ['Park', 'Hayvanat Bahçesi', 'Sinema', 'Müze'],
+            audioText: 'Zoo'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ MEKANI SEÇ',
+            prompt: 'Okunan mekan adını dinleyin ve seçin:',
+            word: 'Museum',
+            correct: 'Müze (Museum)',
+            options: ['Okul (School)', 'Müze (Museum)', 'Kütüphane (Library)', 'Park (Park)'],
+            audioText: 'Museum'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Kütüphane' kelimesinin İngilizcesi nedir?",
+            word: 'Kütüphane',
+            correct: 'Library',
+            options: ['Hospital', 'Cinema', 'Library', 'Zoo'],
+            audioText: 'Library'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'CINEMA' ne demektir?",
+            word: 'Cinema',
+            correct: 'Sinema',
+            options: ['Tiyatro', 'Sinema', 'Park', 'Okul'],
+            audioText: 'Cinema'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Otobüs' ulaşım aracının İngilizcesi hangisidir?",
+            word: 'Otobüs',
+            correct: 'Bus',
+            options: ['Car', 'Bus', 'Train', 'Plane'],
+            audioText: 'Bus'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ MEKANI SEÇ',
+            prompt: 'Okunan yeri dinleyin ve seçin:',
+            word: 'Park',
+            correct: 'Park',
+            options: ['School', 'Park', 'Zoo', 'Hospital'],
+            audioText: 'Park'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Okul nerede?' nasıl sorulur?",
+            word: 'Okul nerede?',
+            correct: 'Where is the school?',
+            options: ['Where is the school?', 'What is the school?', 'How is the school?', 'Who is the school?'],
+            audioText: 'Where is the school?'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'IN THE CITY' ne demektir?",
+            word: 'In the city',
+            correct: 'Şehirde',
+            options: ['Köyde', 'Şehirde', 'Ormanda', 'Denizde'],
+            audioText: 'In the city'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ CÜMLEYİ SEÇ',
+            prompt: 'Ses kaydını dinleyin ve seçin:',
+            word: 'The zoo is in the city',
+            correct: 'Hayvanat bahçesi şehirdedir',
+            options: ['Hayvanat bahçesi şehirdedir', 'Okul parktadır', 'Hastane yakındadır', 'Müze açıktır'],
+            audioText: 'The zoo is in the city'
+          }
+        ]
+      },
+
+      grand: {
+        id: 'grand',
+        title: '20 Soruluk Büyük Karma Sınav',
+        icon: '🏆',
+        badge: 'PUANLI & REKORLU 200 PUAN',
+        description: 'Tüm 6 üniteden ve günlerden seçilmiş 20 soruluk büyük sınav. Puanlı, seri ve yıldızlı karne!',
+        totalQuestions: 20,
+        maxScore: 200,
+        questions: [
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "Aşağıdakilerden hangisi 'Pazartesi' demektir?",
+            word: 'Pazartesi',
+            correct: 'Monday',
+            options: ['Monday', 'Tuesday', 'Sunday', 'Friday'],
+            audioText: 'Monday'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'PENCIL CASE' kelimesinin Türkçe karşılığı nedir?",
+            word: 'Pencil case',
+            correct: 'Kalem Kutusu',
+            options: ['Kalem Kutusu', 'Defter', 'Masa', 'Silgi'],
+            audioText: 'Pencil case'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ DOĞRU GÜNÜ SEÇ',
+            prompt: 'Hoparlörden okunan kelimeyi dinleyin ve doğru olanı seçin:',
+            word: 'Wednesday',
+            correct: 'Wednesday',
+            options: ['Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            audioText: 'Wednesday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Cetvel' kelimesinin İngilizcesi hangisidir?",
+            word: 'Cetvel',
+            correct: 'A ruler',
+            options: ['A ruler', 'A chair', 'A desk', 'Scissors'],
+            audioText: 'A ruler'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'FRIDAY' hangi gündür?",
+            word: 'Friday',
+            correct: 'Cuma',
+            options: ['Perşembe', 'Cuma', 'Cumartesi', 'Pazar'],
+            audioText: 'Friday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Kapıyı aç lütfen' yönergesi hangisidir?",
+            word: 'Kapıyı aç lütfen',
+            correct: 'Open the door please',
+            options: ['Open the door please', 'Close the window', 'Sit down please', 'Stand up'],
+            audioText: 'Open the door please'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ EŞYAYI SEÇ',
+            prompt: 'Okunan eşyayı dinleyin ve doğru olanı seçin:',
+            word: 'Whiteboard',
+            correct: 'Whiteboard',
+            options: ['Whiteboard', 'Window', 'Chair', 'Table'],
+            audioText: 'Whiteboard'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'SUNDAY' kelimesi Türkçe hangi gündür?",
+            word: 'Sunday',
+            correct: 'Pazar',
+            options: ['Cumartesi', 'Pazar', 'Salı', 'Pazartesi'],
+            audioText: 'Sunday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Makas' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Makas',
+            correct: 'Scissors',
+            options: ['Scissors', 'Sharpener', 'Pencil case', 'Crayon'],
+            audioText: 'Scissors'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ GÜNÜ SEÇ',
+            prompt: 'Okunan günü dinleyin ve seçin:',
+            word: 'Thursday',
+            correct: 'Thursday',
+            options: ['Tuesday', 'Thursday', 'Saturday', 'Sunday'],
+            audioText: 'Thursday'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Günaydın' İngilizcede nasıl denir?",
+            word: 'Günaydın',
+            correct: 'Good morning',
+            options: ['Good morning', 'Good afternoon', 'Good night', 'Goodbye'],
+            audioText: 'Good morning'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'HOW ARE YOU?' sorusu ne demektir?",
+            word: 'How are you?',
+            correct: 'Nasılsın?',
+            options: ['Nasılsın?', 'Adın ne?', 'Nerelisin?', 'Kaç yaşındasın?'],
+            audioText: 'How are you?'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Burun' kelimesinin İngilizcesi nedir?",
+            word: 'Burun',
+            correct: 'Nose',
+            options: ['Eye', 'Nose', 'Ear', 'Mouth'],
+            audioText: 'Nose'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'MOTHER' ailemizde kimdir?",
+            word: 'Mother',
+            correct: 'Anne',
+            options: ['Baba', 'Anne', 'Kız kardeş', 'Dede'],
+            audioText: 'Mother'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ ODAYI SEÇ',
+            prompt: 'Okunan odayı dinleyin ve seçin:',
+            word: 'Kitchen',
+            correct: 'Kitchen (Mutfak)',
+            options: ['Bedroom', 'Kitchen (Mutfak)', 'Living room', 'Bathroom'],
+            audioText: 'Kitchen'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Hastane' kelimesinin İngilizcesi hangisidir?",
+            word: 'Hastane',
+            correct: 'Hospital',
+            options: ['School', 'Hospital', 'Park', 'Cinema'],
+            audioText: 'Hospital'
+          },
+          {
+            direction: 'EN_TO_TR',
+            directionLabel: '🇬🇧 İNGİLİZCE ➔ 🇹🇷 TÜRKÇE',
+            prompt: "'ZOO' hangi yerdir?",
+            word: 'Zoo',
+            correct: 'Hayvanat Bahçesi',
+            options: ['Park', 'Hayvanat Bahçesi', 'Müze', 'Kütüphane'],
+            audioText: 'Zoo'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Yatak odası' kelimesinin İngilizce karşılığı hangisidir?",
+            word: 'Yatak odası',
+            correct: 'Bedroom',
+            options: ['Bedroom', 'Living room', 'Kitchen', 'Bathroom'],
+            audioText: 'Bedroom'
+          },
+          {
+            direction: 'LISTENING',
+            directionLabel: '🎧 DİNLE ➔ VÜCUT ORGANINI SEÇ',
+            prompt: 'Okunan organı dinleyin ve seçin:',
+            word: 'Eyes',
+            correct: 'Gözler (Eyes)',
+            options: ['Gözler (Eyes)', 'Kulaklar (Ears)', 'Eller (Hands)', 'Ayaklar (Feet)'],
+            audioText: 'Eyes'
+          },
+          {
+            direction: 'TR_TO_EN',
+            directionLabel: '🇹🇷 TÜRKÇE ➔ 🇬🇧 İNGİLİZCE',
+            prompt: "'Cumartesi' gününün İngilizcesi hangisidir?",
+            word: 'Cumartesi',
+            correct: 'Saturday',
+            options: ['Sunday', 'Saturday', 'Thursday', 'Friday'],
+            audioText: 'Saturday'
+          }
+        ]
+      }
+    };
+
+    // ACTIVE QUIZ RUNTIME STATE
+    let activeTopicId = 'days';
     let currentQuizIndex = 0;
     let quizScore = 0;
     let quizStreak = 0;
@@ -4223,8 +4968,88 @@
     let quizTotalMistakes = 0;
     let quizWrongClicked = [];
     let quizAnsweredCorrectly = false;
+    let quizBestScores = {};
 
-    function restartQuiz() {
+    // 1. RENDER QUIZ HUB (SATIRLAR HALİNDE TEST SEÇİMİ)
+    function renderQuizHub() {
+      const topicKeys = ['days', 'school', 'greetings', 'body', 'family', 'house', 'city', 'grand'];
+      
+      const rowsHtml = topicKeys.map(key => {
+        const t = quizTopicBanks[key];
+        const isGrand = key === 'grand';
+        const isDays = key === 'days';
+        const best = quizBestScores[key] !== undefined ? quizBestScores[key] : null;
+
+        const borderStyle = isGrand 
+          ? 'border:2px solid #f59e0b;background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(15,23,42,0.9));'
+          : (isDays 
+              ? 'border:2px solid #38bdf8;background:linear-gradient(135deg, rgba(56,189,248,0.1), rgba(15,23,42,0.9));'
+              : 'border:1px solid var(--border);background:var(--card-bg);');
+
+        const btnColor = isGrand ? '#f59e0b;color:#0f172a;font-weight:800;' : '#2563eb;color:#fff;';
+
+        return `
+          <div class="card" style="margin-bottom:12px;padding:16px;${borderStyle}transition:transform 0.2s ease;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:240px;">
+                <div style="font-size:36px;line-height:1;background:rgba(255,255,255,0.05);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);">
+                  ${t.icon}
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                    <h3 style="font-size:16px;color:#fff;margin:0;">${t.title}</h3>
+                    <span style="background:${isDays ? '#0284c7' : (isGrand ? '#d97706' : '#334155')};color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;">
+                      ${t.badge}
+                    </span>
+                    <span style="background:rgba(255,255,255,0.08);color:var(--muted);font-size:11px;padding:2px 6px;border-radius:6px;">
+                      ${t.totalQuestions} Soru
+                    </span>
+                    ${best !== null ? `<span style="color:#fde047;font-size:11px;font-weight:700;">★ Rekor: ${best} Puan</span>` : ''}
+                  </div>
+                  <p style="font-size:12px;color:var(--muted);margin:0;line-height:1.4;">
+                    ${t.description}
+                  </p>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;align-self:center;">
+                <button class="action-btn" onclick="startTopicQuiz('${t.id}')" style="background:${btnColor}padding:10px 18px;font-size:13px;border-radius:10px;white-space:nowrap;">
+                  ▶ Testi Başlat
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('appContent').innerHTML = `
+        <div style="max-width:680px;margin:0 auto;padding-bottom:20px;">
+          <!-- ÜST AÇIKLAMA KARTI -->
+          <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9));border:2px solid var(--accent);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+              <div>
+                <h2 style="font-size:20px;color:#fff;margin-bottom:4px;">📝 Konulara Göre Testler & Büyük Sınav</h2>
+                <p style="font-size:13px;color:var(--muted);margin:0;">
+                  Aşağıdaki satırlardan istediğiniz konuyu seçin. <strong>Günler testi tamamen ayrıdır</strong>, okul araçları ayrıdır ve 20 soruluk büyük sınav mevcuttur!
+                </p>
+              </div>
+              <button class="action-btn" onclick="switchMainTab('menu')" style="background:#334155;font-size:12px;padding:8px 12px;">
+                🏠 Tüm Üniteler
+              </button>
+            </div>
+          </div>
+
+          <!-- TEST SATIRLARI (ROWS) -->
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            ${rowsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    // 2. TESTİ BAŞLAT
+    function startTopicQuiz(topicId) {
+      if (!quizTopicBanks[topicId]) topicId = 'days';
+      activeTopicId = topicId;
       currentQuizIndex = 0;
       quizScore = 0;
       quizStreak = 0;
@@ -4234,22 +5059,34 @@
       quizTotalMistakes = 0;
       quizWrongClicked = [];
       quizAnsweredCorrectly = false;
-      renderQuiz();
+
+      const t = quizTopicBanks[topicId];
+      document.getElementById('subHeaderTitle').textContent = `${t.icon} ${t.title} (${t.totalQuestions} Soru)`;
+      renderActiveQuiz();
     }
 
-    function renderQuiz() {
-      // TÜM 20 SORU BİTTİĞİNDE: KUTLAMA VE PUAN RAPORU
-      if (currentQuizIndex >= quizQuestions.length) {
-        const accuracy = Math.round((quizTotalFirstTryCorrect / quizQuestions.length) * 100);
+    // 3. AKTİF TEST SORUSUNU ÇİZ
+    function renderActiveQuiz() {
+      const topic = quizTopicBanks[activeTopicId] || quizTopicBanks.days;
+      const questions = topic.questions;
+
+      // TÜM SORULAR BİTTİĞİNDE: KUTLAMA VE PUAN RAPORU
+      if (currentQuizIndex >= questions.length) {
+        const accuracy = Math.round((quizTotalFirstTryCorrect / questions.length) * 100);
         let starRating = '⭐⭐⭐⭐⭐';
         if (accuracy < 60) starRating = '⭐⭐⭐';
         else if (accuracy < 85) starRating = '⭐⭐⭐⭐';
+
+        // En iyi skoru güncelle
+        if (!quizBestScores[activeTopicId] || quizScore > quizBestScores[activeTopicId]) {
+          quizBestScores[activeTopicId] = quizScore;
+        }
 
         document.getElementById('appContent').innerHTML = `
           <div class="quiz-card" style="max-width:540px;margin:20px auto;border:2px solid #f59e0b;padding:26px;">
             <div style="font-size:58px;margin-bottom:12px;">🏆 🌟 🎉</div>
             <div style="display:inline-block;background:#f59e0b;color:#0f172a;font-size:12px;font-weight:800;padding:4px 12px;border-radius:8px;margin-bottom:8px;">
-              20 SORULUK PUANLI SINAV TAMAMLANDI!
+              ${topic.title.toUpperCase()} TAMAMLANDI!
             </div>
             <h2 style="font-size:24px;color:#fde047;margin-bottom:6px;">Harika Bir Başarı!</h2>
             <div style="font-size:28px;margin-bottom:14px;">${starRating}</div>
@@ -4257,12 +5094,12 @@
             <!-- PUAN VE İSTATİSTİK KUTUSU -->
             <div style="background:#0f172a;border:1px solid var(--border);border-radius:14px;padding:16px;margin:16px 0;text-align:left;">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-                <span style="color:var(--muted);font-size:14px;">Toplam Skor / Puan:</span>
+                <span style="color:var(--muted);font-size:14px;">Toplam Puan / Skor:</span>
                 <span style="color:#fde047;font-size:20px;font-weight:800;">★ ${quizScore} Puan</span>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                 <span style="color:var(--muted);font-size:13px;">İlk Denemede Doğru:</span>
-                <span style="color:#34d399;font-weight:700;font-size:14px;">${quizTotalFirstTryCorrect} / ${quizQuestions.length} soru</span>
+                <span style="color:#34d399;font-weight:700;font-size:14px;">${quizTotalFirstTryCorrect} / ${questions.length} soru</span>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                 <span style="color:var(--muted);font-size:13px;">En Yüksek Seri (Streak):</span>
@@ -4282,11 +5119,16 @@
               Yanlış yaptığınız sorularda da pes etmeyip doğruyu kendiniz bulana kadar çalıştınız!
             </p>
 
-            <div style="display:flex;gap:10px;">
-              <button class="action-btn" style="flex:1;background:#f59e0b;color:#0f172a;font-weight:800;" onclick="restartQuiz()">
-                Sınavı Tekrar Başlat 🔄
-              </button>
-              <button class="action-btn" style="flex:1;" onclick="switchMainTab('menu')">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:10px;">
+                <button class="action-btn" style="flex:1;background:#f59e0b;color:#0f172a;font-weight:800;" onclick="startTopicQuiz('${activeTopicId}')">
+                  Bu Testi Tekrarla 🔄
+                </button>
+                <button class="action-btn" style="flex:1;background:#2563eb;" onclick="renderQuizHub()">
+                  📋 Diğer Test Satırları
+                </button>
+              </div>
+              <button class="action-btn" style="background:#334155;" onclick="switchMainTab('menu')">
                 🏠 Tüm Üniteler Menüsü
               </button>
             </div>
@@ -4295,8 +5137,8 @@
         return;
       }
 
-      const q = quizQuestions[currentQuizIndex];
-      const remainingCount = quizQuestions.length - currentQuizIndex;
+      const q = questions[currentQuizIndex];
+      const remainingCount = questions.length - currentQuizIndex;
 
       // Dinleme sorusu ise sorunun başında otomatik seslendir
       if (q.direction === 'LISTENING' && !quizAnsweredCorrectly && quizWrongInCurrent === 0) {
@@ -4305,10 +5147,15 @@
 
       const html = `
         <div class="quiz-card" style="max-width:540px;margin:16px auto;border:2px solid var(--border);">
-          <!-- 1. ÜST BİLGİ VE PUAN ÇUBUĞU (Android'deki TopHeaderBar ile Birebir) -->
+          <!-- 1. ÜST BİLGİ VE PUAN ÇUBUĞU -->
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;">
-            <div style="background:rgba(56,189,248,0.15);color:#38bdf8;font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px;">
-              ${q.directionLabel}
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button onclick="renderQuizHub()" style="background:#334155;color:#fff;border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;">
+                ← Test Listesi
+              </button>
+              <div style="background:rgba(56,189,248,0.15);color:#38bdf8;font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px;">
+                ${q.directionLabel}
+              </div>
             </div>
             <div style="display:flex;align-items:center;gap:12px;">
               ${quizStreak >= 2 ? `<span style="background:rgba(234,88,12,0.2);color:#f97316;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">🔥 ${quizStreak}x Seri</span>` : ''}
@@ -4316,70 +5163,71 @@
             </div>
           </div>
 
-          <!-- 2. SORU SAYISI & SIFIRLA BUTONU -->
+          <!-- 2. TEST ADI, SORU SAYISI & SIFIRLA BUTONU -->
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:#34d399;">
-              Soru ${currentQuizIndex + 1} / ${quizQuestions.length} <span style="font-size:11px;color:var(--muted);font-weight:normal;">(Kalan: ${remainingCount})</span>
+            <div style="font-size:12px;color:var(--muted);font-weight:700;">
+              ${topic.icon} ${topic.title} &bull; Soru ${currentQuizIndex + 1} / ${questions.length}
             </div>
-            <button class="reset-btn" onclick="restartQuiz()" title="Sınavı Baştan Başlat">🔄 Sınavı Sıfırla</button>
+            <button onclick="startTopicQuiz('${activeTopicId}')" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:2px 8px;border-radius:6px;font-size:11px;cursor:pointer;">
+              Sıfırla 🔄
+            </button>
           </div>
 
-          <!-- 3. SORU VE SES ALANI -->
-          <div class="quiz-question-box" style="margin:14px 0 20px;">
-            <div class="quiz-prompt" style="font-size:14px;color:#cbd5e1;margin-bottom:10px;">
-              ${q.prompt}
-            </div>
-
-            ${q.direction === 'LISTENING' ? `
-              <div onclick="speakText('${q.audioText}')" style="cursor:pointer;background:#0f172a;border:2px dashed #38bdf8;border-radius:14px;padding:16px;display:inline-flex;align-items:center;gap:10px;margin:6px 0;">
-                <span style="font-size:28px;">🔊</span>
-                <span style="color:#38bdf8;font-weight:700;font-size:15px;">Tekrar Dinlemek İçin Dokunun</span>
-              </div>
-            ` : `
-              <div class="quiz-word" onclick="speakText('${q.audioText}')" title="Dinlemek için tıkla" style="font-size:24px;color:#38bdf8;font-weight:800;cursor:pointer;">
-                <span>${q.word}</span>
-                <span style="font-size:18px;">🔊</span>
-              </div>
-            `}
+          <!-- 3. İLERLEME ÇUBUĞU -->
+          <div style="height:6px;background:#334155;border-radius:3px;margin-bottom:18px;overflow:hidden;">
+            <div style="height:100%;width:${((currentQuizIndex) / questions.length) * 100}%;background:linear-gradient(90deg, #38bdf8, #34d399);transition:width 0.3s ease;"></div>
           </div>
 
-          <!-- 4. DÖRT SEÇENEK ŞIKLARI -->
-          <div class="options-grid" style="grid-template-columns:1fr 1fr;gap:10px;">
+          <!-- 4. SORU VE SES BUTONU -->
+          <div style="background:#0f172a;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px;text-align:center;">
+            <div style="font-size:14px;color:var(--muted);margin-bottom:6px;">${q.prompt}</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;">
+              <span style="font-size:22px;font-weight:800;color:#fff;">${q.word}</span>
+              <button class="sound-btn" style="width:36px;height:36px;font-size:16px;" onclick="speakText('${q.audioText}')" title="İngilizce Telaffuzu Dinle">
+                🔊
+              </button>
+            </div>
+          </div>
+
+          <!-- 5. ŞIKLAR (SEÇENEKLER) -->
+          <div class="quiz-options" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
             ${q.options.map(opt => {
               const isWrong = quizWrongClicked.includes(opt);
-              const isCorrectChosen = quizAnsweredCorrectly && opt === q.correct;
-              let btnClass = 'option-btn';
-              if (isCorrectChosen) btnClass += ' correct';
-              if (isWrong) btnClass += ' wrong';
-
+              const isRight = quizAnsweredCorrectly && opt === q.correct;
+              let btnStyle = 'padding:14px 10px;font-size:14px;font-weight:700;border-radius:10px;border:2px solid var(--border);background:#1e293b;color:#fff;cursor:pointer;transition:all 0.15s ease;';
+              if (isRight) {
+                btnStyle = 'padding:14px 10px;font-size:14px;font-weight:800;border-radius:10px;border:2px solid #34d399;background:rgba(52,211,153,0.2);color:#34d399;cursor:default;';
+              } else if (isWrong) {
+                btnStyle = 'padding:14px 10px;font-size:14px;font-weight:700;border-radius:10px;border:2px solid #f87171;background:rgba(248,113,113,0.15);color:#f87171;opacity:0.6;cursor:not-allowed;';
+              }
               return `
-                <button
-                  class="${btnClass}"
-                  ${quizAnsweredCorrectly ? 'disabled' : ''}
-                  onclick="handleQuizOption('${opt.replace(/'/g, "\\'")}')"
-                  style="padding:14px 10px;font-size:14px;min-height:54px;display:flex;align-items:center;justify-content:center;text-align:center;"
-                >
+                <button style="${btnStyle}" onclick="handleQuizAnswer('${opt.replace(/'/g, "\\'")}')" ${quizAnsweredCorrectly || isWrong ? 'disabled' : ''}>
                   ${opt}
                 </button>
               `;
             }).join('')}
           </div>
 
-          <!-- 5. GERİ BİLDİRİM VE SONRAKİ SORU BUTONU -->
-          <div id="quizFeedbackArea" style="margin-top:16px;">
+          <!-- 6. GERİ BİLDİRİM VE İLERLEME ALANI -->
+          <div id="quizFeedbackArea" style="min-height:50px;">
             ${quizAnsweredCorrectly ? `
-              <div class="feedback-banner success" style="display:flex;justify-content:space-between;align-items:center;">
-                <span>🎉 Harika! Doğru cevap!</span>
-                <button class="action-btn" onclick="nextQuizQuestion()" style="font-size:12px;padding:8px 14px;background:#10b981;">
-                  Sonraki Soru ➔
+              <div style="background:rgba(52,211,153,0.15);border:1px solid #34d399;color:#34d399;padding:12px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:13px;font-weight:700;">
+                  🎉 Harika! Doğru Cevap: <strong>${q.correct}</strong>
+                </div>
+                <button class="action-btn" style="background:#10b981;padding:6px 14px;font-size:12px;" onclick="advanceQuizQuestion()">
+                  ${currentQuizIndex + 1 === questions.length ? 'Sonucu Gör ➔' : 'Sonraki Soru ➔'}
                 </button>
               </div>
-            ` : ''}
-            ${quizWrongClicked.length > 0 && !quizAnsweredCorrectly ? `
-              <div class="feedback-banner error" style="text-align:left;">
-                <span>❌ Yanlış şık! Pes etmek yok, doğru şıkkı bulana kadar tekrar dene!</span>
+            ` : (quizWrongClicked.length > 0 ? `
+              <div style="background:rgba(248,113,113,0.15);border:1px solid #f87171;color:#f87171;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700;">
+                ❌ Yanlış cevap! Pes etmek yok, doğru şıkkı bulana kadar diğerlerini deneyin.
               </div>
-            ` : ''}
+            ` : `
+              <div style="font-size:12px;color:var(--muted);text-align:center;">
+                Doğru şıkkı seçin. Yanlış yapsanız da doğruyu bulana kadar tekrar deneyebilirsiniz!
+              </div>
+            `)}
           </div>
         </div>
       `;
@@ -4387,50 +5235,64 @@
       document.getElementById('appContent').innerHTML = html;
     }
 
-    function handleQuizOption(selectedOpt) {
+    // CEVAP KONTROLÜ
+    function handleQuizAnswer(selectedOption) {
       if (quizAnsweredCorrectly) return;
-      recordActivity();
+      const topic = quizTopicBanks[activeTopicId] || quizTopicBanks.days;
+      const q = topic.questions[currentQuizIndex];
 
-      const q = quizQuestions[currentQuizIndex];
-
-      if (selectedOpt === q.correct) {
-        // DOĞRU CEVAP
+      if (selectedOption === q.correct) {
+        // DOĞRU CEVAP!
         quizAnsweredCorrectly = true;
-        let pointsEarned = 10;
+        speakText('Correct! ' + q.correct);
 
         if (quizWrongInCurrent === 0) {
-          // İlk denemede bildi
-          quizTotalFirstTryCorrect++;
-          quizStreak++;
+          // İlk denemede doğru bildi
+          quizScore += 10;
+          quizStreak += 1;
           if (quizStreak > quizBestStreak) quizBestStreak = quizStreak;
-          if (quizStreak >= 2) pointsEarned += 5; // Seri bonusu!
+          quizTotalFirstTryCorrect += 1;
         } else {
-          // Yanlış denemelerden sonra doğruyu buldu
-          pointsEarned = 5;
+          // Tekrarlayarak doğruyu buldu
+          quizScore += 5;
+          quizStreak = 0;
         }
 
-        quizScore += pointsEarned;
-        speakText('Correct! ' + q.audioText);
-        renderQuiz();
+        renderActiveQuiz();
 
-        // 1.5 saniye sonra otomatik ilerle (kullanıcı beklemek istemezse butona da basabilir)
+        // 1.5 saniye sonra otomatik geç
         setTimeout(() => {
           if (quizAnsweredCorrectly) {
-            nextQuizQuestion();
+            advanceQuizQuestion();
           }
-        }, 1600);
+        }, 1400);
+
       } else {
-        // YANLIŞ CEVAP - DOĞRUYU BULANA KADAR DEVAM EDER!
-        if (!quizWrongClicked.includes(selectedOpt)) {
-          quizWrongClicked.push(selectedOpt);
-          quizWrongInCurrent++;
-          quizTotalMistakes++;
-          quizStreak = 0; // Seri sıfırlandı
-        }
+        // YANLIŞ CEVAP!
         speakText('Try again');
-        renderQuiz();
+        quizWrongInCurrent += 1;
+        quizTotalMistakes += 1;
+        quizStreak = 0;
+        if (!quizWrongClicked.includes(selectedOption)) {
+          quizWrongClicked.push(selectedOption);
+        }
+        renderActiveQuiz();
       }
     }
+
+    function advanceQuizQuestion() {
+      currentQuizIndex += 1;
+      quizWrongInCurrent = 0;
+      quizWrongClicked = [];
+      quizAnsweredCorrectly = false;
+      renderActiveQuiz();
+    }
+
+    // Geriye dönük uyumluluk için renderQuiz() çağrılırsa direkt renderQuizHub açsın
+    function renderQuiz() {
+      renderQuizHub();
+    }
+
 
     function nextQuizQuestion() {
       if (currentQuizIndex < quizQuestions.length) {
